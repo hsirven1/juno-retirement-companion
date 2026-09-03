@@ -1,0 +1,147 @@
+import type { AssessmentQuestion } from '../types'
+
+export const OTHER_DREAM = 'Autre chose...'
+export const UNKNOWN_DREAM = 'Je ne sais pas encore'
+
+export const assessmentQuestions: AssessmentQuestion[] = [
+  {
+    id: 'journey',
+    prompt: 'Où en êtes-vous dans votre parcours vers la retraite ?',
+    type: 'single',
+    layout: 'list',
+    advance: 'continue',
+    options: [
+      'Dans plus de 2 ans',
+      'Dans 1 à 2 ans',
+      'Dans 6 à 12 mois',
+      'Dans 3 à 6 mois',
+      'Dans moins de 3 mois',
+      'À la retraite depuis moins d’un an',
+      'À la retraite depuis 1 à 3 ans',
+      'À la retraite depuis plus de 3 ans',
+    ],
+  },
+  {
+    id: 'feelings',
+    prompt: 'Comment vivez-vous cette nouvelle étape ?',
+    type: 'multiple',
+    layout: 'grid',
+    stagePrompts: {
+      pre: 'Comment vous sentez-vous à l’approche de la retraite ?',
+      retired: 'Comment vivez-vous votre retraite aujourd’hui ?',
+    },
+    options: [
+      'Enthousiaste',
+      'J’apprécie ma liberté',
+      'Curieux de la suite',
+      'Encore en train de m’adapter',
+      'Le travail me manque',
+      'Un peu perdu(e)',
+      'Je m’ennuie parfois',
+      'L’argent m’inquiète',
+      'Seul(e) parfois',
+    ],
+  },
+  {
+    id: 'miss',
+    prompt: 'Qu’est-ce qui vous manque le plus dans le travail ?',
+    type: 'multiple',
+    layout: 'grid',
+    exclusiveOption: 'Rien, en réalité',
+    stagePrompts: {
+      pre: 'Qu’est-ce qui pourrait le plus vous manquer dans votre vie professionnelle ?',
+      retired: 'Qu’est-ce qui vous manque le plus dans le travail ?',
+    },
+    options: [
+      'Les collègues',
+      'Avoir un rythme',
+      'Me sentir utile',
+      'Sortir de chez moi',
+      'Voir du monde régulièrement',
+      'Être mis au défi',
+      'Le salaire',
+      'Rien, en réalité',
+    ],
+  },
+  {
+    id: 'more-of',
+    prompt: 'De quoi aimeriez-vous davantage dans cette nouvelle étape ?',
+    type: 'multiple',
+    layout: 'grid',
+    stagePrompts: {
+      pre: 'De quoi aimeriez-vous davantage une fois à la retraite ?',
+      retired: 'De quoi aimeriez-vous davantage dans votre retraite ?',
+    },
+    options: [
+      'Voyager',
+      'Voir mes proches',
+      'Bouger',
+      'Apprendre',
+      'Être utile',
+      'Rencontrer du monde',
+      'Me détendre',
+      'Avoir des projets',
+    ],
+  },
+  {
+    id: 'social',
+    prompt: 'Êtes-vous satisfait(e) de votre vie sociale aujourd’hui ?',
+    type: 'scale',
+    scaleStart: 'Pas du tout satisfait',
+    scaleEnd: 'Très satisfait',
+  },
+  {
+    id: 'finances',
+    prompt: 'Comment vous sentez-vous vis-à-vis de vos finances à la retraite ?',
+    type: 'scale',
+    stagePrompts: {
+      pre: 'Comment vous sentez-vous vis-à-vis de vos finances pour la retraite ?',
+      retired: 'Comment vous sentez-vous vis-à-vis de vos finances aujourd’hui ?',
+    },
+    scaleStart: 'Très inquiet',
+    scaleEnd: 'Très serein',
+  },
+  {
+    id: 'ideal-week',
+    prompt: 'À quoi ressemble, pour vous, une semaine idéale à la retraite ?',
+    type: 'multiple',
+    layout: 'grid',
+    exclusiveOption: 'Je ne sais pas encore',
+    stagePrompts: {
+      pre: 'À quoi ressemblerait, pour vous, une semaine idéale à la retraite ?',
+      retired: 'À quoi ressemble, pour vous, une semaine idéale ?',
+    },
+    options: [
+      'Surtout libre',
+      'Quelques rendez-vous réguliers',
+      'Une semaine assez structurée',
+      'Beaucoup de temps avec les autres',
+      'Du temps pour des projets',
+      'Du temps en famille',
+      'Bouger régulièrement',
+      'Je ne sais pas encore',
+    ],
+  },
+  {
+    id: 'dream',
+    prompt:
+      'Y a-t-il quelque chose que vous avez vraiment envie de faire pendant votre retraite ?',
+    helper:
+      'Un voyage, un projet, une activité, transmettre votre expérience... ou tout autre chose.',
+    type: 'multiple',
+    layout: 'grid',
+    allowOther: true,
+    otherLabel: OTHER_DREAM,
+    exclusiveOption: UNKNOWN_DREAM,
+    options: [
+      'Faire un grand voyage',
+      'Me lancer dans un projet personnel',
+      'M’investir dans une association',
+      'Transmettre mon expérience',
+      'Apprendre quelque chose de nouveau',
+      'Passer plus de temps avec mes proches',
+      'Créer ou construire quelque chose',
+      UNKNOWN_DREAM,
+    ],
+  },
+]
