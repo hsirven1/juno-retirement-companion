@@ -1,20 +1,57 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Newsreader", ui-serif, Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
-  --color-cream: #f4efe6;
-  --color-cream-deep: #e8e0d2;
-  --color-paper: #fbf8f2;
-  --color-ink: #241f1a;
-  --color-ink-muted: #6b645c;
-  --color-ink-soft: #8a8278;
-  --color-clay: #9c5a3c;
-  --color-clay-deep: #824a32;
-  --color-sage: #5f6d56;
-  --color-line: #ddd4c6;
-  --color-line-strong: #cfc5b5;
+  /* Base surfaces (warm neutral canvas) */
+  --color-cream: #faf6f0; /* canvas */
+  --color-cream-deep: #f3ede4; /* sunken sections */
+  --color-paper: #ffffff; /* surfaces */
+
+  /* Text */
+  --color-ink: #221c18;
+  --color-ink-muted: #58504a;
+  --color-ink-soft: #8a817a;
+  --color-ink-label: #a0958a;
+
+  /* Brand coral + success green */
+  --color-clay: #e1503a; /* coral fill */
+  --color-clay-deep: #ce452f; /* hover/darken */
+  --color-clay-ink: #b93a26; /* coral as text on light */
+  --color-clay-tint: #f6e4df; /* active nav pill / coral chip */
+  --color-on-coral: #fff7f2; /* opaque text on coral surfaces */
+  --color-sage: #2f7d5b; /* success */
+
+  /* Theme palette (Home + resource tiles) */
+  --theme-social-solid: #d6455e;
+  --theme-social-tint: #fbe6e9;
+  --theme-social-ink: #a82b44;
+
+  --theme-active-solid: #2f7d5b;
+  --theme-active-tint: #e1efe4;
+  --theme-active-ink: #216245;
+
+  --theme-rythme-solid: #3563c9;
+  --theme-rythme-tint: #e3eaf8;
+  --theme-rythme-ink: #24499c;
+
+  --theme-learn-solid: #6d4ac4;
+  --theme-learn-tint: #ede4fa;
+  --theme-learn-ink: #5b3fa8;
+
+  --theme-contribute-solid: #c98a16;
+  --theme-contribute-tint: #f7ebd8;
+  --theme-contribute-ink: #8a5d0a;
+
+  /* Borders */
+  --color-line: #ede5da; /* hairline */
+  --color-line-strong: #dcd1c1; /* stronger controls */
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgba(34, 28, 24, 0.04), 0 20px 44px -34px rgba(34, 28, 24, 0.3);
+  --shadow-card-hover: 0 22px 44px -26px rgba(34, 28, 24, 0.34);
+  --shadow-overlay: 0 30px 60px -40px rgba(34, 28, 24, 0.4);
 
   --radius-md: 10px;
   --radius-lg: 12px;
@@ -50,6 +87,15 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-clay);
   outline-offset: 3px;
+}
+
+@keyframes juno-breathe {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
 }
 
 button:not(:disabled),
@@ -151,25 +197,11 @@ textarea {
   }
 }
 
-@keyframes weekly-row-done-bg {
-  from {
-    background-color: transparent;
-  }
-  to {
-    background-color: color-mix(in srgb, var(--color-sage) 5%, transparent);
-  }
-}
-
-.weekly-step-row.is-completed {
-  animation: weekly-row-done-bg 320ms ease-out forwards;
-}
-
 .weekly-step-row.is-completed .weekly-step-check-icon {
   animation: weekly-check-pop 280ms ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .weekly-step-row.is-completed,
   .weekly-step-row.is-completed .weekly-step-check-icon {
     animation: none;
   }

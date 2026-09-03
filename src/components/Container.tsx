@@ -8,7 +8,7 @@ interface ContainerProps {
 }
 
 const widths = {
-  wide: 'max-w-[1120px]',
+  wide: 'max-w-[1240px]',
   reading: 'max-w-[760px]',
   narrow: 'max-w-[640px]',
 }

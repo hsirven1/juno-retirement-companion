@@ -1,6 +1,8 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Button } from './Button'
-import { JunoAvatar } from './JunoAvatar'
+import { JunoOrb } from './JunoOrb'
+import { QuizOption } from './journey/QuizOption'
+import { AbstractComposition } from './journey/AbstractComposition'
 import { useApp } from '../context/useApp'
 import type {
   JourneyScreen,
@@ -8,6 +10,7 @@ import type {
   SocialPreferences,
 } from '../types'
 import { cn } from '../lib/cn'
+import type { JourneySurface } from '../lib/journeyTheme'
 import {
   JourneyStepCompletion,
   ScenarioCards,
@@ -23,21 +26,27 @@ import {
 } from '../i18n'
 import { getRecommendedResourceCards } from '../lib/lilleRecommendations'
 import { makeResourceLabelFns } from '../lib/resourceLabels'
+import { SOCIAL_STEP_ORDER } from '../data/socialJourney'
+import { getCompletedSocialStepIds } from '../lib/journeyScheduling'
+import { PATH_SOCIAL } from '../data/paths'
 
 export function JourneyStepContent({
   stepId,
   stepDirection = 'forward',
   reviewMode = false,
+  surface = 'cream',
   onComplete,
 }: {
   stepId: string
   stepDirection?: 'forward' | 'back'
   reviewMode?: boolean
+  surface?: JourneySurface
   onComplete: () => void
 }) {
   const {
     socialPreferences,
     socialFeedback,
+    pathProgress,
     getJourneyStepState,
     setJourneyStepScreen,
     setJourneyStepResponse,
@@ -62,18 +71,28 @@ export function JourneyStepContent({
     setJourneyStepScreen(stepId, screenIndex + 1)
   }
 
+  const completedCount = getCompletedSocialStepIds(
+    pathProgress[PATH_SOCIAL],
+  ).length
+  const weekNumber = Math.min(
+    SOCIAL_STEP_ORDER.length,
+    Math.max(1, completedCount + (reviewMode ? 0 : 1)),
+  )
+
   return (
     <div
       key={`${stepId}-${screen.id}`}
       className={
         stepDirection === 'back'
-          ? 'guided-step-enter-back pb-4'
-          : 'guided-step-enter pb-4'
+          ? 'guided-step-enter-back flex min-h-full flex-col pb-4'
+          : 'guided-step-enter flex min-h-full flex-col pb-4'
       }
     >
       <ScreenRenderer
         stepId={stepId}
         screen={screen}
+        surface={surface}
+        weekNumber={weekNumber}
         prefs={socialPreferences}
         responses={responses}
         feedback={socialFeedback}
@@ -93,6 +112,8 @@ export function JourneyStepContent({
 function ScreenRenderer({
   stepId,
   screen,
+  surface: _surface,
+  weekNumber,
   prefs,
   responses,
   feedback,
@@ -107,6 +128,8 @@ function ScreenRenderer({
 }: {
   stepId: string
   screen: JourneyScreen
+  surface: JourneySurface
+  weekNumber: number
   prefs: SocialPreferences
   responses: Record<string, unknown>
   feedback: {
@@ -130,19 +153,25 @@ function ScreenRenderer({
 
   if (screen.type === 'timeline') {
     return (
-      <div>
-        {screen.title ? <Title>{screen.title}</Title> : null}
-        <div className={screen.title ? 'mt-8' : ''}>
+      <ScreenShell
+        onDark={false}
+        cta={
+          <ContinueButton inverted={false} onClick={onContinue}>
+            {cta}
+          </ContinueButton>
+        }
+      >
+        {screen.title ? (
+          <Title className="text-ink">{screen.title}</Title>
+        ) : null}
+        <div className={screen.title ? 'mt-6' : ''}>
           <TimelineVisual
             title={copy.journeyUi.atWork}
             items={screen.timeline ?? []}
             footer={screen.paragraphs?.[0]}
           />
         </div>
-        <Button className="mt-10" onClick={onContinue}>
-          {cta}
-        </Button>
-      </div>
+      </ScreenShell>
     )
   }
 
@@ -154,16 +183,56 @@ function ScreenRenderer({
       locale,
     )
     return (
-      <div className="rounded-lg border border-line bg-paper/60 px-5 py-5">
-        <div className="space-y-4 text-[17px] leading-relaxed text-ink-muted">
-          {insight.paragraphs.map((p) => (
-            <p key={p}>{p}</p>
-          ))}
+      <ScreenShell
+        onDark
+        cta={
+          <div className="flex w-full flex-col gap-3">
+            <ContinueButton inverted={false} solid onClick={onContinue}>
+              {copy.journeyUi.insightConfirm}
+            </ContinueButton>
+            <button
+              type="button"
+              onClick={onContinue}
+              className="min-h-11 cursor-pointer rounded-full border border-white/35 px-5 text-[16px] font-bold text-white transition-colors hover:bg-white/10"
+            >
+              {copy.journeyUi.insightAdjust}
+            </button>
+          </div>
+        }
+      >
+        <div className="flex flex-col items-center text-center">
+          <JunoOrb size={88} glow />
+          <p
+            className="mt-5 text-[12px] font-extrabold tracking-[0.1em] uppercase"
+            style={{ color: 'var(--journey-solid, #d6455e)' }}
+          >
+            {copy.journeyUi.whatIUnderstand}
+          </p>
         </div>
-        <Button className="mt-8" onClick={onContinue}>
-          {cta}
-        </Button>
-      </div>
+        {insight.title ? (
+          <h1 className="mt-4 text-center font-display text-[1.75rem] font-medium leading-tight tracking-[-0.02em] text-white sm:text-[2rem]">
+            {insight.title}
+          </h1>
+        ) : null}
+        <ul className="mt-7 space-y-3 text-left">
+          {insight.paragraphs.map((p) => (
+            <li
+              key={p}
+              className="rounded-[16px] bg-white/8 px-4 py-4 text-[16px] leading-relaxed text-white/92"
+            >
+              {p}
+            </li>
+          ))}
+          {(insight.bullets ?? []).map((p) => (
+            <li
+              key={p}
+              className="rounded-[16px] bg-white/8 px-4 py-4 text-[16px] leading-relaxed text-white/92"
+            >
+              {p}
+            </li>
+          ))}
+        </ul>
+      </ScreenShell>
     )
   }
 
@@ -171,8 +240,21 @@ function ScreenRenderer({
     const selected =
       (responses[screen.responseKey] as string | undefined) ?? null
     return (
-      <div>
+      <ScreenShell
+        onDark={false}
+        cta={
+          <ContinueButton
+            inverted={false}
+            solid
+            disabled={!selected}
+            onClick={onContinue}
+          >
+            {cta}
+          </ContinueButton>
+        }
+      >
         <ScenarioCards
+          eyebrow={copy.journeyUi.threeWays}
           question={screen.question ?? ''}
           options={(screen.options ?? []).map((o) => ({
             id: o.id,
@@ -182,10 +264,7 @@ function ScreenRenderer({
           selected={selected}
           onSelect={(id) => onResponse(screen.responseKey!, id)}
         />
-        <Button className="mt-10" disabled={!selected} onClick={onContinue}>
-          {cta}
-        </Button>
-      </div>
+      </ScreenShell>
     )
   }
 
@@ -203,6 +282,7 @@ function ScreenRenderer({
         junoRetains={content.junoRetains}
         tags={content.tags}
         nextTime={content.nextTime}
+        weekNumber={weekNumber}
         onFinish={onComplete}
         finishLabel={
           reviewMode ? copy.journeyUi.closeStep : copy.journeyUi.finishStep
@@ -213,25 +293,55 @@ function ScreenRenderer({
 
   if (screen.type === 'content') {
     return (
-      <ContentBlock title={screen.title} paragraphs={screen.paragraphs ?? []}>
-        <Button className="mt-10" onClick={onContinue}>
-          {cta}
-        </Button>
-      </ContentBlock>
+      <ScreenShell
+        onDark
+        cta={
+          <ContinueButton inverted onClick={onContinue}>
+            {cta}
+          </ContinueButton>
+        }
+      >
+        <AbstractComposition variant="orbit" tone="on-solid" />
+        {screen.title ? (
+          <h1 className="mt-4 text-center font-display text-[2rem] font-medium leading-tight tracking-[-0.02em] text-white sm:text-[2.35rem]">
+            {screen.title}
+          </h1>
+        ) : null}
+        <div className="mt-5 space-y-4 text-center text-[17px] leading-relaxed text-white/90 sm:text-[18px]">
+          {(screen.paragraphs ?? []).map((p) => (
+            <p key={p}>{p}</p>
+          ))}
+        </div>
+      </ScreenShell>
     )
   }
 
   if (screen.type === 'concepts') {
     return (
-      <div>
+      <ScreenShell
+        onDark={false}
+        cta={
+          <ContinueButton inverted={false} solid onClick={onContinue}>
+            {cta}
+          </ContinueButton>
+        }
+      >
         {screen.title ? <Title>{screen.title}</Title> : null}
-        <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+        <AbstractComposition
+          variant="cluster"
+          tone="on-tint"
+          className={screen.title ? 'mt-4' : ''}
+        />
+        <ul className="mt-6 grid gap-3 sm:grid-cols-2">
           {(screen.options ?? []).map((option, index) => (
             <li
               key={option.id}
-              className="rounded-lg border border-line bg-paper px-4 py-4"
+              className="rounded-[18px] border border-line/70 bg-paper/90 px-4 py-4"
             >
-              <p className="text-[12px] font-medium tracking-[0.12em] text-clay uppercase">
+              <p
+                className="text-[12px] font-extrabold tracking-[0.12em] uppercase"
+                style={{ color: 'var(--journey-ink, var(--color-clay-ink))' }}
+              >
                 {option.label}
               </p>
               {screen.paragraphs?.[index] ? (
@@ -242,10 +352,7 @@ function ScreenRenderer({
             </li>
           ))}
         </ul>
-        <Button className="mt-10" onClick={onContinue}>
-          {cta}
-        </Button>
-      </div>
+      </ScreenShell>
     )
   }
 
@@ -355,33 +462,86 @@ function ScreenRenderer({
   return null
 }
 
-function Title({ children }: { children: ReactNode }) {
+function ScreenShell({
+  children,
+  cta,
+  onDark,
+}: {
+  children: ReactNode
+  cta?: ReactNode
+  onDark?: boolean
+}) {
   return (
-    <h1 className="font-display text-[2rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2.4rem]">
-      {children}
-    </h1>
+    <div className="flex min-h-full flex-col">
+      <div className={cn('flex-1', onDark ? 'text-white' : '')}>{children}</div>
+      {cta ? <div className="mt-auto pt-8">{cta}</div> : null}
+    </div>
   )
 }
 
-function ContentBlock({
-  title,
-  paragraphs,
+function ContinueButton({
   children,
+  onClick,
+  disabled,
+  inverted = false,
+  solid = false,
 }: {
-  title?: string
-  paragraphs: string[]
-  children?: ReactNode
+  children: ReactNode
+  onClick: () => void
+  disabled?: boolean
+  inverted?: boolean
+  solid?: boolean
+}) {
+  if (inverted) {
+    return (
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={onClick}
+        className="min-h-12 w-full cursor-pointer rounded-full bg-white px-6 text-[17px] font-bold text-[color:var(--journey-ink,#a82b44)] transition-transform active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {children}
+      </button>
+    )
+  }
+  if (solid) {
+    return (
+      <Button
+        className="min-h-12 w-full text-[17px] font-bold"
+        disabled={disabled}
+        onClick={onClick}
+      >
+        {children}
+      </Button>
+    )
+  }
+  return (
+    <Button
+      className="min-h-12 w-full text-[17px] font-bold sm:w-auto"
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  )
+}
+
+function Title({
+  children,
+  className,
+}: {
+  children: ReactNode
+  className?: string
 }) {
   return (
-    <div>
-      {title ? <Title>{title}</Title> : null}
-      <div className={cn('space-y-4 text-[17px] leading-relaxed text-ink-muted', title ? 'mt-6' : '')}>
-        {paragraphs.map((p) => (
-          <p key={p}>{p}</p>
-        ))}
-      </div>
+    <h1
+      className={cn(
+        'font-display text-[1.85rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2.2rem]',
+        className,
+      )}
+    >
       {children}
-    </div>
+    </h1>
   )
 }
 
@@ -390,7 +550,6 @@ function SynthesisBlock({
   paragraphs,
   bullets,
   tags,
-  cta,
   onContinue,
 }: {
   title?: string
@@ -403,69 +562,72 @@ function SynthesisBlock({
   const copy = useCopy()
 
   return (
-    <div>
-      <div className="mb-5 flex items-center gap-3">
-        <JunoAvatar size="md" />
-        <p className="text-[15px] font-medium text-ink">{copy.brand.name}</p>
+    <ScreenShell
+      onDark
+      cta={
+        <div className="flex w-full flex-col gap-3">
+          <ContinueButton solid onClick={onContinue}>
+            {copy.journeyUi.insightConfirm}
+          </ContinueButton>
+          <button
+            type="button"
+            onClick={onContinue}
+            className="min-h-11 cursor-pointer rounded-full border border-white/35 px-5 text-[16px] font-bold text-white transition-colors hover:bg-white/10"
+          >
+            {copy.journeyUi.insightAdjust}
+          </button>
+        </div>
+      }
+    >
+      <div className="flex flex-col items-center text-center">
+        <JunoOrb size={88} glow />
+        <p
+          className="mt-5 text-[12px] font-extrabold tracking-[0.1em] uppercase"
+          style={{ color: 'var(--journey-solid, #d6455e)' }}
+        >
+          {copy.journeyUi.whatIUnderstand}
+        </p>
       </div>
-      {title ? <Title>{title}</Title> : null}
-      <div className={cn('space-y-4 text-[17px] leading-relaxed text-ink', title ? 'mt-6' : 'mt-2')}>
+      {title ? (
+        <h1 className="mt-4 text-center font-display text-[1.75rem] font-medium leading-tight tracking-[-0.02em] text-white sm:text-[2rem]">
+          {title}
+        </h1>
+      ) : null}
+      <div className="mt-6 space-y-3 text-left">
         {paragraphs.map((p) => (
-          <p key={p}>{p}</p>
+          <p
+            key={p}
+            className="rounded-[16px] bg-white/8 px-4 py-4 text-[16px] leading-relaxed text-white/92"
+          >
+            {p}
+          </p>
         ))}
       </div>
       {bullets && bullets.length > 0 ? (
-        <ul className="mt-5 space-y-2 text-[17px] text-ink">
+        <ul className="mt-3 space-y-3 text-left">
           {bullets.map((item) => (
-            <li key={item} className="flex gap-2">
-              <span className="text-clay">•</span>
-              <span>{item}</span>
+            <li
+              key={item}
+              className="rounded-[16px] bg-white/8 px-4 py-4 text-[16px] leading-relaxed text-white/92"
+            >
+              {item}
             </li>
           ))}
         </ul>
       ) : null}
       {tags && tags.length > 0 ? (
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-5 flex flex-wrap justify-center gap-2">
           {tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-line-strong bg-paper px-3 py-1.5 text-[13px] text-ink-muted"
+              className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[13px] text-white/85"
             >
               {tag}
             </span>
           ))}
         </div>
       ) : null}
-      <Button className="mt-10" onClick={onContinue}>
-        {cta}
-      </Button>
-    </div>
-  )
-}
-
-function Pill({
-  label,
-  selected,
-  onSelect,
-}: {
-  label: string
-  selected: boolean
-  onSelect: () => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onSelect}
-      aria-pressed={selected}
-      className={cn(
-        'min-h-11 cursor-pointer rounded-full border px-4 py-2.5 text-left text-[15px] transition-colors',
-        selected
-          ? 'border-ink bg-ink text-cream'
-          : 'border-line-strong bg-paper text-ink hover:border-ink/40',
-      )}
-    >
-      {label}
-    </button>
+    </ScreenShell>
   )
 }
 
@@ -491,27 +653,38 @@ function ChoiceScreen({
   const copy = useCopy()
 
   return (
-    <div>
-      <Title>{question}</Title>
-      {multi ? (
-        <p className="mt-3 text-[15px] text-ink-soft">
-          {copy.journeyUi.severalAnswers}
-        </p>
-      ) : null}
-      <div className={cn('mt-7 flex flex-wrap gap-2.5', !multi && 'flex-col')}>
+    <ScreenShell
+      cta={
+        <ContinueButton solid disabled={disabled} onClick={onContinue}>
+          {cta}
+        </ContinueButton>
+      }
+    >
+      <p
+        className="text-[12px] font-extrabold tracking-[0.1em] uppercase"
+        style={{ color: 'var(--journey-ink, var(--color-clay-ink))' }}
+      >
+        {copy.journeyUi.aQuestion}
+      </p>
+      <h1 className="mt-2 text-[1.55rem] font-extrabold leading-snug tracking-[-0.02em] text-ink sm:text-[1.85rem]">
+        {question}
+      </h1>
+      <p className="mt-2 text-[15px] text-ink-soft">
+        {multi ? copy.journeyUi.severalAnswers : copy.journeyUi.singleAnswer}
+      </p>
+      <div className="mt-7 flex flex-col gap-3">
         {options.map((option) => (
-          <Pill
+          <QuizOption
             key={option.id}
             label={option.label}
             selected={selected.includes(option.id)}
             onSelect={() => onToggle(option.id)}
+            accent="var(--journey-solid, var(--color-clay))"
+            accentTint="var(--journey-tint, var(--color-clay-tint))"
           />
         ))}
       </div>
-      <Button className="mt-10" disabled={disabled} onClick={onContinue}>
-        {cta}
-      </Button>
-    </div>
+    </ScreenShell>
   )
 }
 
@@ -543,36 +716,46 @@ function RecommendationTypesScreen({
   const allAnswered = types.every((t) => feedback[t.id])
 
   return (
-    <div>
+    <ScreenShell
+      cta={
+        <ContinueButton solid disabled={!allAnswered} onClick={onContinue}>
+          {cta}
+        </ContinueButton>
+      }
+    >
       <ul className="space-y-4">
         {types.map((type) => (
           <li
             key={type.id}
-            className="rounded-lg border border-line bg-paper px-5 py-5"
+            className="rounded-[18px] border border-line bg-paper px-5 py-5"
           >
-            <p className="text-[12px] font-medium tracking-[0.12em] text-clay uppercase">
+            <p
+              className="text-[12px] font-extrabold tracking-[0.12em] uppercase"
+              style={{ color: 'var(--journey-ink, var(--color-clay-ink))' }}
+            >
               {type.title}
             </p>
             <p className="mt-2 text-[16px] text-ink-muted">{type.description}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Pill
+            <div className="mt-4 flex flex-col gap-2">
+              <QuizOption
                 label={copy.journeyUi.speaksToMe}
                 selected={feedback[type.id] === 'yes'}
                 onSelect={() => setFeedback(type.id, 'yes')}
+                accent="var(--journey-solid, var(--color-clay))"
+                accentTint="var(--journey-tint, var(--color-clay-tint))"
               />
-              <Pill
+              <QuizOption
                 label={copy.journeyUi.notReally}
                 selected={feedback[type.id] === 'no'}
                 onSelect={() => setFeedback(type.id, 'no')}
+                accent="var(--journey-solid, var(--color-clay))"
+                accentTint="var(--journey-tint, var(--color-clay-tint))"
               />
             </div>
           </li>
         ))}
       </ul>
-      <Button className="mt-10" disabled={!allAnswered} onClick={onContinue}>
-        {cta}
-      </Button>
-    </div>
+    </ScreenShell>
   )
 }
 
@@ -656,52 +839,66 @@ function ResourcesScreen({
   if (pickMode && pickedResource) {
     const actionLabel = copy.journeyUi.contactAction(pickedResource.title)
     return (
-      <ContentBlock
-        title={copy.journeyUi.nextStepConfirm}
-        paragraphs={[actionLabel]}
+      <ScreenShell
+        cta={
+          <div className="flex w-full flex-col gap-3">
+            <ContinueButton
+              solid
+              onClick={() => {
+                onAddToWeek(pickedResource)
+                onPick(pickedResource)
+                onContinue()
+              }}
+            >
+              {copy.journeyUi.addToWeek}
+            </ContinueButton>
+            <button
+              type="button"
+              className="cursor-pointer text-[14px] text-ink-muted underline underline-offset-4 hover:text-ink"
+              onClick={() => {
+                onPick(pickedResource)
+                onContinue()
+              }}
+            >
+              {copy.journeyUi.continueWithoutAdding}
+            </button>
+          </div>
+        }
       >
-        <Button
-          className="mt-6 min-h-11 px-5 text-[15px]"
-          onClick={() => {
-            onAddToWeek(pickedResource)
-            onPick(pickedResource)
-            onContinue()
-          }}
-        >
-          {copy.journeyUi.addToWeek}
-        </Button>
-        <button
-          type="button"
-          className="mt-4 cursor-pointer text-[14px] text-ink-muted underline underline-offset-4 hover:text-ink"
-          onClick={() => {
-            onPick(pickedResource)
-            onContinue()
-          }}
-        >
-          {copy.journeyUi.continueWithoutAdding}
-        </button>
-      </ContentBlock>
+        <Title>{copy.journeyUi.nextStepConfirm}</Title>
+        <p className="mt-4 text-[17px] text-ink-muted">{actionLabel}</p>
+      </ScreenShell>
     )
   }
 
   if (pickMode && resources.length === 0) {
     return (
-      <ContentBlock
-        title={copy.journeyUi.pickWhichFirst}
-        paragraphs={[
-          copy.journeyUi.noInterestYet,
-          copy.journeyUi.goBackToSelect,
-        ]}
+      <ScreenShell
+        cta={
+          <ContinueButton inverted={false} onClick={onContinue}>
+            {cta}
+          </ContinueButton>
+        }
       >
-        <Button className="mt-10" variant="secondary" onClick={onContinue}>
-          {cta}
-        </Button>
-      </ContentBlock>
+        <Title>{copy.journeyUi.pickWhichFirst}</Title>
+        <div className="mt-4 space-y-3 text-[17px] text-ink-muted">
+          <p>{copy.journeyUi.noInterestYet}</p>
+          <p>{copy.journeyUi.goBackToSelect}</p>
+        </div>
+      </ScreenShell>
     )
   }
 
   return (
-    <div>
+    <ScreenShell
+      cta={
+        !pickMode ? (
+          <ContinueButton solid onClick={onContinue}>
+            {cta}
+          </ContinueButton>
+        ) : undefined
+      }
+    >
       {title ? <Title>{title}</Title> : null}
       {intro ? <p className="mt-3 text-[16px] text-ink-muted">{intro}</p> : null}
 
@@ -712,12 +909,15 @@ function ResourcesScreen({
           return (
             <li
               key={resource.id}
-              className="rounded-lg border border-line bg-paper px-5 py-5"
+              className="rounded-[18px] border border-line bg-paper px-5 py-5"
             >
-              <p className="text-[12px] font-medium tracking-[0.12em] text-clay uppercase">
+              <p
+                className="text-[12px] font-extrabold tracking-[0.12em] uppercase"
+                style={{ color: 'var(--journey-ink, var(--color-clay-ink))' }}
+              >
                 {resource.categoryLabel}
               </p>
-              <h2 className="mt-2 text-[1.2rem] font-medium text-ink">
+              <h2 className="mt-2 text-[1.2rem] font-bold text-ink">
                 {resource.title}
               </h2>
               <p className="mt-2 text-[15px] text-ink-muted">
@@ -743,18 +943,18 @@ function ResourcesScreen({
               {pickMode ? (
                 <button
                   type="button"
-                  className="mt-4 cursor-pointer text-[15px] font-medium text-clay hover:text-clay-deep"
+                  className="mt-4 cursor-pointer text-[15px] font-bold text-clay-ink hover:text-clay-deep"
                   onClick={() => setPickedResource(resource)}
                 >
                   {copy.journeyUi.chooseThisOne}
                 </button>
               ) : pendingAddId === resource.id ? (
-                <div className="mt-4 rounded-md border border-line bg-cream px-4 py-4">
+                <div className="mt-4 rounded-[14px] border border-line bg-cream px-4 py-4">
                   <p className="text-[15px] text-ink">
                     {copy.journeyUi.nextStepConfirm}
                   </p>
                   <Button
-                    className="mt-4 min-h-11 px-5 text-[15px]"
+                    className="mt-4 min-h-11 px-5 text-[15px] font-bold"
                     onClick={() => {
                       onAddToWeek(resource)
                       setPendingAddId(null)
@@ -768,9 +968,9 @@ function ResourcesScreen({
                   <p className="text-[14px] text-ink-muted">
                     {copy.journeyUi.dismissPrompt}
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="mt-3 flex flex-col gap-2">
                     {reasons.map((reason) => (
-                      <Pill
+                      <QuizOption
                         key={reason.id}
                         label={reason.label}
                         selected={false}
@@ -787,7 +987,7 @@ function ResourcesScreen({
                   {!interested ? (
                     <button
                       type="button"
-                      className="cursor-pointer font-medium text-clay hover:text-clay-deep"
+                      className="cursor-pointer font-bold text-clay-ink hover:text-clay-deep"
                       onClick={() => {
                         onInterest(resource)
                         setPendingAddId(resource.id)
@@ -826,12 +1026,6 @@ function ResourcesScreen({
           )
         })}
       </ul>
-
-      {!pickMode ? (
-        <Button className="mt-10" onClick={onContinue}>
-          {cta}
-        </Button>
-      ) : null}
-    </div>
+    </ScreenShell>
   )
 }

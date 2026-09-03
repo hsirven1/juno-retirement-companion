@@ -1,5 +1,16 @@
 import { cn } from '../lib/cn'
+import { JunoOrb } from './JunoOrb'
 
+const SIZE_PX = {
+  sm: 32,
+  md: 36,
+  lg: 44,
+} as const
+
+/**
+ * Named size wrapper around the CSS Juno orb.
+ * Keeps existing call sites (chat overlay, journey) on the same face.
+ */
 export function JunoAvatar({
   size = 'md',
   className,
@@ -7,19 +18,10 @@ export function JunoAvatar({
   size?: 'sm' | 'md' | 'lg'
   className?: string
 }) {
-  const sizeClass =
-    size === 'sm'
-      ? 'size-8'
-      : size === 'lg'
-        ? 'size-11'
-        : 'size-9'
-
   return (
-    <img
-      src="/juno-avatar.png"
-      alt=""
-      className={cn('shrink-0 rounded-full object-cover', sizeClass, className)}
-      aria-hidden="true"
+    <JunoOrb
+      size={SIZE_PX[size]}
+      className={cn('shrink-0', className)}
     />
   )
 }

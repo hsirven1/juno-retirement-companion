@@ -117,6 +117,12 @@ export const messages = {
       `${hour < 18 ? 'Bonjour' : 'Bonsoir'} ${name}`,
     intro: 'Voici vos prochaines étapes.',
     thisWeek: 'Votre semaine',
+    weekLead: 'Trois choses. Rien de plus.',
+    journeyInProgress: 'PARCOURS EN COURS',
+    weekLabel: 'semaine',
+    guidedStep: 'Étape guidée',
+    resumeStep: 'Reprendre',
+    detailsStep: 'Détails',
     upcomingWeekLabel: 'À venir',
     pastWeekLabel: 'Passée',
     forecastLabel: 'Prévision',
@@ -131,7 +137,7 @@ export const messages = {
           ? '1 prochaine étape'
           : `${n} prochaines étapes`,
     weekProgress: (done: number, total: number) =>
-      total <= 0 ? '' : `${done} sur ${total} terminé`,
+      total <= 0 ? '' : `${done} sur ${total}`,
     allDoneThisWeek: 'Tout est fait pour cette semaine.',
     completed: 'Terminé',
     completedSection: 'Terminées',
@@ -143,6 +149,7 @@ export const messages = {
     carriedOver: 'Reproposé cette semaine',
     prioritiesTitle: 'Vos priorités',
     prioritiesCta: 'Voir mon parcours',
+    prioritiesAdjust: 'Ajuster',
     forYou: 'Recommandé pour vous',
     seeAllResources: 'Voir toutes les ressources →',
     whyForYou: 'Pourquoi pour vous ?',
@@ -156,9 +163,10 @@ export const messages = {
     ideasLead:
       'Vous aimeriez sortir et voir du monde, sans un agenda trop chargé. Voici quatre pistes à Lyon.',
     coachTitle: 'Parler à Juno',
+    coachSubtitle: 'Votre accompagnement',
     coachPreview: (name: string) =>
       `Bonjour ${name}. Vous voulez avancer sur une priorité ou découvrir de nouvelles idées ?`,
-    coachPlaceholder: 'Écrivez à Juno...',
+    coachPlaceholder: 'Écrire à Juno…',
     coachOpen: 'Ouvrir la conversation avec Juno',
     prototypeWeekSimulator: 'Prototype — simuler la semaine courante',
     weekShort: (n: number) => `S${n}`,
@@ -166,11 +174,19 @@ export const messages = {
 
   plan: {
     title: 'Mon parcours',
-    subtitle: 'Les sujets sur lesquels vous avancez, à votre rythme.',
+    subtitle: 'Un thème à la fois, quelques minutes par semaine.',
     statusInProgress: 'En cours',
     statusExplore: 'À explorer',
     statusInAction: 'En action',
     statusCompleted: 'Terminé',
+    statusReady: 'Prêt à démarrer',
+    statusSuggested: 'Suggéré ensuite',
+    statusAvailable: 'Disponible',
+    resume: 'Reprendre',
+    weekPhaseTitle: (week: number, phase: string) =>
+      `Semaine ${week} — ${phase}`,
+    themeMeta: (weeks: number, mins: number) =>
+      `${weeks} semaines · ${mins} min / semaine`,
     stepsProgress: (done: number, total: number) =>
       `${done} étape${done > 1 ? 's' : ''} sur ${total}`,
     stepsEstimate: (total: number, minutes: number) =>
@@ -202,10 +218,18 @@ export const messages = {
     advancedOn: 'Vous avez avancé sur\u00a0:',
     junoRetains: 'Juno retient',
     nextTime: 'La prochaine fois',
-    finishStep: 'Terminer cette étape',
+    nextWeek: 'La semaine prochaine',
+    finishStep: 'Terminer',
     closeStep: 'Fermer',
     continue: 'Continuer',
     severalAnswers: 'Plusieurs réponses possibles.',
+    singleAnswer: 'Une seule réponse. Vous pourrez revenir dessus.',
+    aQuestion: 'Une question',
+    threeWays: 'Trois manières de faire',
+    whatIUnderstand: 'Ce que je comprends de vous',
+    insightConfirm: 'C’est assez juste',
+    insightAdjust: 'Pas tout à fait',
+    weekDone: (n: number) => `Semaine ${n} terminée`,
     speaksToMe: 'Ça me parle',
     notReally: 'Pas vraiment',
     addToWeek: 'Ajouter à ma semaine',
@@ -243,8 +267,9 @@ export const messages = {
 
   discover: {
     title: 'Découvrir',
-    subtitle:
-      'Des activités, associations et ressources qui pourraient vous correspondre.',
+    subtitle: 'Des idées choisies pour vous, à Lille.',
+    searchPlaceholder: 'Chercher une activité, un lieu, une association',
+    searchAria: 'Rechercher des ressources',
     filters: [
       { id: 'all' as const, label: 'Tout' },
       { id: 'meet' as const, label: 'Rencontrer' },
@@ -254,10 +279,59 @@ export const messages = {
       { id: 'travel' as const, label: 'Voyager' },
       { id: 'practice' as const, label: 'Pratique' },
     ],
+    collectionsTitle: 'Par où commencer',
+    collectionsSubtitle: (n: number) =>
+      `${n} ressource${n > 1 ? 's' : ''} autour de vous.`,
+    collections: [
+      {
+        id: 'meet' as const,
+        title: 'Rencontrer des gens près de chez moi',
+        solid: '#D6455E',
+      },
+      {
+        id: 'move' as const,
+        title: 'Bouger sans faire du sport',
+        solid: '#2F7D5B',
+      },
+      {
+        id: 'learn' as const,
+        title: 'Apprendre quelque chose de neuf',
+        solid: '#6D4AC4',
+      },
+      {
+        id: 'engage' as const,
+        title: 'Transmettre mon expérience',
+        solid: '#C98A16',
+      },
+      {
+        id: 'travel' as const,
+        title: 'Sortir et découvrir',
+        solid: '#3563C9',
+      },
+    ],
+    browseAll: 'Tout parcourir',
+    browseAllCount: (n: number) => `${n} ressources à Lille →`,
+    seeAllCollections: 'Voir toutes les collections',
+    forYouTitle: 'Pour vous',
+    forYouSubtitle:
+      'Parce que vous cherchez à rencontrer de nouvelles personnes.',
+    lowCommitmentTitle: 'À essayer sans trop s’engager',
+    lowCommitmentSubtitle:
+      'Une fois, pour voir. Personne ne vous attend la semaine suivante.',
+    learnTitle: 'Pour apprendre quelque chose',
+    learnSubtitle: 'Des groupes et ateliers pour nourrir la curiosité.',
+    contributeTitle: 'Pour transmettre votre expérience',
+    contributeSubtitle: 'Des façons concrètes de rester utile autour de vous.',
+    aroundTitle: 'Autour de vous',
+    aroundSubtitle: 'Des ressources près de Lille, classées pour vous.',
+    countIdeas: (n: number) => `${n} idée${n > 1 ? 's' : ''}`,
+    countProposals: (n: number) =>
+      `${n} proposition${n > 1 ? 's' : ''}`,
+    clearSearch: 'Effacer la recherche',
     whyForYou: 'Pourquoi pour vous',
     viewResource: 'Découvrir',
-    save: 'Enregistrer',
-    saved: 'Enregistré',
+    save: 'Ça m’intéresse',
+    saved: 'Intérêt noté',
     mockNote: '',
     interested: 'Ça m’intéresse',
     later: 'Plus tard',
@@ -271,13 +345,19 @@ export const messages = {
     programYear: 'Programme en cours',
     addToWeek: 'Ajouter à ma semaine',
     askAddToWeek: 'Vous voulez en faire une prochaine étape ?',
+    talkToJunoFirst: 'Ou en parler à Juno avant de décider',
     eligibilityLabel: 'Conditions',
     costLabel: 'Tarif',
     commitmentLabel: 'Engagement',
     locationLabel: 'Lieu',
     addressLabel: 'Adresse',
+    rhythmLabel: 'Rythme',
+    formatLabel: 'Format',
+    practicalTitle: 'Informations pratiques',
     dismissPrompt: 'Qu’est-ce qui vous convient moins ?',
     emptyFilter: 'Aucune ressource ne correspond à ce filtre pour le moment.',
+    emptySearch: 'Aucun résultat pour cette recherche.',
+    backToDiscover: 'Découvrir',
   },
 
   resources: {

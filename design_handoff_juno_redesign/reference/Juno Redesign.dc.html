@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #E8E1D6; }
+  * { box-sizing: border-box; }
+  a { color: #B93A26; text-decoration: none; }
+  a:hover { color: #8E2A19; text-decoration: underline; }
+  @keyframes junoBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+</style>
+</helmet>
+
+<div style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #221C18; background: #E8E1D6; padding: 56px 56px 120px; -webkit-font-smoothing: antialiased;">
+
+<div style="max-width: 1240px; margin: 0 0 48px;">
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
+    <div style="width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F6A98F, #E1503A 72%);"></div>
+    <span style="font-family: 'Newsreader', serif; font-size: 31px; font-weight: 500; letter-spacing: -.01em;">juno</span>
+  </div>
+  <h1 style="font-family: 'Newsreader', serif; font-size: 44px; line-height: 1.1; font-weight: 500; margin: 0; letter-spacing: -.02em;">Refonte visuelle — direction proposée</h1>
+  <p style="font-size: 18px; line-height: 1.55; color: #58504A; margin: 14px 0 0; max-width: 62ch; text-wrap: pretty;">Toile neutre chaude, une couleur signature corail, des couleurs de thème contrôlées, et des moments plus immersifs dans les parcours guidés. Deux directions pour Accueil (<a href="#1a">1a</a> / <a href="#1b">1b</a>) et Découvrir (<a href="#1c">1c</a> / <a href="#1d">1d</a>), une seule pour le reste.</p>
+</div>
+
+<!-- ═════════════════════════ TURN 1 ═════════════════════════ -->
+<section style="display: flex; flex-direction: column; gap: 72px;">
+
+  <!-- ─── ACCUEIL, DEUX DIRECTIONS ─── -->
+  <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;">
+
+    <!-- 1a -->
+    <div id="1a" style="width: 1240px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em; background: #221C18; color: #F7EFE6; padding: 6px 11px; border-radius: 7px;">1a</span>
+        <span style="font-size: 19px; font-weight: 800;">Accueil — direction « toile chaude »</span>
+        <span style="font-size: 17px; color: #6B625B;">surfaces blanches nettes sur ivoire, corail réservé aux actions, Juno en panneau sombre</span>
+      </div>
+
+      <div style="background: #FAF6F0; border: 1px solid #DCD1C1; border-radius: 26px; overflow: hidden; box-shadow: 0 30px 60px -40px rgba(34,28,24,.4);">
+        <div style="height: 74px; padding: 0 36px; display: flex; align-items: center; gap: 40px; border-bottom: 1px solid #EDE5DA; background: rgba(255,255,255,.6);">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F6A98F, #E1503A 72%);"></div>
+            <span style="font-family: 'Newsreader', serif; font-size: 25px; font-weight: 500;">juno</span>
+          </div>
+          <div style="display: flex; gap: 6px; flex: 1;">
+            <div style="position: relative; padding: 8px 14px; font-size: 16px; font-weight: 700;">Accueil<div style="position: absolute; left: 14px; right: 14px; bottom: -20px; height: 3px; border-radius: 2px; background: #E1503A;"></div></div>
+            <div style="padding: 8px 14px; font-size: 16px; font-weight: 600; color: #6B625B;">Découvrir</div>
+            <div style="padding: 8px 14px; font-size: 16px; font-weight: 600; color: #6B625B;">Mon parcours</div>
+            <div style="padding: 8px 14px; font-size: 16px; font-weight: 600; color: #6B625B;">Mon bilan</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 8px 17px 8px 11px; border-radius: 999px; background: #221C18; color: #FDF9F4; font-size: 15px; font-weight: 700;">
+            <div style="width: 21px; height: 21px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F6A98F, #E1503A 72%);"></div>Parler à Juno
+          </div>
+          <div style="width: 40px; height: 40px; border-radius: 50%; background: #EFE4D6; border: 1px solid #E3D6C6; display: grid; place-items: center; font-size: 14px; font-weight: 800; color: #6B5F54;">CL</div>
+        </div>
+
+        <div style="padding: 40px 36px 46px;">
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 32px;">
+            <div>
+              <div style="font-size: 13px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; color: #A0958A; margin-bottom: 11px;">Mardi 2 septembre</div>
+              <div style="font-family: 'Newsreader', serif; font-size: 44px; line-height: 1.08; font-weight: 500; letter-spacing: -.02em;">Bonjour Claire.</div>
+              <div style="font-size: 19px; line-height: 1.5; color: #58504A; margin-top: 10px;">Trois choses vous attendent cette semaine. Rien de plus.</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 13px; padding: 15px 21px; background: #FFF; border: 1px solid #EDE5DA; border-radius: 16px;">
+              <div style="width: 10px; height: 10px; border-radius: 50%; background: #D6455E;"></div>
+              <div>
+                <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #A0958A;">Parcours en cours</div>
+                <div style="font-size: 16px; font-weight: 700; margin-top: 3px;">Ma vie sociale · semaine 2</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr); gap: 26px; align-items: start;">
+            <div style="display: flex; flex-direction: column; gap: 26px; min-width: 0;">
+
+              <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 24px; padding: 30px 30px 12px; box-shadow: 0 1px 2px rgba(34,28,24,.04), 0 20px 44px -34px rgba(34,28,24,.3);">
+                <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 6px;">
+                  <div style="font-size: 25px; font-weight: 800; letter-spacing: -.015em;">Votre semaine</div>
+                  <div style="font-size: 15px; font-weight: 600; color: #8A817A;">2 – 8 septembre · <span style="color: #221C18; font-weight: 700;">1 sur 3</span></div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 18px; padding: 21px 2px; border-bottom: 1px solid #F2EBE1;">
+                  <div style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #2F7D5B; display: grid; place-items: center;">
+                    <div style="width: 15px; height: 8px; border-left: 3px solid #FFF; border-bottom: 3px solid #FFF; transform: rotate(-45deg) translate(1px, -2px);"></div>
+                  </div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 4px;">
+                      <span style="width: 7px; height: 7px; border-radius: 50%; background: #3563C9;"></span>
+                      <span style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #3563C9;">Nouveau rythme</span>
+                    </div>
+                    <div style="font-size: 19px; font-weight: 700; letter-spacing: -.01em; color: #8A817A; text-decoration: line-through; text-decoration-color: #D6CDC2;">Noter trois moments de la semaine passée</div>
+                  </div>
+                  <div style="flex: none; font-size: 15px; font-weight: 700; color: #2F7D5B;">Fait lundi</div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 18px; padding: 21px 2px; border-bottom: 1px solid #F2EBE1;">
+                  <div style="flex: none; width: 34px; height: 34px; border-radius: 50%; border: 2px solid #DCD2C6;"></div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 4px;">
+                      <span style="width: 7px; height: 7px; border-radius: 50%; background: #D6455E;"></span>
+                      <span style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #D6455E;">Ma vie sociale</span>
+                    </div>
+                    <div style="font-size: 19px; font-weight: 700; letter-spacing: -.01em;">Les rencontres que le travail créait pour vous</div>
+                    <div style="font-size: 15px; color: #7A7069; margin-top: 4px;">Étape guidée · environ 8 minutes</div>
+                  </div>
+                  <div style="flex: none; padding: 12px 22px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 16px; font-weight: 700;">Reprendre</div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 18px; padding: 21px 2px;">
+                  <div style="flex: none; width: 34px; height: 34px; border-radius: 50%; border: 2px solid #DCD2C6;"></div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 4px;">
+                      <span style="width: 7px; height: 7px; border-radius: 50%; background: #2F7D5B;"></span>
+                      <span style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #2F7D5B;">Rester actif</span>
+                    </div>
+                    <div style="font-size: 19px; font-weight: 700; letter-spacing: -.01em;">Aller voir la marche du jeudi matin</div>
+                    <div style="font-size: 15px; color: #7A7069; margin-top: 4px;">9h30, parc de la Citadelle · sans inscription</div>
+                  </div>
+                  <div style="flex: none; padding: 12px 22px; border-radius: 999px; border: 1.5px solid #DCD1C1; font-size: 16px; font-weight: 700;">Détails</div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 20px;">
+                  <div style="font-size: 25px; font-weight: 800; letter-spacing: -.015em;">Recommandé pour vous</div>
+                  <div style="font-size: 16px; font-weight: 700; color: #B93A26;">Tout découvrir →</div>
+                </div>
+                <div style="font-size: 17px; color: #6B625B; margin: 6px 0 18px;">Parce que vous cherchez une activité régulière, en petit groupe.</div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                  <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 20px; overflow: hidden;">
+                    <div style="height: 186px; background: #EDE4FA; display: grid; place-items: center; position: relative;">
+                      <div style="position: absolute; left: 26px; bottom: -34px; width: 118px; height: 118px; border-radius: 50%; background: #6D4AC4; opacity: .18;"></div>
+                      <div style="position: absolute; right: 34px; top: 30px; width: 58px; height: 58px; border-radius: 50%; border: 9px solid #6D4AC4; opacity: .3;"></div>
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #5B3FA8; background: rgba(255,255,255,.7); padding: 5px 9px; border-radius: 6px; position: relative;">photo · atelier</span>
+                    </div>
+                    <div style="padding: 20px 22px 22px;">
+                      <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #6D4AC4; margin-bottom: 8px;">Apprendre</div>
+                      <div style="font-size: 21px; font-weight: 800; letter-spacing: -.015em;">Atelier photographie</div>
+                      <div style="font-size: 16px; color: #58504A; font-weight: 600; margin-top: 3px;">Université du Temps Libre</div>
+                      <div style="font-size: 15px; color: #8A817A; margin-top: 9px;">Lille-Centre · Petit groupe · Chaque mardi</div>
+                      <div style="font-size: 16px; line-height: 1.5; color: #4A433D; margin-top: 12px;">Une activité régulière autour d'un intérêt que vous aimez déjà.</div>
+                    </div>
+                  </div>
+                  <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 20px; overflow: hidden;">
+                    <div style="height: 186px; background: #E1EFE4; display: grid; place-items: center; position: relative;">
+                      <div style="position: absolute; left: -20px; top: 26px; width: 130px; height: 130px; border-radius: 50%; background: #2F7D5B; opacity: .16;"></div>
+                      <div style="position: absolute; right: 40px; bottom: 24px; width: 66px; height: 66px; border-radius: 999px 999px 4px 999px; background: #2F7D5B; opacity: .3;"></div>
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #216245; background: rgba(255,255,255,.7); padding: 5px 9px; border-radius: 6px; position: relative;">photo · jardin</span>
+                    </div>
+                    <div style="padding: 20px 22px 22px;">
+                      <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #2F7D5B; margin-bottom: 8px;">S'engager</div>
+                      <div style="font-size: 21px; font-weight: 800; letter-spacing: -.015em;">Les Jardins de Wazemmes</div>
+                      <div style="font-size: 16px; color: #58504A; font-weight: 600; margin-top: 3px;">Association Le Grand Bac</div>
+                      <div style="font-size: 15px; color: #8A817A; margin-top: 9px;">Wazemmes · Sans engagement · Samedi matin</div>
+                      <div style="font-size: 16px; line-height: 1.5; color: #4A433D; margin-top: 12px;">On vient quand on veut, on repart avec des légumes et des voisins.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+              <div style="background: #241C18; border-radius: 24px; padding: 26px 24px 22px; color: #F7EFE6; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -80px; right: -70px; width: 210px; height: 210px; border-radius: 50%; background: radial-gradient(circle, rgba(225,80,58,.45), transparent 68%);"></div>
+                <div style="position: relative; display: flex; align-items: center; gap: 13px; margin-bottom: 18px;">
+                  <div style="width: 50px; height: 50px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F8B39A, #E1503A 74%); position: relative; animation: junoBreathe 5.5s ease-in-out infinite; box-shadow: 0 10px 26px rgba(225,80,58,.42);">
+                    <div style="position: absolute; top: 40%; left: 29%; width: 6px; height: 9px; border-radius: 4px; background: #3A1B12;"></div>
+                    <div style="position: absolute; top: 40%; left: 57%; width: 6px; height: 9px; border-radius: 4px; background: #3A1B12;"></div>
+                  </div>
+                  <div>
+                    <div style="font-size: 19px; font-weight: 800;">Juno</div>
+                    <div style="font-size: 14px; color: #B9AA9D;">Là quand vous voulez</div>
+                  </div>
+                </div>
+                <div style="position: relative; background: rgba(255,255,255,.1); border-radius: 18px 18px 18px 6px; padding: 17px 19px; font-size: 17px; line-height: 1.5; color: #F2E7DC;">Vous avez noté que les repas du midi vous manquent. On regarde ensemble ce qu'on peut recréer ?</div>
+                <div style="position: relative; display: flex; gap: 8px; margin-top: 13px; flex-wrap: wrap;">
+                  <div style="padding: 9px 15px; border-radius: 999px; border: 1px solid rgba(255,255,255,.26); font-size: 15px; font-weight: 600;">Oui, volontiers</div>
+                  <div style="padding: 9px 15px; border-radius: 999px; border: 1px solid rgba(255,255,255,.26); font-size: 15px; font-weight: 600;">Plus tard</div>
+                </div>
+                <div style="position: relative; margin-top: 16px; display: flex; align-items: center; gap: 12px; background: #FFF; border-radius: 999px; padding: 5px 5px 5px 19px;">
+                  <span style="flex: 1; font-size: 16px; color: #9A9088;">Écrire à Juno…</span>
+                  <div style="width: 40px; height: 40px; border-radius: 50%; background: #E1503A; display: grid; place-items: center;">
+                    <div style="width: 11px; height: 11px; border-top: 3px solid #FFF; border-right: 3px solid #FFF; transform: rotate(45deg) translate(-1px, 1px);"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 24px; padding: 24px;">
+                <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 15px;">
+                  <div style="font-size: 19px; font-weight: 800;">Vos priorités</div>
+                  <div style="font-size: 15px; font-weight: 700; color: #B93A26;">Ajuster</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 13px;">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="width: 9px; height: 9px; border-radius: 50%; background: #D6455E;"></span>
+                    <span style="flex: 1; font-size: 17px; font-weight: 600;">Rencontrer du monde</span>
+                    <span style="font-size: 14px; font-weight: 700; color: #8A817A;">En cours</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="width: 9px; height: 9px; border-radius: 50%; background: #2F7D5B;"></span>
+                    <span style="flex: 1; font-size: 17px; font-weight: 600;">Bouger régulièrement</span>
+                    <span style="font-size: 14px; font-weight: 700; color: #8A817A;">Semaine 4</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="width: 9px; height: 9px; border-radius: 50%; background: #C98A16;"></span>
+                    <span style="flex: 1; font-size: 17px; font-weight: 600;">Transmettre mon métier</span>
+                    <span style="font-size: 14px; font-weight: 700; color: #8A817A;">À venir</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1b -->
+    <div id="1b" style="width: 1240px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em; background: #221C18; color: #F7EFE6; padding: 6px 11px; border-radius: 7px;">1b</span>
+        <span style="font-size: 19px; font-weight: 800;">Accueil — direction « couleur en tête »</span>
+        <span style="font-size: 17px; color: #6B625B;">la semaine posée sur un bloc corail, thèmes plus affirmés, Juno en carte claire</span>
+      </div>
+
+      <div style="background: #FAF6F0; border: 1px solid #DCD1C1; border-radius: 26px; overflow: hidden; box-shadow: 0 30px 60px -40px rgba(34,28,24,.4);">
+        <div style="height: 74px; padding: 0 36px; display: flex; align-items: center; gap: 40px; border-bottom: 1px solid #EDE5DA; background: #FFF;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F6A98F, #E1503A 72%);"></div>
+            <span style="font-family: 'Newsreader', serif; font-size: 25px; font-weight: 500;">juno</span>
+          </div>
+          <div style="display: flex; gap: 6px; flex: 1;">
+            <div style="padding: 8px 16px; border-radius: 999px; background: #F6E4DF; font-size: 16px; font-weight: 700; color: #B93A26;">Accueil</div>
+            <div style="padding: 8px 16px; font-size: 16px; font-weight: 600; color: #6B625B;">Découvrir</div>
+            <div style="padding: 8px 16px; font-size: 16px; font-weight: 600; color: #6B625B;">Mon parcours</div>
+            <div style="padding: 8px 16px; font-size: 16px; font-weight: 600; color: #6B625B;">Mon bilan</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 8px 17px 8px 11px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 15px; font-weight: 700;">
+            <div style="width: 21px; height: 21px; border-radius: 50%; background: rgba(255,255,255,.28);"></div>Parler à Juno
+          </div>
+          <div style="width: 40px; height: 40px; border-radius: 50%; background: #EFE4D6; border: 1px solid #E3D6C6; display: grid; place-items: center; font-size: 14px; font-weight: 800; color: #6B5F54;">CL</div>
+        </div>
+
+        <div style="padding: 36px 36px 46px;">
+          <div style="display: grid; grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr); gap: 26px; align-items: start;">
+            <div style="display: flex; flex-direction: column; gap: 26px; min-width: 0;">
+
+              <div style="background: #E1503A; border-radius: 26px; padding: 32px 32px 26px; color: #FFF7F2; position: relative; overflow: hidden;">
+                <div style="position: absolute; right: -60px; top: -60px; width: 230px; height: 230px; border-radius: 50%; background: rgba(255,255,255,.11);"></div>
+                <div style="position: absolute; right: 74px; bottom: -90px; width: 150px; height: 150px; border-radius: 50%; background: rgba(255,255,255,.08);"></div>
+                <div style="position: relative;">
+                  <div style="font-size: 13px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; color: rgba(255,255,255,.72); margin-bottom: 10px;">2 – 8 septembre · 1 sur 3</div>
+                  <div style="font-family: 'Newsreader', serif; font-size: 40px; font-weight: 500; letter-spacing: -.02em;">Votre semaine, Claire</div>
+                  <div style="font-size: 18px; color: rgba(255,255,255,.85); margin-top: 8px;">Trois choses. Rien de plus.</div>
+                </div>
+                <div style="position: relative; margin-top: 26px; display: flex; flex-direction: column; gap: 12px;">
+                  <div style="display: flex; align-items: center; gap: 16px; background: rgba(255,255,255,.14); border-radius: 18px; padding: 18px 20px;">
+                    <div style="flex: none; width: 32px; height: 32px; border-radius: 50%; background: #FFF; display: grid; place-items: center;">
+                      <div style="width: 14px; height: 7px; border-left: 3px solid #E1503A; border-bottom: 3px solid #E1503A; transform: rotate(-45deg) translate(1px, -2px);"></div>
+                    </div>
+                    <div style="flex: 1; font-size: 18px; font-weight: 700; color: rgba(255,255,255,.72); text-decoration: line-through; text-decoration-color: rgba(255,255,255,.4);">Noter trois moments de la semaine passée</div>
+                    <div style="font-size: 15px; font-weight: 700; color: rgba(255,255,255,.72);">Fait lundi</div>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 16px; background: #FFF; border-radius: 18px; padding: 20px; color: #221C18;">
+                    <div style="flex: none; width: 32px; height: 32px; border-radius: 50%; border: 2px solid #DCD2C6;"></div>
+                    <div style="flex: 1; min-width: 0;">
+                      <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #D6455E; margin-bottom: 4px;">Ma vie sociale · étape guidée</div>
+                      <div style="font-size: 19px; font-weight: 700;">Les rencontres que le travail créait pour vous</div>
+                    </div>
+                    <div style="flex: none; padding: 12px 22px; border-radius: 999px; background: #221C18; color: #FFF; font-size: 16px; font-weight: 700;">Reprendre</div>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 16px; background: rgba(255,255,255,.14); border-radius: 18px; padding: 20px;">
+                    <div style="flex: none; width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(255,255,255,.5);"></div>
+                    <div style="flex: 1; min-width: 0;">
+                      <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: rgba(255,255,255,.75); margin-bottom: 4px;">Rester actif</div>
+                      <div style="font-size: 19px; font-weight: 700;">Aller voir la marche du jeudi matin</div>
+                    </div>
+                    <div style="flex: none; padding: 11px 20px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,.45); font-size: 16px; font-weight: 700;">Détails</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 20px;">
+                  <div style="font-size: 25px; font-weight: 800; letter-spacing: -.015em;">Recommandé pour vous</div>
+                  <div style="font-size: 16px; font-weight: 700; color: #B93A26;">Tout découvrir →</div>
+                </div>
+                <div style="font-size: 17px; color: #6B625B; margin: 6px 0 18px;">Une activité régulière, en petit groupe.</div>
+                <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 20px;">
+                  <div style="border-radius: 22px; overflow: hidden; background: #6D4AC4; color: #FFF; min-height: 320px; display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; position: relative;">
+                    <div style="position: absolute; right: -40px; top: -30px; width: 190px; height: 190px; border-radius: 50%; background: rgba(255,255,255,.14);"></div>
+                    <div style="position: absolute; left: 24px; top: 30px; width: 74px; height: 74px; border-radius: 50%; border: 12px solid rgba(255,255,255,.2);"></div>
+                    <span style="position: absolute; top: 24px; right: 24px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: rgba(255,255,255,.75);">photo · atelier</span>
+                    <div style="position: relative;">
+                      <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: rgba(255,255,255,.78); margin-bottom: 8px;">Apprendre</div>
+                      <div style="font-size: 27px; font-weight: 800; letter-spacing: -.02em;">Atelier photographie</div>
+                      <div style="font-size: 17px; color: rgba(255,255,255,.88); margin-top: 6px;">Université du Temps Libre · Lille-Centre</div>
+                      <div style="font-size: 16px; color: rgba(255,255,255,.8); margin-top: 4px;">Petit groupe · chaque mardi</div>
+                      <div style="display: inline-block; margin-top: 16px; padding: 12px 22px; border-radius: 999px; background: #FFF; color: #4A2F92; font-size: 16px; font-weight: 700;">Découvrir</div>
+                    </div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div style="flex: 1; border-radius: 22px; background: #E1EFE4; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+                      <div style="position: absolute; right: -30px; bottom: -30px; width: 130px; height: 130px; border-radius: 50%; background: #2F7D5B; opacity: .16;"></div>
+                      <div style="position: relative; font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #216245;">S'engager</div>
+                      <div style="position: relative;">
+                        <div style="font-size: 20px; font-weight: 800; letter-spacing: -.015em;">Les Jardins de Wazemmes</div>
+                        <div style="font-size: 15px; color: #46554B; margin-top: 5px;">Samedi matin · sans engagement</div>
+                      </div>
+                    </div>
+                    <div style="flex: 1; border-radius: 22px; background: #FBE6E9; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+                      <div style="position: absolute; right: 16px; top: -34px; width: 110px; height: 110px; border-radius: 50%; background: #D6455E; opacity: .16;"></div>
+                      <div style="position: relative; font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #A82B44;">Rencontrer</div>
+                      <div style="position: relative;">
+                        <div style="font-size: 20px; font-weight: 800; letter-spacing: -.015em;">Chorale du Vieux-Lille</div>
+                        <div style="font-size: 15px; color: #5B4247; margin-top: 5px;">Jeudi soir · tous niveaux</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+              <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 24px; padding: 24px; box-shadow: 0 20px 44px -34px rgba(34,28,24,.3);">
+                <div style="display: flex; align-items: center; gap: 13px; margin-bottom: 16px;">
+                  <div style="width: 54px; height: 54px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F8B39A, #E1503A 74%); position: relative; animation: junoBreathe 5.5s ease-in-out infinite;">
+                    <div style="position: absolute; top: 40%; left: 29%; width: 6px; height: 10px; border-radius: 4px; background: #3A1B12;"></div>
+                    <div style="position: absolute; top: 40%; left: 57%; width: 6px; height: 10px; border-radius: 4px; background: #3A1B12;"></div>
+                  </div>
+                  <div>
+                    <div style="font-size: 20px; font-weight: 800;">Juno</div>
+                    <div style="font-size: 14px; color: #8A817A;">Votre accompagnement</div>
+                  </div>
+                </div>
+                <div style="background: #F6EFE5; border-radius: 18px 18px 18px 6px; padding: 17px 19px; font-size: 17px; line-height: 1.5; color: #3B342E;">Vous avez noté que les repas du midi vous manquent. On regarde ensemble ce qu'on peut recréer ?</div>
+                <div style="display: flex; gap: 8px; margin-top: 13px; flex-wrap: wrap;">
+                  <div style="padding: 10px 16px; border-radius: 999px; background: #F6E4DF; color: #B93A26; font-size: 15px; font-weight: 700;">Oui, volontiers</div>
+                  <div style="padding: 10px 16px; border-radius: 999px; border: 1.5px solid #E3D9CC; font-size: 15px; font-weight: 700;">Plus tard</div>
+                </div>
+                <div style="margin-top: 16px; display: flex; align-items: center; gap: 12px; background: #FAF6F0; border: 1px solid #EDE5DA; border-radius: 999px; padding: 5px 5px 5px 19px;">
+                  <span style="flex: 1; font-size: 16px; color: #9A9088;">Écrire à Juno…</span>
+                  <div style="width: 40px; height: 40px; border-radius: 50%; background: #E1503A; display: grid; place-items: center;">
+                    <div style="width: 11px; height: 11px; border-top: 3px solid #FFF; border-right: 3px solid #FFF; transform: rotate(45deg) translate(-1px, 1px);"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background: #F3EDE4; border-radius: 24px; padding: 24px;">
+                <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 15px;">
+                  <div style="font-size: 19px; font-weight: 800;">Vos priorités</div>
+                  <div style="font-size: 15px; font-weight: 700; color: #B93A26;">Ajuster</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 11px;">
+                  <div style="display: flex; align-items: center; gap: 12px; background: #FFF; border-radius: 14px; padding: 13px 15px;">
+                    <span style="width: 9px; height: 9px; border-radius: 50%; background: #D6455E;"></span>
+                    <span style="flex: 1; font-size: 17px; font-weight: 700;">Rencontrer du monde</span>
+                    <span style="font-size: 14px; font-weight: 700; color: #8A817A;">En cours</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 12px; background: #FFF; border-radius: 14px; padding: 13px 15px;">
+                    <span style="width: 9px; height: 9px; border-radius: 50%; background: #2F7D5B;"></span>
+                    <span style="flex: 1; font-size: 17px; font-weight: 700;">Bouger régulièrement</span>
+                    <span style="font-size: 14px; font-weight: 700; color: #8A817A;">Semaine 4</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 12px; background: #FFF; border-radius: 14px; padding: 13px 15px;">
+                    <span style="width: 9px; height: 9px; border-radius: 50%; background: #C98A16;"></span>
+                    <span style="flex: 1; font-size: 17px; font-weight: 700;">Transmettre mon métier</span>
+                    <span style="font-size: 14px; font-weight: 700; color: #8A817A;">À venir</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── DÉCOUVRIR, DEUX DIRECTIONS ─── -->
+  <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;">
+
+    <div id="1c" style="width: 1240px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em; background: #221C18; color: #F7EFE6; padding: 6px 11px; border-radius: 7px;">1c</span>
+        <span style="font-size: 19px; font-weight: 800;">Découvrir — direction « éditoriale »</span>
+        <span style="font-size: 17px; color: #6B625B;">rangées thématiques, image d'abord, très peu de chrome</span>
+      </div>
+
+      <div style="background: #FAF6F0; border: 1px solid #DCD1C1; border-radius: 26px; overflow: hidden; padding: 40px 36px 46px; box-shadow: 0 30px 60px -40px rgba(34,28,24,.4);">
+        <div style="font-family: 'Newsreader', serif; font-size: 44px; font-weight: 500; letter-spacing: -.02em;">Découvrir</div>
+        <div style="font-size: 20px; color: #58504A; margin: 8px 0 24px;">Des idées choisies pour vous, à Lille.</div>
+        <div style="display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 40px;">
+          <div style="padding: 12px 22px; border-radius: 999px; background: #221C18; color: #FDF9F4; font-size: 16px; font-weight: 700;">Tout</div>
+          <div style="padding: 12px 22px; border-radius: 999px; background: #FFF; border: 1.5px solid #E3D9CC; font-size: 16px; font-weight: 700;">Rencontrer</div>
+          <div style="padding: 12px 22px; border-radius: 999px; background: #FFF; border: 1.5px solid #E3D9CC; font-size: 16px; font-weight: 700;">Bouger</div>
+          <div style="padding: 12px 22px; border-radius: 999px; background: #FFF; border: 1.5px solid #E3D9CC; font-size: 16px; font-weight: 700;">Apprendre</div>
+          <div style="padding: 12px 22px; border-radius: 999px; background: #FFF; border: 1.5px solid #E3D9CC; font-size: 16px; font-weight: 700;">S'engager</div>
+          <div style="padding: 12px 22px; border-radius: 999px; background: #FFF; border: 1.5px solid #E3D9CC; font-size: 16px; font-weight: 700;">Sortir</div>
+          <div style="padding: 12px 22px; border-radius: 999px; background: #FFF; border: 1.5px solid #E3D9CC; font-size: 16px; font-weight: 700;">Voyager</div>
+        </div>
+
+        <div style="margin-bottom: 46px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <div style="font-size: 27px; font-weight: 800; letter-spacing: -.02em;">Pour vous</div>
+            <div style="font-size: 16px; font-weight: 700; color: #B93A26;">Voir les 14 →</div>
+          </div>
+          <div style="font-size: 17px; color: #6B625B; margin: 5px 0 18px;">Parce que vous cherchez à rencontrer de nouvelles personnes.</div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+            <div>
+              <div style="height: 200px; border-radius: 20px; background: #EDE4FA; margin-bottom: 13px; position: relative; overflow: hidden;">
+                <div style="position: absolute; left: 30px; bottom: -40px; width: 130px; height: 130px; border-radius: 50%; background: #6D4AC4; opacity: .18;"></div>
+                <div style="position: absolute; right: 32px; top: 28px; width: 62px; height: 62px; border-radius: 50%; border: 10px solid #6D4AC4; opacity: .3;"></div>
+                <span style="position: absolute; left: 14px; top: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #5B3FA8; background: rgba(255,255,255,.72); padding: 5px 9px; border-radius: 6px;">photo · atelier</span>
+              </div>
+              <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #6D4AC4; margin-bottom: 6px;">Apprendre</div>
+              <div style="font-size: 20px; font-weight: 800; letter-spacing: -.015em;">Atelier photographie</div>
+              <div style="font-size: 16px; color: #6B625B; margin-top: 4px;">Lille-Centre · Petit groupe · Mardi</div>
+            </div>
+            <div>
+              <div style="height: 200px; border-radius: 20px; background: #FBE6E9; margin-bottom: 13px; position: relative; overflow: hidden;">
+                <div style="position: absolute; left: -24px; top: 40px; width: 140px; height: 140px; border-radius: 50%; background: #D6455E; opacity: .16;"></div>
+                <div style="position: absolute; right: 44px; bottom: 30px; width: 60px; height: 60px; border-radius: 50%; background: #D6455E; opacity: .3;"></div>
+                <span style="position: absolute; left: 14px; top: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #A82B44; background: rgba(255,255,255,.72); padding: 5px 9px; border-radius: 6px;">photo · chorale</span>
+              </div>
+              <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #D6455E; margin-bottom: 6px;">Rencontrer</div>
+              <div style="font-size: 20px; font-weight: 800; letter-spacing: -.015em;">Chorale du Vieux-Lille</div>
+              <div style="font-size: 16px; color: #6B625B; margin-top: 4px;">Vieux-Lille · Tous niveaux · Jeudi soir</div>
+            </div>
+            <div>
+              <div style="height: 200px; border-radius: 20px; background: #E3EAF8; margin-bottom: 13px; position: relative; overflow: hidden;">
+                <div style="position: absolute; right: -30px; top: -30px; width: 150px; height: 150px; border-radius: 50%; background: #3563C9; opacity: .15;"></div>
+                <div style="position: absolute; left: 34px; bottom: 26px; width: 70px; height: 34px; border-radius: 999px; background: #3563C9; opacity: .3;"></div>
+                <span style="position: absolute; left: 14px; top: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #24499C; background: rgba(255,255,255,.72); padding: 5px 9px; border-radius: 6px;">photo · café</span>
+              </div>
+              <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #3563C9; margin-bottom: 6px;">Sortir</div>
+              <div style="font-size: 20px; font-weight: 800; letter-spacing: -.015em;">Les Cafés Philo</div>
+              <div style="font-size: 16px; color: #6B625B; margin-top: 4px;">Moulins · Sans inscription · 1× par mois</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #F3EDE4; border-radius: 26px; padding: 32px 30px; margin-bottom: 46px;">
+          <div style="font-size: 27px; font-weight: 800; letter-spacing: -.02em;">À essayer sans trop s'engager</div>
+          <div style="font-size: 17px; color: #6B625B; margin: 5px 0 18px;">Une fois, pour voir. Personne ne vous attend la semaine suivante.</div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+            <div style="background: #FFF; border-radius: 18px; overflow: hidden;">
+              <div style="height: 130px; background: #F7EBD8; position: relative; overflow: hidden;">
+                <div style="position: absolute; right: -20px; bottom: -30px; width: 110px; height: 110px; border-radius: 50%; background: #C98A16; opacity: .2;"></div>
+                <span style="position: absolute; left: 12px; top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #8A5D0A;">photo · repair café</span>
+              </div>
+              <div style="padding: 17px 19px 19px;">
+                <div style="font-size: 19px; font-weight: 800;">Repair Café Fives</div>
+                <div style="font-size: 15px; color: #6B625B; margin-top: 4px;">Samedi 14h · Gratuit</div>
+              </div>
+            </div>
+            <div style="background: #FFF; border-radius: 18px; overflow: hidden;">
+              <div style="height: 130px; background: #E1EFE4; position: relative; overflow: hidden;">
+                <div style="position: absolute; left: 20px; bottom: -40px; width: 120px; height: 120px; border-radius: 50%; background: #2F7D5B; opacity: .18;"></div>
+                <span style="position: absolute; left: 12px; top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #216245;">photo · marche</span>
+              </div>
+              <div style="padding: 17px 19px 19px;">
+                <div style="font-size: 19px; font-weight: 800;">Marche du jeudi</div>
+                <div style="font-size: 15px; color: #6B625B; margin-top: 4px;">9h30 · 5 km · Sans inscription</div>
+              </div>
+            </div>
+            <div style="background: #FFF; border-radius: 18px; overflow: hidden;">
+              <div style="height: 130px; background: #F6E4DF; position: relative; overflow: hidden;">
+                <div style="position: absolute; right: 30px; top: -30px; width: 100px; height: 100px; border-radius: 50%; background: #E1503A; opacity: .2;"></div>
+                <span style="position: absolute; left: 12px; top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #B93A26;">photo · cuisine</span>
+              </div>
+              <div style="padding: 17px 19px 19px;">
+                <div style="font-size: 19px; font-weight: 800;">Cuisine du monde</div>
+                <div style="font-size: 15px; color: #6B625B; margin-top: 4px;">Séance à l'unité · 12 €</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 27px; font-weight: 800; letter-spacing: -.02em;">Pour transmettre votre expérience</div>
+          <div style="font-size: 17px; color: #6B625B; margin: 5px 0 18px;">Trente-cinq ans de métier. Des gens en ont besoin.</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div style="display: flex; gap: 18px; background: #FFF; border: 1px solid #EDE5DA; border-radius: 20px; padding: 18px;">
+              <div style="flex: none; width: 128px; height: 128px; border-radius: 14px; background: #F7EBD8; position: relative; overflow: hidden;">
+                <div style="position: absolute; left: 18px; bottom: -26px; width: 96px; height: 96px; border-radius: 50%; background: #C98A16; opacity: .22;"></div>
+              </div>
+              <div style="min-width: 0;">
+                <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #C98A16; margin-bottom: 6px;">S'engager</div>
+                <div style="font-size: 20px; font-weight: 800; letter-spacing: -.015em;">Parrainage de jeunes créateurs</div>
+                <div style="font-size: 15px; color: #8A817A; margin-top: 5px;">Réseau Entreprendre · 2h par mois</div>
+                <div style="font-size: 16px; line-height: 1.45; color: #4A433D; margin-top: 9px;">Accompagner une personne qui démarre, sur la durée.</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 18px; background: #FFF; border: 1px solid #EDE5DA; border-radius: 20px; padding: 18px;">
+              <div style="flex: none; width: 128px; height: 128px; border-radius: 14px; background: #E3EAF8; position: relative; overflow: hidden;">
+                <div style="position: absolute; right: -20px; top: 14px; width: 100px; height: 100px; border-radius: 50%; background: #3563C9; opacity: .2;"></div>
+              </div>
+              <div style="min-width: 0;">
+                <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #3563C9; margin-bottom: 6px;">Apprendre</div>
+                <div style="font-size: 20px; font-weight: 800; letter-spacing: -.015em;">Cours de français aux adultes</div>
+                <div style="font-size: 15px; color: #8A817A; margin-top: 5px;">Maison de quartier Moulins · Hebdo</div>
+                <div style="font-size: 16px; line-height: 1.45; color: #4A433D; margin-top: 9px;">Formation courte fournie, aucun diplôme requis.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="1d" style="width: 1240px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em; background: #221C18; color: #F7EFE6; padding: 6px 11px; border-radius: 7px;">1d</span>
+        <span style="font-size: 19px; font-weight: 800;">Découvrir — direction « collections »</span>
+        <span style="font-size: 17px; color: #6B625B;">entrée par grandes tuiles de couleur, puis une rangée de lieux réels</span>
+      </div>
+
+      <div style="background: #FAF6F0; border: 1px solid #DCD1C1; border-radius: 26px; overflow: hidden; padding: 40px 36px 46px; box-shadow: 0 30px 60px -40px rgba(34,28,24,.4);">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 26px;">
+          <div>
+            <div style="font-family: 'Newsreader', serif; font-size: 44px; font-weight: 500; letter-spacing: -.02em;">Découvrir</div>
+            <div style="font-size: 20px; color: #58504A; margin-top: 8px;">Des idées choisies pour vous, à Lille.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; background: #FFF; border: 1px solid #EDE5DA; border-radius: 999px; padding: 13px 22px; font-size: 16px; color: #6B625B;">
+            <div style="width: 15px; height: 15px; border-radius: 50%; border: 2px solid #A0958A;"></div>Chercher une activité, un lieu, une association
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 46px;">
+          <div style="border-radius: 22px; background: #D6455E; color: #FFF; padding: 26px; min-height: 168px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; right: -34px; bottom: -44px; width: 150px; height: 150px; border-radius: 50%; background: rgba(255,255,255,.16);"></div>
+            <div style="position: absolute; right: 60px; top: -30px; width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,.12);"></div>
+            <div style="position: relative; font-size: 24px; font-weight: 800; letter-spacing: -.02em; max-width: 15ch;">Rencontrer des gens près de chez moi</div>
+            <div style="position: relative; font-size: 15px; font-weight: 700; color: rgba(255,255,255,.82);">24 propositions</div>
+          </div>
+          <div style="border-radius: 22px; background: #2F7D5B; color: #FFF; padding: 26px; min-height: 168px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; left: -30px; top: 30px; width: 140px; height: 140px; border-radius: 50%; background: rgba(255,255,255,.14);"></div>
+            <div style="position: relative; font-size: 24px; font-weight: 800; letter-spacing: -.02em; max-width: 15ch;">Bouger sans faire du sport</div>
+            <div style="position: relative; font-size: 15px; font-weight: 700; color: rgba(255,255,255,.82);">18 propositions</div>
+          </div>
+          <div style="border-radius: 22px; background: #6D4AC4; color: #FFF; padding: 26px; min-height: 168px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; right: 20px; top: -40px; width: 130px; height: 130px; border-radius: 50%; border: 22px solid rgba(255,255,255,.16);"></div>
+            <div style="position: relative; font-size: 24px; font-weight: 800; letter-spacing: -.02em; max-width: 15ch;">Apprendre quelque chose de neuf</div>
+            <div style="position: relative; font-size: 15px; font-weight: 700; color: rgba(255,255,255,.82);">31 propositions</div>
+          </div>
+          <div style="border-radius: 22px; background: #C98A16; color: #FFF; padding: 26px; min-height: 168px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; right: -26px; bottom: -34px; width: 130px; height: 130px; border-radius: 50%; background: rgba(255,255,255,.16);"></div>
+            <div style="position: relative; font-size: 24px; font-weight: 800; letter-spacing: -.02em; max-width: 15ch;">Transmettre mon expérience</div>
+            <div style="position: relative; font-size: 15px; font-weight: 700; color: rgba(255,255,255,.82);">12 propositions</div>
+          </div>
+          <div style="border-radius: 22px; background: #3563C9; color: #FFF; padding: 26px; min-height: 168px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; left: 30px; bottom: -50px; width: 150px; height: 150px; border-radius: 50%; background: rgba(255,255,255,.13);"></div>
+            <div style="position: relative; font-size: 24px; font-weight: 800; letter-spacing: -.02em; max-width: 15ch;">Sortir en soirée, en semaine</div>
+            <div style="position: relative; font-size: 15px; font-weight: 700; color: rgba(255,255,255,.82);">20 propositions</div>
+          </div>
+          <div style="border-radius: 22px; background: #FFF; border: 1px solid #E3D9CC; padding: 26px; min-height: 168px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="font-size: 24px; font-weight: 800; letter-spacing: -.02em; max-width: 15ch;">Tout parcourir</div>
+            <div style="font-size: 15px; font-weight: 700; color: #B93A26;">137 ressources à Lille →</div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: baseline; justify-content: space-between;">
+          <div style="font-size: 27px; font-weight: 800; letter-spacing: -.02em;">Autour de vous cette semaine</div>
+          <div style="font-size: 16px; font-weight: 700; color: #B93A26;">Voir la carte →</div>
+        </div>
+        <div style="font-size: 17px; color: #6B625B; margin: 5px 0 18px;">À moins de vingt minutes de Wazemmes.</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;">
+          <div>
+            <div style="height: 168px; border-radius: 18px; background: #E1EFE4; position: relative; overflow: hidden; margin-bottom: 12px;">
+              <div style="position: absolute; left: 20px; bottom: -34px; width: 120px; height: 120px; border-radius: 50%; background: #2F7D5B; opacity: .2;"></div>
+              <span style="position: absolute; left: 12px; top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #216245; background: rgba(255,255,255,.72); padding: 5px 8px; border-radius: 6px;">photo · marche</span>
+            </div>
+            <div style="font-size: 18px; font-weight: 800;">Marche du jeudi</div>
+            <div style="font-size: 15px; color: #6B625B; margin-top: 3px;">Jeudi 9h30 · 5 km</div>
+          </div>
+          <div>
+            <div style="height: 168px; border-radius: 18px; background: #EDE4FA; position: relative; overflow: hidden; margin-bottom: 12px;">
+              <div style="position: absolute; right: 24px; top: 24px; width: 60px; height: 60px; border-radius: 50%; border: 10px solid #6D4AC4; opacity: .3;"></div>
+              <span style="position: absolute; left: 12px; top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #5B3FA8; background: rgba(255,255,255,.72); padding: 5px 8px; border-radius: 6px;">photo · atelier</span>
+            </div>
+            <div style="font-size: 18px; font-weight: 800;">Atelier photographie</div>
+            <div style="font-size: 15px; color: #6B625B; margin-top: 3px;">Mardi 14h · UTL</div>
+          </div>
+          <div>
+            <div style="height: 168px; border-radius: 18px; background: #F7EBD8; position: relative; overflow: hidden; margin-bottom: 12px;">
+              <div style="position: absolute; right: -24px; bottom: -30px; width: 120px; height: 120px; border-radius: 50%; background: #C98A16; opacity: .22;"></div>
+              <span style="position: absolute; left: 12px; top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #8A5D0A; background: rgba(255,255,255,.72); padding: 5px 8px; border-radius: 6px;">photo · repair café</span>
+            </div>
+            <div style="font-size: 18px; font-weight: 800;">Repair Café Fives</div>
+            <div style="font-size: 15px; color: #6B625B; margin-top: 3px;">Samedi 14h · Gratuit</div>
+          </div>
+          <div>
+            <div style="height: 168px; border-radius: 18px; background: #FBE6E9; position: relative; overflow: hidden; margin-bottom: 12px;">
+              <div style="position: absolute; left: -20px; top: 30px; width: 130px; height: 130px; border-radius: 50%; background: #D6455E; opacity: .18;"></div>
+              <span style="position: absolute; left: 12px; top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #A82B44; background: rgba(255,255,255,.72); padding: 5px 8px; border-radius: 6px;">photo · chorale</span>
+            </div>
+            <div style="font-size: 18px; font-weight: 800;">Chorale du Vieux-Lille</div>
+            <div style="font-size: 15px; color: #6B625B; margin-top: 3px;">Jeudi 19h · Tous niveaux</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── RESSOURCE + PARCOURS ─── -->
+  <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;">
+
+    <div id="1e" style="width: 1240px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em; background: #221C18; color: #F7EFE6; padding: 6px 11px; border-radius: 7px;">1e</span>
+        <span style="font-size: 19px; font-weight: 800;">Détail d'une ressource</span>
+        <span style="font-size: 17px; color: #6B625B;">galerie à gauche, décision à droite, « pourquoi Juno » en évidence</span>
+      </div>
+
+      <div style="background: #FAF6F0; border: 1px solid #DCD1C1; border-radius: 26px; overflow: hidden; padding: 34px 36px 46px; box-shadow: 0 30px 60px -40px rgba(34,28,24,.4);">
+        <div style="font-size: 16px; font-weight: 700; color: #6B625B; margin-bottom: 22px;">← Découvrir · Apprendre</div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 34px; align-items: start;">
+          <div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div style="grid-column: span 2; height: 300px; border-radius: 20px; background: #EDE4FA; position: relative; overflow: hidden;">
+                <div style="position: absolute; left: 60px; bottom: -70px; width: 220px; height: 220px; border-radius: 50%; background: #6D4AC4; opacity: .18;"></div>
+                <div style="position: absolute; right: 70px; top: 44px; width: 92px; height: 92px; border-radius: 50%; border: 15px solid #6D4AC4; opacity: .28;"></div>
+                <span style="position: absolute; left: 16px; top: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .1em; color: #5B3FA8; background: rgba(255,255,255,.75); padding: 6px 10px; border-radius: 7px;">photo · atelier en cours</span>
+              </div>
+              <div style="height: 150px; border-radius: 18px; background: #E6DEF5; position: relative; overflow: hidden;">
+                <div style="position: absolute; right: -20px; bottom: -24px; width: 100px; height: 100px; border-radius: 50%; background: #6D4AC4; opacity: .2;"></div>
+                <span style="position: absolute; left: 12px; top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #5B3FA8;">photo · salle</span>
+              </div>
+              <div style="height: 150px; border-radius: 18px; background: #E6DEF5; position: relative; overflow: hidden;">
+                <div style="position: absolute; left: 16px; top: -20px; width: 90px; height: 90px; border-radius: 50%; background: #6D4AC4; opacity: .16;"></div>
+                <span style="position: absolute; left: 12px; top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: #5B3FA8;">photo · sortie</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 34px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+              <div>
+                <div style="font-size: 21px; font-weight: 800; margin-bottom: 12px;">Ce qui vous attend</div>
+                <div style="font-size: 17px; line-height: 1.6; color: #4A433D;">Douze séances de deux heures, de septembre à décembre. On apprend le cadrage et la lumière, puis on sort photographier le quartier. Une exposition collective clôt le trimestre. Aucun niveau requis, un appareil simple suffit.</div>
+              </div>
+              <div>
+                <div style="font-size: 21px; font-weight: 800; margin-bottom: 12px;">Informations pratiques</div>
+                <div style="display: flex; flex-direction: column; gap: 11px; font-size: 17px;">
+                  <div style="display: flex; justify-content: space-between; gap: 16px; padding-bottom: 11px; border-bottom: 1px solid #EAE0D3;"><span style="color: #6B625B;">Adresse</span><span style="font-weight: 700; text-align: right;">3 rue Jean Bart, Lille</span></div>
+                  <div style="display: flex; justify-content: space-between; gap: 16px; padding-bottom: 11px; border-bottom: 1px solid #EAE0D3;"><span style="color: #6B625B;">Accès</span><span style="font-weight: 700; text-align: right;">Métro Rihour · 4 min</span></div>
+                  <div style="display: flex; justify-content: space-between; gap: 16px; padding-bottom: 11px; border-bottom: 1px solid #EAE0D3;"><span style="color: #6B625B;">Inscription</span><span style="font-weight: 700; text-align: right;">Par téléphone</span></div>
+                  <div style="display: flex; justify-content: space-between; gap: 16px;"><span style="color: #6B625B;">Source</span><span style="font-weight: 700; text-align: right;">Université du Temps Libre</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #6D4AC4; margin-bottom: 10px;">Apprendre · Atelier</div>
+            <div style="font-family: 'Newsreader', serif; font-size: 38px; line-height: 1.12; font-weight: 500; letter-spacing: -.02em;">Atelier photographie</div>
+            <div style="font-size: 18px; font-weight: 600; color: #58504A; margin-top: 8px;">Université du Temps Libre, Lille-Centre</div>
+            <div style="font-size: 18px; line-height: 1.55; color: #4A433D; margin-top: 16px;">Un petit groupe de douze personnes, tous les mardis après-midi. On y vient pour apprendre, on y reste souvent pour les gens.</div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0;">
+              <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 14px; padding: 15px 17px;">
+                <div style="font-size: 13px; font-weight: 700; color: #8A817A;">Rythme</div>
+                <div style="font-size: 17px; font-weight: 700; margin-top: 3px;">Chaque mardi, 14h</div>
+              </div>
+              <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 14px; padding: 15px 17px;">
+                <div style="font-size: 13px; font-weight: 700; color: #8A817A;">Format</div>
+                <div style="font-size: 17px; font-weight: 700; margin-top: 3px;">12 personnes</div>
+              </div>
+              <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 14px; padding: 15px 17px;">
+                <div style="font-size: 13px; font-weight: 700; color: #8A817A;">Engagement</div>
+                <div style="font-size: 17px; font-weight: 700; margin-top: 3px;">Un trimestre</div>
+              </div>
+              <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 14px; padding: 15px 17px;">
+                <div style="font-size: 13px; font-weight: 700; color: #8A817A;">Coût</div>
+                <div style="font-size: 17px; font-weight: 700; margin-top: 3px;">95 € / trimestre</div>
+              </div>
+            </div>
+
+            <div style="background: #221C18; border-radius: 20px; padding: 24px; color: #F7EFE6; position: relative; overflow: hidden;">
+              <div style="position: absolute; top: -70px; right: -60px; width: 190px; height: 190px; border-radius: 50%; background: radial-gradient(circle, rgba(225,80,58,.4), transparent 68%);"></div>
+              <div style="position: relative; display: flex; align-items: center; gap: 11px; margin-bottom: 13px;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F8B39A, #E1503A 74%); position: relative;">
+                  <div style="position: absolute; top: 40%; left: 28%; width: 4px; height: 6px; border-radius: 3px; background: #3A1B12;"></div>
+                  <div style="position: absolute; top: 40%; left: 58%; width: 4px; height: 6px; border-radius: 3px; background: #3A1B12;"></div>
+                </div>
+                <div style="font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #E6B9A6;">Pourquoi Juno vous le propose</div>
+              </div>
+              <div style="position: relative; font-size: 18px; line-height: 1.55; color: #F2E7DC;">Vous cherchez à rencontrer de nouvelles personnes autour d'une activité régulière, en petit groupe. La photographie revenait souvent dans ce que vous aimez faire seul — ici, elle devient partagée.</div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
+              <div style="flex: 1; text-align: center; padding: 17px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 18px; font-weight: 700;">Ajouter à ma semaine</div>
+              <div style="padding: 17px 24px; border-radius: 999px; border: 1.5px solid #DCD1C1; font-size: 18px; font-weight: 700;">Plus tard</div>
+            </div>
+            <div style="font-size: 16px; color: #6B625B; text-align: center; margin-top: 14px;">Ou <a href="#1g">en parler à Juno</a> avant de décider.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="1f" style="width: 1240px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em; background: #221C18; color: #F7EFE6; padding: 6px 11px; border-radius: 7px;">1f</span>
+        <span style="font-size: 19px; font-weight: 800;">Mon parcours</span>
+        <span style="font-size: 17px; color: #6B625B;">les thèmes deviennent reconnaissables par leur couleur</span>
+      </div>
+
+      <div style="background: #FAF6F0; border: 1px solid #DCD1C1; border-radius: 26px; padding: 40px 36px 46px; box-shadow: 0 30px 60px -40px rgba(34,28,24,.4);">
+        <div style="font-family: 'Newsreader', serif; font-size: 44px; font-weight: 500; letter-spacing: -.02em;">Mon parcours</div>
+        <div style="font-size: 20px; color: #58504A; margin: 8px 0 30px;">Un thème à la fois, quelques minutes par semaine.</div>
+
+        <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 24px; padding: 30px; margin-bottom: 26px;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+            <span style="width: 10px; height: 10px; border-radius: 50%; background: #D6455E;"></span>
+            <span style="font-size: 13px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #D6455E;">En cours · Ma vie sociale</span>
+          </div>
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 30px;">
+            <div>
+              <div style="font-size: 30px; font-weight: 800; letter-spacing: -.02em;">Semaine 2 — Comprendre</div>
+              <div style="font-size: 18px; color: #58504A; margin-top: 7px; max-width: 52ch;">Ce que le travail organisait pour vous sans que vous ayez à y penser.</div>
+            </div>
+            <div style="padding: 15px 28px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 18px; font-weight: 700;">Reprendre</div>
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 26px;">
+            <div style="flex: 1; height: 8px; border-radius: 4px; background: #D6455E;"></div>
+            <div style="flex: 1; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #D6455E 55%, #F0DCDF 55%);"></div>
+            <div style="flex: 1; height: 8px; border-radius: 4px; background: #F0DCDF;"></div>
+            <div style="flex: 1; height: 8px; border-radius: 4px; background: #F0DCDF;"></div>
+            <div style="flex: 1; height: 8px; border-radius: 4px; background: #F0DCDF;"></div>
+            <div style="flex: 1; height: 8px; border-radius: 4px; background: #F0DCDF;"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 15px; font-weight: 600; color: #6B625B;">
+            <span>Comprendre</span><span>Définir ce qui me convient</span><span>Passer à l'action</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;">
+          <div style="border-radius: 22px; background: #E1EFE4; padding: 24px; min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; right: -30px; bottom: -34px; width: 130px; height: 130px; border-radius: 50%; background: #2F7D5B; opacity: .16;"></div>
+            <div style="position: relative;">
+              <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #216245; margin-bottom: 9px;">Prêt à démarrer</div>
+              <div style="font-size: 23px; font-weight: 800; letter-spacing: -.02em;">Rester actif</div>
+              <div style="font-size: 16px; color: #46554B; margin-top: 6px;">6 semaines · 8 min / semaine</div>
+            </div>
+            <div style="position: relative; display: inline-block; padding: 11px 20px; border-radius: 999px; background: #FFF; font-size: 16px; font-weight: 700; align-self: flex-start;">Commencer</div>
+          </div>
+          <div style="border-radius: 22px; background: #E3EAF8; padding: 24px; min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; left: -26px; top: 40px; width: 120px; height: 120px; border-radius: 50%; background: #3563C9; opacity: .14;"></div>
+            <div style="position: relative;">
+              <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #24499C; margin-bottom: 9px;">Suggéré ensuite</div>
+              <div style="font-size: 23px; font-weight: 800; letter-spacing: -.02em;">Nouveau rythme</div>
+              <div style="font-size: 16px; color: #414B5E; margin-top: 6px;">5 semaines · 6 min / semaine</div>
+            </div>
+            <div style="position: relative; display: inline-block; padding: 11px 20px; border-radius: 999px; background: #FFF; font-size: 16px; font-weight: 700; align-self: flex-start;">Voir</div>
+          </div>
+          <div style="border-radius: 22px; background: #EDE4FA; padding: 24px; min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; right: 18px; top: -30px; width: 110px; height: 110px; border-radius: 50%; border: 18px solid #6D4AC4; opacity: .22;"></div>
+            <div style="position: relative;">
+              <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #5B3FA8; margin-bottom: 9px;">Disponible</div>
+              <div style="font-size: 23px; font-weight: 800; letter-spacing: -.02em;">Apprendre</div>
+              <div style="font-size: 16px; color: #4B4159; margin-top: 6px;">4 semaines · 7 min / semaine</div>
+            </div>
+            <div style="position: relative; display: inline-block; padding: 11px 20px; border-radius: 999px; background: #FFF; font-size: 16px; font-weight: 700; align-self: flex-start;">Voir</div>
+          </div>
+          <div style="border-radius: 22px; background: #F7EBD8; padding: 24px; min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; right: -24px; bottom: -30px; width: 120px; height: 120px; border-radius: 50%; background: #C98A16; opacity: .2;"></div>
+            <div style="position: relative;">
+              <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #8A5D0A; margin-bottom: 9px;">Disponible</div>
+              <div style="font-size: 23px; font-weight: 800; letter-spacing: -.02em;">S'engager</div>
+              <div style="font-size: 16px; color: #57492E; margin-top: 6px;">6 semaines · 8 min / semaine</div>
+            </div>
+            <div style="position: relative; display: inline-block; padding: 11px 20px; border-radius: 999px; background: #FFF; font-size: 16px; font-weight: 700; align-self: flex-start;">Voir</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PARCOURS GUIDÉ : 5 ÉCRANS ─── -->
+  <div id="1g2" style="width: 100%;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em; background: #221C18; color: #F7EFE6; padding: 6px 11px; border-radius: 7px;">1i</span>
+      <span style="font-size: 19px; font-weight: 800;">Ma vie sociale — l'overlay guidé</span>
+      <span style="font-size: 17px; color: #6B625B;">cinq gabarits d'un même micro-pas : éditorial, quiz, scénario, synthèse, fin</span>
+    </div>
+    <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+
+      <div style="width: 620px; height: 780px; border-radius: 26px; overflow: hidden; background: #D6455E; color: #FFF6F7; padding: 30px 38px 38px; display: flex; flex-direction: column; position: relative; box-shadow: 0 30px 60px -40px rgba(34,28,24,.5);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.2); display: grid; place-items: center;"><div style="width: 9px; height: 9px; border-left: 2.5px solid #FFF; border-bottom: 2.5px solid #FFF; transform: rotate(45deg) translate(1px, -1px);"></div></div>
+          <div style="flex: 1; display: flex; gap: 5px;">
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #FFF;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,.34);"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,.34);"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,.34);"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,.34);"></div>
+          </div>
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.2); display: grid; place-items: center; font-size: 17px;">✕</div>
+        </div>
+        <div style="margin-top: 42px; height: 240px; position: relative;">
+          <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 150px; height: 150px; border-radius: 50%; background: rgba(255,255,255,.9);"></div>
+          <div style="position: absolute; left: 8%; top: 14%; width: 46px; height: 46px; border-radius: 50%; background: rgba(255,255,255,.42);"></div>
+          <div style="position: absolute; right: 12%; top: 8%; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.3);"></div>
+          <div style="position: absolute; right: 4%; bottom: 20%; width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,.5);"></div>
+          <div style="position: absolute; left: 18%; bottom: 8%; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.36);"></div>
+          <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 300px; height: 300px; border-radius: 50%; border: 2px dashed rgba(255,255,255,.4);"></div>
+        </div>
+        <div style="margin-top: 46px;">
+          <div style="font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.75); margin-bottom: 14px;">Comprendre · 1 sur 5</div>
+          <div style="font-family: 'Newsreader', serif; font-size: 40px; line-height: 1.14; font-weight: 500; letter-spacing: -.02em;">Le travail organisait vos rencontres pour vous.</div>
+          <div style="font-size: 19px; line-height: 1.6; color: rgba(255,255,255,.9); margin-top: 16px;">Le café de 10h, le collègue croisé dans le couloir, le déjeuner décidé à midi moins cinq. Personne ne les avait planifiés. Ils arrivaient.</div>
+        </div>
+        <div style="margin-top: auto; display: flex; align-items: center; gap: 16px;">
+          <div style="flex: 1; text-align: center; padding: 18px; border-radius: 999px; background: #FFF; color: #A82B44; font-size: 19px; font-weight: 700;">Continuer</div>
+        </div>
+      </div>
+
+      <div style="width: 620px; height: 780px; border-radius: 26px; overflow: hidden; background: #FAF6F0; padding: 30px 38px 38px; display: flex; flex-direction: column; position: relative; border: 1px solid #DCD1C1; box-shadow: 0 30px 60px -40px rgba(34,28,24,.4);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: #F0E8DC; display: grid; place-items: center;"><div style="width: 9px; height: 9px; border-left: 2.5px solid #6B625B; border-bottom: 2.5px solid #6B625B; transform: rotate(45deg) translate(1px, -1px);"></div></div>
+          <div style="flex: 1; display: flex; gap: 5px;">
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #D6455E;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #D6455E;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #EADFD2;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #EADFD2;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #EADFD2;"></div>
+          </div>
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: #F0E8DC; display: grid; place-items: center; font-size: 17px; color: #6B625B;">✕</div>
+        </div>
+        <div style="margin-top: 60px;">
+          <div style="font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #D6455E; margin-bottom: 16px;">Une question</div>
+          <div style="font-size: 34px; line-height: 1.2; font-weight: 800; letter-spacing: -.025em;">Parmi ces moments, lequel vous manque le plus ?</div>
+          <div style="font-size: 18px; color: #6B625B; margin-top: 12px;">Une seule réponse. Vous pourrez revenir dessus.</div>
+        </div>
+        <div style="margin-top: 34px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 16px; background: #FFF; border: 2px solid #EDE5DA; border-radius: 18px; padding: 20px 22px;">
+            <div style="flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #DCD2C6;"></div>
+            <div style="font-size: 19px; font-weight: 600;">Les déjeuners improvisés</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px; background: #FDF1EF; border: 2px solid #E1503A; border-radius: 18px; padding: 20px 22px;">
+            <div style="flex: none; width: 24px; height: 24px; border-radius: 50%; background: #E1503A; display: grid; place-items: center;">
+              <div style="width: 10px; height: 5px; border-left: 2.5px solid #FFF; border-bottom: 2.5px solid #FFF; transform: rotate(-45deg) translate(1px, -1px);"></div>
+            </div>
+            <div style="font-size: 19px; font-weight: 700;">Les conversations sans objet précis</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px; background: #FFF; border: 2px solid #EDE5DA; border-radius: 18px; padding: 20px 22px;">
+            <div style="flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #DCD2C6;"></div>
+            <div style="font-size: 19px; font-weight: 600;">Le sentiment d'être attendu quelque part</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px; background: #FFF; border: 2px solid #EDE5DA; border-radius: 18px; padding: 20px 22px;">
+            <div style="flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #DCD2C6;"></div>
+            <div style="font-size: 19px; font-weight: 600;">Travailler à plusieurs sur un sujet</div>
+          </div>
+        </div>
+        <div style="margin-top: auto; text-align: center; padding: 18px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 19px; font-weight: 700;">Continuer</div>
+      </div>
+
+      <div style="width: 620px; height: 780px; border-radius: 26px; overflow: hidden; background: #F3EDE4; padding: 30px 38px 38px; display: flex; flex-direction: column; border: 1px solid #DCD1C1; box-shadow: 0 30px 60px -40px rgba(34,28,24,.4);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: #E8DFD1; display: grid; place-items: center;"><div style="width: 9px; height: 9px; border-left: 2.5px solid #6B625B; border-bottom: 2.5px solid #6B625B; transform: rotate(45deg) translate(1px, -1px);"></div></div>
+          <div style="flex: 1; display: flex; gap: 5px;">
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #D6455E;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #D6455E;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #D6455E;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #E2D7C8;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #E2D7C8;"></div>
+          </div>
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: #E8DFD1; display: grid; place-items: center; font-size: 17px; color: #6B625B;">✕</div>
+        </div>
+        <div style="margin-top: 52px;">
+          <div style="font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #D6455E; margin-bottom: 16px;">Trois manières de faire</div>
+          <div style="font-size: 34px; line-height: 1.2; font-weight: 800; letter-spacing: -.025em;">Laquelle vous ressemble le plus ?</div>
+        </div>
+        <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; gap: 20px; align-items: center; background: #FFF; border: 2px solid #EDE5DA; border-radius: 20px; padding: 20px;">
+            <div style="flex: none; width: 96px; height: 96px; border-radius: 16px; background: #E3EAF8; position: relative; overflow: hidden;">
+              <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 44px; height: 44px; border-radius: 50%; background: #3563C9; opacity: .5;"></div>
+              <div style="position: absolute; left: 12px; bottom: 12px; width: 20px; height: 20px; border-radius: 50%; background: #3563C9; opacity: .3;"></div>
+              <div style="position: absolute; right: 12px; top: 12px; width: 20px; height: 20px; border-radius: 50%; background: #3563C9; opacity: .3;"></div>
+            </div>
+            <div>
+              <div style="font-size: 20px; font-weight: 800;">Peu de personnes, souvent</div>
+              <div style="font-size: 17px; line-height: 1.45; color: #58504A; margin-top: 5px;">Je préfère deux ou trois liens solides à beaucoup de connaissances.</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 20px; align-items: center; background: #FDF1EF; border: 2px solid #E1503A; border-radius: 20px; padding: 20px;">
+            <div style="flex: none; width: 96px; height: 96px; border-radius: 16px; background: #FBE6E9; position: relative; overflow: hidden;">
+              <div style="position: absolute; left: 14px; top: 16px; width: 26px; height: 26px; border-radius: 50%; background: #D6455E; opacity: .45;"></div>
+              <div style="position: absolute; right: 14px; top: 26px; width: 26px; height: 26px; border-radius: 50%; background: #D6455E; opacity: .45;"></div>
+              <div style="position: absolute; left: 34px; bottom: 14px; width: 26px; height: 26px; border-radius: 50%; background: #D6455E; opacity: .45;"></div>
+              <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 54px; height: 54px; border-radius: 50%; border: 2px dashed #D6455E; opacity: .5;"></div>
+            </div>
+            <div>
+              <div style="font-size: 20px; font-weight: 800;">Un groupe, un rendez-vous fixe</div>
+              <div style="font-size: 17px; line-height: 1.45; color: #58504A; margin-top: 5px;">J'aime savoir que quelque chose a lieu le mardi, sans avoir à l'organiser.</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 20px; align-items: center; background: #FFF; border: 2px solid #EDE5DA; border-radius: 20px; padding: 20px;">
+            <div style="flex: none; width: 96px; height: 96px; border-radius: 16px; background: #E1EFE4; position: relative; overflow: hidden;">
+              <div style="position: absolute; left: -6px; bottom: -6px; width: 70px; height: 70px; border-radius: 50%; background: #2F7D5B; opacity: .35;"></div>
+              <div style="position: absolute; right: 14px; top: 14px; width: 30px; height: 30px; border-radius: 50%; background: #2F7D5B; opacity: .25;"></div>
+            </div>
+            <div>
+              <div style="font-size: 20px; font-weight: 800;">Beaucoup de monde, sans engagement</div>
+              <div style="font-size: 17px; line-height: 1.45; color: #58504A; margin-top: 5px;">Je viens quand je veux, je repars quand je veux.</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: auto; text-align: center; padding: 18px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 19px; font-weight: 700;">Continuer</div>
+      </div>
+
+      <div style="width: 620px; height: 780px; border-radius: 26px; overflow: hidden; background: #241C18; color: #F7EFE6; padding: 30px 38px 38px; display: flex; flex-direction: column; position: relative; box-shadow: 0 30px 60px -40px rgba(34,28,24,.5);">
+        <div style="position: absolute; top: -120px; left: 50%; transform: translateX(-50%); width: 460px; height: 460px; border-radius: 50%; background: radial-gradient(circle, rgba(225,80,58,.32), transparent 66%);"></div>
+        <div style="position: relative; display: flex; align-items: center; gap: 16px;">
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.14); display: grid; place-items: center;"><div style="width: 9px; height: 9px; border-left: 2.5px solid #E6D8CB; border-bottom: 2.5px solid #E6D8CB; transform: rotate(45deg) translate(1px, -1px);"></div></div>
+          <div style="flex: 1; display: flex; gap: 5px;">
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #F08A72;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #F08A72;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #F08A72;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: #F08A72;"></div>
+            <div style="flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,.22);"></div>
+          </div>
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.14); display: grid; place-items: center; font-size: 17px;">✕</div>
+        </div>
+        <div style="position: relative; margin-top: 56px; display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <div style="width: 96px; height: 96px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F8B39A, #E1503A 74%); position: relative; animation: junoBreathe 5.5s ease-in-out infinite; box-shadow: 0 18px 50px rgba(225,80,58,.45);">
+            <div style="position: absolute; top: 41%; left: 29%; width: 10px; height: 15px; border-radius: 6px; background: #3A1B12;"></div>
+            <div style="position: absolute; top: 41%; left: 57%; width: 10px; height: 15px; border-radius: 6px; background: #3A1B12;"></div>
+          </div>
+          <div style="font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #E6B9A6; margin: 26px 0 14px;">Ce que je comprends de vous</div>
+          <div style="font-family: 'Newsreader', serif; font-size: 34px; line-height: 1.2; font-weight: 500; letter-spacing: -.02em;">Ce ne sont pas les gens qui vous manquent. C'est le cadre qui les rendait faciles.</div>
+        </div>
+        <div style="position: relative; margin-top: 32px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="background: rgba(255,255,255,.09); border-radius: 16px; padding: 18px 20px; font-size: 18px; line-height: 1.5;">Vous préférez <strong style="color: #F8B39A;">un groupe avec un rendez-vous fixe</strong> plutôt que des rencontres à organiser.</div>
+          <div style="background: rgba(255,255,255,.09); border-radius: 16px; padding: 18px 20px; font-size: 18px; line-height: 1.5;">Ce qui vous manque le plus : <strong style="color: #F8B39A;">les conversations sans objet précis</strong>.</div>
+          <div style="background: rgba(255,255,255,.09); border-radius: 16px; padding: 18px 20px; font-size: 18px; line-height: 1.5;">Vous avez déjà <strong style="color: #F8B39A;">trois liens</strong> que vous voulez garder vivants.</div>
+        </div>
+        <div style="position: relative; margin-top: auto; display: flex; gap: 12px;">
+          <div style="flex: 1; text-align: center; padding: 18px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 19px; font-weight: 700;">C'est assez juste</div>
+          <div style="padding: 18px 24px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,.28); font-size: 19px; font-weight: 700;">Pas tout à fait</div>
+        </div>
+      </div>
+
+      <div style="width: 620px; height: 780px; border-radius: 26px; overflow: hidden; background: #FAF6F0; padding: 30px 38px 38px; display: flex; flex-direction: column; border: 1px solid #DCD1C1; box-shadow: 0 30px 60px -40px rgba(34,28,24,.4);">
+        <div style="display: flex; align-items: center; justify-content: flex-end;">
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: #F0E8DC; display: grid; place-items: center; font-size: 17px; color: #6B625B;">✕</div>
+        </div>
+        <div style="margin-top: 40px; height: 210px; position: relative;">
+          <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 170px; height: 170px; border-radius: 50%; background: #E1EFE4;"></div>
+          <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 76px; height: 76px; border-radius: 50%; background: #2F7D5B;"></div>
+          <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) translateY(2px); width: 30px; height: 15px; border-left: 4px solid #FFF; border-bottom: 4px solid #FFF; transform: translate(-50%,-60%) rotate(-45deg);"></div>
+          <div style="position: absolute; left: 22%; top: 16%; width: 22px; height: 22px; border-radius: 50%; background: #D6455E; opacity: .5;"></div>
+          <div style="position: absolute; right: 20%; bottom: 18%; width: 30px; height: 30px; border-radius: 50%; background: #C98A16; opacity: .45;"></div>
+          <div style="position: absolute; right: 26%; top: 12%; width: 16px; height: 16px; border-radius: 50%; background: #6D4AC4; opacity: .45;"></div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <div style="font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #2F7D5B; margin-bottom: 14px;">Semaine 2 terminée</div>
+          <div style="font-family: 'Newsreader', serif; font-size: 36px; line-height: 1.16; font-weight: 500; letter-spacing: -.02em;">Vous savez maintenant ce que vous cherchez à recréer.</div>
+        </div>
+        <div style="margin-top: 30px; background: #FFF; border: 1px solid #EDE5DA; border-radius: 20px; padding: 24px;">
+          <div style="font-size: 13px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #A0958A; margin-bottom: 14px;">La semaine prochaine</div>
+          <div style="font-size: 21px; font-weight: 800; letter-spacing: -.015em;">Définir ce qui vous convient</div>
+          <div style="font-size: 17px; line-height: 1.5; color: #58504A; margin-top: 7px;">On regardera trois formats concrets de groupe, et vous direz lequel vous voulez essayer.</div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-top: 18px; padding-top: 18px; border-top: 1px solid #F2EBE1;">
+            <div style="width: 40px; height: 40px; border-radius: 10px; background: #FBE6E9; position: relative; overflow: hidden;">
+              <div style="position: absolute; left: 8px; top: 8px; width: 24px; height: 24px; border-radius: 50%; background: #D6455E; opacity: .5;"></div>
+            </div>
+            <div style="flex: 1; font-size: 16px; color: #4A433D;">En attendant, la chorale du Vieux-Lille correspond bien à ce que vous avez décrit.</div>
+          </div>
+        </div>
+        <div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px;">
+          <div style="text-align: center; padding: 18px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 19px; font-weight: 700;">Revenir à ma semaine</div>
+          <div style="text-align: center; padding: 14px; font-size: 17px; font-weight: 700; color: #6B625B;">Voir la ressource suggérée</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── JUNO CHAT + BILAN ─── -->
+  <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;">
+
+    <div id="1g" style="width: 720px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em; background: #221C18; color: #F7EFE6; padding: 6px 11px; border-radius: 7px;">1g</span>
+        <span style="font-size: 19px; font-weight: 800;">Parler à Juno</span>
+      </div>
+      <div style="height: 920px; border-radius: 26px; overflow: hidden; background: #FAF6F0; border: 1px solid #DCD1C1; display: flex; flex-direction: column; box-shadow: 0 30px 60px -40px rgba(34,28,24,.4);">
+        <div style="padding: 22px 28px; border-bottom: 1px solid #EDE5DA; background: #FFF; display: flex; align-items: center; gap: 13px;">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F8B39A, #E1503A 74%); position: relative; animation: junoBreathe 5.5s ease-in-out infinite;">
+            <div style="position: absolute; top: 41%; left: 28%; width: 5px; height: 8px; border-radius: 3px; background: #3A1B12;"></div>
+            <div style="position: absolute; top: 41%; left: 58%; width: 5px; height: 8px; border-radius: 3px; background: #3A1B12;"></div>
+          </div>
+          <div style="flex: 1;">
+            <div style="font-size: 19px; font-weight: 800;">Juno</div>
+            <div style="font-size: 14px; color: #8A817A;">Se souvient de vos parcours et de vos priorités</div>
+          </div>
+          <div style="font-size: 15px; font-weight: 700; color: #6B625B;">Historique</div>
+        </div>
+
+        <div style="flex: 1; padding: 26px 28px; display: flex; flex-direction: column; gap: 18px; overflow: hidden;">
+          <div style="align-self: center; font-size: 14px; font-weight: 700; color: #A0958A;">Aujourd'hui</div>
+          <div style="display: flex; gap: 12px; max-width: 82%;">
+            <div style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F8B39A, #E1503A 74%);"></div>
+            <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 18px 18px 18px 6px; padding: 17px 19px; font-size: 18px; line-height: 1.55;">Vous avez terminé la semaine 2 de Ma vie sociale. Vous m'avez dit que les conversations sans objet précis vous manquaient le plus.</div>
+          </div>
+          <div style="align-self: flex-end; max-width: 78%; background: #E1503A; color: #FFF; border-radius: 18px 18px 6px 18px; padding: 17px 19px; font-size: 18px; line-height: 1.55;">Oui. Mais je n'ai pas envie de m'inscrire à un truc où on doit se présenter devant tout le monde.</div>
+          <div style="display: flex; gap: 12px; max-width: 82%;">
+            <div style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F8B39A, #E1503A 74%);"></div>
+            <div>
+              <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 18px 18px 18px 6px; padding: 17px 19px; font-size: 18px; line-height: 1.55;">C'est noté, et c'est cohérent avec ce que vous avez choisi tout à l'heure. Il existe des formats où l'on entre par l'activité, pas par le groupe. Deux exemples près de chez vous :</div>
+              <div style="display: flex; gap: 12px; margin-top: 12px;">
+                <div style="flex: 1; background: #FFF; border: 1px solid #EDE5DA; border-radius: 16px; overflow: hidden;">
+                  <div style="height: 84px; background: #F7EBD8; position: relative; overflow: hidden;">
+                    <div style="position: absolute; right: -14px; bottom: -20px; width: 74px; height: 74px; border-radius: 50%; background: #C98A16; opacity: .22;"></div>
+                  </div>
+                  <div style="padding: 13px 15px 15px;">
+                    <div style="font-size: 17px; font-weight: 800;">Repair Café Fives</div>
+                    <div style="font-size: 14px; color: #6B625B; margin-top: 3px;">On répare, on parle en réparant</div>
+                  </div>
+                </div>
+                <div style="flex: 1; background: #FFF; border: 1px solid #EDE5DA; border-radius: 16px; overflow: hidden;">
+                  <div style="height: 84px; background: #E1EFE4; position: relative; overflow: hidden;">
+                    <div style="position: absolute; left: 12px; bottom: -22px; width: 78px; height: 78px; border-radius: 50%; background: #2F7D5B; opacity: .2;"></div>
+                  </div>
+                  <div style="padding: 13px 15px 15px;">
+                    <div style="font-size: 17px; font-weight: 800;">Jardins de Wazemmes</div>
+                    <div style="font-size: 14px; color: #6B625B; margin-top: 3px;">Samedi matin, sans inscription</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding: 18px 28px 24px; border-top: 1px solid #EDE5DA; background: #FFF;">
+          <div style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+            <div style="padding: 10px 16px; border-radius: 999px; background: #F6EFE5; font-size: 15px; font-weight: 700;">Ajouter le Repair Café à ma semaine</div>
+            <div style="padding: 10px 16px; border-radius: 999px; background: #F6EFE5; font-size: 15px; font-weight: 700;">Autre chose ?</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; background: #FAF6F0; border: 1px solid #E3D9CC; border-radius: 999px; padding: 7px 7px 7px 22px;">
+            <span style="flex: 1; font-size: 18px; color: #9A9088;">Écrire à Juno…</span>
+            <div style="width: 46px; height: 46px; border-radius: 50%; background: #E1503A; display: grid; place-items: center;">
+              <div style="width: 12px; height: 12px; border-top: 3px solid #FFF; border-right: 3px solid #FFF; transform: rotate(45deg) translate(-1px, 1px);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="1h" style="width: 720px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em; background: #221C18; color: #F7EFE6; padding: 6px 11px; border-radius: 7px;">1h</span>
+        <span style="font-size: 19px; font-weight: 800;">Bilan initial — une question</span>
+      </div>
+      <div style="height: 780px; border-radius: 26px; overflow: hidden; background: #FDFAF5; border: 1px solid #DCD1C1; padding: 30px 44px 40px; display: flex; flex-direction: column; box-shadow: 0 30px 60px -40px rgba(34,28,24,.4);">
+        <div style="display: flex; align-items: center; gap: 18px;">
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: #F0E8DC; display: grid; place-items: center;"><div style="width: 9px; height: 9px; border-left: 2.5px solid #6B625B; border-bottom: 2.5px solid #6B625B; transform: rotate(45deg) translate(1px, -1px);"></div></div>
+          <div style="flex: 1; height: 6px; border-radius: 3px; background: #EADFD2; position: relative;">
+            <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 38%; border-radius: 3px; background: #E1503A;"></div>
+          </div>
+          <div style="font-size: 15px; font-weight: 700; color: #6B625B;">3 / 8</div>
+        </div>
+
+        <div style="margin-top: 68px; text-align: center;">
+          <div style="width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #F8B39A, #E1503A 74%); margin: 0 auto 28px; position: relative; animation: junoBreathe 5.5s ease-in-out infinite;">
+            <div style="position: absolute; top: 41%; left: 28%; width: 7px; height: 10px; border-radius: 4px; background: #3A1B12;"></div>
+            <div style="position: absolute; top: 41%; left: 58%; width: 7px; height: 10px; border-radius: 4px; background: #3A1B12;"></div>
+          </div>
+          <div style="font-size: 34px; line-height: 1.22; font-weight: 800; letter-spacing: -.025em; text-wrap: pretty;">Où en êtes-vous dans votre transition ?</div>
+          <div style="font-size: 18px; color: #6B625B; margin-top: 12px;">Il n'y a pas de bonne réponse. Cela m'aide à savoir par où commencer.</div>
+        </div>
+
+        <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 16px; background: #FFF; border: 2px solid #EDE5DA; border-radius: 18px; padding: 22px 24px;">
+            <div style="flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #DCD2C6;"></div>
+            <div style="font-size: 19px; font-weight: 600;">J'y pense, mais je travaille encore</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px; background: #FDF1EF; border: 2px solid #E1503A; border-radius: 18px; padding: 22px 24px;">
+            <div style="flex: none; width: 24px; height: 24px; border-radius: 50%; background: #E1503A; display: grid; place-items: center;">
+              <div style="width: 10px; height: 5px; border-left: 2.5px solid #FFF; border-bottom: 2.5px solid #FFF; transform: rotate(-45deg) translate(1px, -1px);"></div>
+            </div>
+            <div style="font-size: 19px; font-weight: 700;">C'est tout récent — moins de six mois</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px; background: #FFF; border: 2px solid #EDE5DA; border-radius: 18px; padding: 22px 24px;">
+            <div style="flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #DCD2C6;"></div>
+            <div style="font-size: 19px; font-weight: 600;">Cela fait un an ou deux, je cherche mon rythme</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px; background: #FFF; border: 2px solid #EDE5DA; border-radius: 18px; padding: 22px 24px;">
+            <div style="flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #DCD2C6;"></div>
+            <div style="font-size: 19px; font-weight: 600;">Je suis installé, mais il manque quelque chose</div>
+          </div>
+        </div>
+
+        <div style="margin-top: auto; display: flex; align-items: center; gap: 16px;">
+          <div style="flex: 1; text-align: center; padding: 19px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 19px; font-weight: 700;">Continuer</div>
+          <div style="font-size: 17px; font-weight: 700; color: #6B625B;">Passer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SYSTÈME + BILINGUE ─── -->
+  <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;">
+
+    <div id="1j" style="width: 720px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em; background: #221C18; color: #F7EFE6; padding: 6px 11px; border-radius: 7px;">1j</span>
+        <span style="font-size: 19px; font-weight: 800;">Le système</span>
+      </div>
+      <div style="background: #FDFAF5; border: 1px solid #DCD1C1; border-radius: 26px; padding: 34px;">
+        <div style="font-size: 13px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #A0958A; margin-bottom: 16px;">Couleur</div>
+        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+          <div style="flex: 2; height: 88px; border-radius: 14px; background: #E1503A; color: #FFF; padding: 13px; display: flex; flex-direction: column; justify-content: space-between;">
+            <span style="font-size: 15px; font-weight: 800;">Juno corail</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; opacity: .85;">#E1503A</span>
+          </div>
+          <div style="flex: 1; height: 88px; border-radius: 14px; background: #B93A26; color: #FFF; padding: 13px; display: flex; flex-direction: column; justify-content: space-between;">
+            <span style="font-size: 14px; font-weight: 800;">Texte / lien</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; opacity: .85;">#B93A26</span>
+          </div>
+          <div style="flex: 1; height: 88px; border-radius: 14px; background: #221C18; color: #FFF; padding: 13px; display: flex; flex-direction: column; justify-content: space-between;">
+            <span style="font-size: 14px; font-weight: 800;">Encre</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; opacity: .85;">#221C18</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+          <div style="flex: 1; height: 64px; border-radius: 14px; background: #FAF6F0; border: 1px solid #E3D9CC; padding: 11px; font-size: 13px; font-weight: 700;">Toile<div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A817A; margin-top: 4px;">#FAF6F0</div></div>
+          <div style="flex: 1; height: 64px; border-radius: 14px; background: #FFF; border: 1px solid #E3D9CC; padding: 11px; font-size: 13px; font-weight: 700;">Surface<div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A817A; margin-top: 4px;">#FFFFFF</div></div>
+          <div style="flex: 1; height: 64px; border-radius: 14px; background: #F3EDE4; border: 1px solid #E3D9CC; padding: 11px; font-size: 13px; font-weight: 700;">Section<div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A817A; margin-top: 4px;">#F3EDE4</div></div>
+          <div style="flex: 1; height: 64px; border-radius: 14px; background: #241C18; color: #F7EFE6; padding: 11px; font-size: 13px; font-weight: 700;">Immersif<div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; opacity: .7; margin-top: 4px;">#241C18</div></div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 30px;">
+          <div style="flex: 1; height: 58px; border-radius: 12px; background: #D6455E; color: #FFF; padding: 10px; font-size: 13px; font-weight: 700;">Ma vie sociale</div>
+          <div style="flex: 1; height: 58px; border-radius: 12px; background: #2F7D5B; color: #FFF; padding: 10px; font-size: 13px; font-weight: 700;">Rester actif</div>
+          <div style="flex: 1; height: 58px; border-radius: 12px; background: #3563C9; color: #FFF; padding: 10px; font-size: 13px; font-weight: 700;">Nouveau rythme</div>
+          <div style="flex: 1; height: 58px; border-radius: 12px; background: #6D4AC4; color: #FFF; padding: 10px; font-size: 13px; font-weight: 700;">Apprendre</div>
+          <div style="flex: 1; height: 58px; border-radius: 12px; background: #C98A16; color: #FFF; padding: 10px; font-size: 13px; font-weight: 700;">S'engager</div>
+        </div>
+
+        <div style="font-size: 13px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #A0958A; margin-bottom: 16px;">Typographie</div>
+        <div style="display: flex; flex-direction: column; gap: 14px; padding-bottom: 30px; border-bottom: 1px solid #EAE0D3;">
+          <div><div style="font-family: 'Newsreader', serif; font-size: 40px; font-weight: 500; letter-spacing: -.02em; line-height: 1.1;">Newsreader 40 / display</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #8A817A; margin-top: 4px;">titres de page, moments Juno — avec parcimonie</div></div>
+          <div><div style="font-size: 27px; font-weight: 800; letter-spacing: -.02em;">Jakarta 27 / 800 — titre de section</div></div>
+          <div><div style="font-size: 19px; font-weight: 700;">Jakarta 19 / 700 — titre de carte</div></div>
+          <div><div style="font-size: 18px; line-height: 1.55; color: #4A433D;">Jakarta 18 / 400 — corps de texte. Jamais sous 15 px, jamais en gris clair.</div></div>
+          <div><div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #A0958A;">Jakarta 12 / 800 — étiquette</div></div>
+        </div>
+
+        <div style="font-size: 13px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #A0958A; margin: 30px 0 16px;">Composants</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+          <div style="padding: 15px 26px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 17px; font-weight: 700;">Action principale</div>
+          <div style="padding: 15px 26px; border-radius: 999px; border: 1.5px solid #DCD1C1; font-size: 17px; font-weight: 700;">Secondaire</div>
+          <div style="padding: 12px 20px; border-radius: 999px; background: #221C18; color: #FDF9F4; font-size: 16px; font-weight: 700;">Pilule active</div>
+          <div style="padding: 12px 20px; border-radius: 999px; background: #FFF; border: 1.5px solid #E3D9CC; font-size: 16px; font-weight: 700;">Pilule</div>
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: #2F7D5B; display: grid; place-items: center;"><div style="width: 15px; height: 8px; border-left: 3px solid #FFF; border-bottom: 3px solid #FFF; transform: rotate(-45deg) translate(1px, -2px);"></div></div>
+          <div style="width: 34px; height: 34px; border-radius: 50%; border: 2px solid #DCD2C6;"></div>
+        </div>
+        <div style="font-size: 16px; line-height: 1.6; color: #58504A; margin-top: 24px;">Cibles de clic à 44 px minimum. Deux teintes chaudes maximum par écran. La couleur de thème habille, elle ne remplace jamais le corail pour une action.</div>
+      </div>
+    </div>
+
+    <div id="1k" style="width: 720px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em; background: #221C18; color: #F7EFE6; padding: 6px 11px; border-radius: 7px;">1k</span>
+        <span style="font-size: 19px; font-weight: 800;">Bilingue — mêmes composants, deux langues</span>
+      </div>
+      <div style="background: #FDFAF5; border: 1px solid #DCD1C1; border-radius: 26px; padding: 34px;">
+        <div style="font-size: 16px; line-height: 1.6; color: #58504A; margin-bottom: 26px;">Le français est en moyenne 20 % plus long. Les composants sont dimensionnés sur le français : rien ne tient par la brièveté de l'anglais.</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .1em; color: #8A817A; margin-bottom: 12px;">FR</div>
+            <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 18px; overflow: hidden; margin-bottom: 14px;">
+              <div style="height: 110px; background: #EDE4FA; position: relative; overflow: hidden;">
+                <div style="position: absolute; left: 20px; bottom: -30px; width: 100px; height: 100px; border-radius: 50%; background: #6D4AC4; opacity: .18;"></div>
+              </div>
+              <div style="padding: 16px 18px 18px;">
+                <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #6D4AC4; margin-bottom: 7px;">Apprendre</div>
+                <div style="font-size: 19px; font-weight: 800; letter-spacing: -.015em; text-wrap: pretty;">Atelier photographie</div>
+                <div style="font-size: 15px; color: #6B625B; margin-top: 5px;">Lille-Centre · Petit groupe · Chaque mardi</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px; background: #FDF1EF; border: 2px solid #E1503A; border-radius: 16px; padding: 18px 20px;">
+              <div style="flex: none; width: 22px; height: 22px; border-radius: 50%; background: #E1503A;"></div>
+              <div style="font-size: 17px; font-weight: 700; text-wrap: pretty;">Les conversations sans objet précis</div>
+            </div>
+            <div style="margin-top: 14px; text-align: center; padding: 16px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 17px; font-weight: 700;">Ajouter à ma semaine</div>
+          </div>
+          <div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .1em; color: #8A817A; margin-bottom: 12px;">EN</div>
+            <div style="background: #FFF; border: 1px solid #EDE5DA; border-radius: 18px; overflow: hidden; margin-bottom: 14px;">
+              <div style="height: 110px; background: #EDE4FA; position: relative; overflow: hidden;">
+                <div style="position: absolute; left: 20px; bottom: -30px; width: 100px; height: 100px; border-radius: 50%; background: #6D4AC4; opacity: .18;"></div>
+              </div>
+              <div style="padding: 16px 18px 18px;">
+                <div style="font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #6D4AC4; margin-bottom: 7px;">Learn</div>
+                <div style="font-size: 19px; font-weight: 800; letter-spacing: -.015em; text-wrap: pretty;">Photography workshop</div>
+                <div style="font-size: 15px; color: #6B625B; margin-top: 5px;">Central Lille · Small group · Every Tuesday</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px; background: #FFF; border: 2px solid #EDE5DA; border-radius: 16px; padding: 18px 20px;">
+              <div style="flex: none; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #DCD2C6;"></div>
+              <div style="font-size: 17px; font-weight: 600; text-wrap: pretty;">Conversations with no particular purpose</div>
+            </div>
+            <div style="margin-top: 14px; text-align: center; padding: 16px; border-radius: 999px; background: #E1503A; color: #FFF; font-size: 17px; font-weight: 700;">Add to my week</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+</div>
+
+</x-dc>
+</body>
+</html>

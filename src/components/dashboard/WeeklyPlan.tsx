@@ -1,9 +1,10 @@
-import { Circle, CircleCheck, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Check, Circle, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { DashboardCard } from './DashboardCard'
 import { useApp } from '../../context/useApp'
 import { PATH_SOCIAL } from '../../data/paths'
 import { formatWeekDateRange, useCopy, useLocale } from '../../i18n'
+import { getCurrentSocialStepId } from '../../lib/journeyScheduling'
 import { cn } from '../../lib/cn'
 import type { WeekDefinition, WeeklyStepItem } from '../../types'
 
@@ -32,6 +33,7 @@ export function WeeklyPlan({
 }) {
   const copy = useCopy()
   const { locale } = useLocale()
+  const { profile } = useApp()
 
   const relative: WeekRelative =
     weekIndex < currentWeekIndex
@@ -47,49 +49,60 @@ export function WeeklyPlan({
   const showSteps = relative !== 'upcoming' && totalCount > 0
 
   return (
-    <DashboardCard padding="lg" className="h-full">
-      <div className="flex items-start justify-between gap-3">
+    <DashboardCard padding="lg" surface="coral" className="relative h-full overflow-hidden">
+      {/* Decorative discs — background only, never text opacity */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-[60px] -right-[60px] size-[230px] rounded-full bg-white/[0.11]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[74px] -bottom-[90px] size-[150px] rounded-full bg-white/[0.08]"
+      />
+
+      <div className="relative flex items-start justify-between gap-3">
         <button
           type="button"
           onClick={onPrev}
           disabled={weekIndex <= 0}
-          className="mt-1 flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-md border border-line-strong text-ink transition-colors hover:border-ink/40 hover:bg-cream disabled:cursor-not-allowed disabled:opacity-30"
+          className="mt-1 flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/35 text-on-coral transition-colors hover:bg-white/15 disabled:cursor-not-allowed disabled:border-white/20 disabled:text-white/55"
           aria-label={copy.home.prevWeek}
         >
           <ChevronLeft size={20} strokeWidth={1.8} />
         </button>
 
-        <div className="min-w-0 flex-1 text-center">
-          <h2 className="font-display text-[1.85rem] leading-tight tracking-[-0.02em] text-ink sm:text-[2.05rem]">
-            {copy.home.thisWeek}
-          </h2>
-          <p className="mt-1.5 text-[15px] text-ink-muted">
+        <div className="min-w-0 flex-1">
+          <p className="text-[13px] font-[800] tracking-[0.11em] text-white/80 uppercase">
             {formatWeekDateRange(week.offset, locale)}
+            {showSteps ? ` · ${copy.home.weekProgress(doneCount, totalCount)}` : ''}
           </p>
+          <h2 className="mt-2 font-display text-[2.1rem] leading-[1.12] tracking-[-0.02em] text-on-coral sm:text-[2.35rem]">
+            {copy.home.thisWeek}
+            {profile.firstName ? `, ${profile.firstName}` : ''}
+          </h2>
           {relative !== 'current' ? (
             <p
               className={cn(
                 'mt-2 text-[13px] font-medium tracking-[0.04em]',
-                relative === 'upcoming' ? 'text-ink-soft' : 'text-sage',
+                relative === 'upcoming' ? 'text-white/80' : 'text-on-coral',
               )}
             >
               {relative === 'upcoming'
                 ? copy.home.forecastLabel
                 : copy.home.pastWeekLabel}
             </p>
-          ) : null}
-          {showSteps && doneCount > 0 ? (
-            <p className="mt-2 text-[14px] text-ink-muted">
-              {copy.home.weekProgress(doneCount, totalCount)}
+          ) : (
+            <p className="mt-2 text-[17px] text-white/85">
+              {copy.home.weekLead}
             </p>
-          ) : null}
+          )}
         </div>
 
         <button
           type="button"
           onClick={onNext}
           disabled={weekIndex >= totalWeeksAvailable - 1}
-          className="mt-1 flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-md border border-line-strong text-ink transition-colors hover:border-ink/40 hover:bg-cream disabled:cursor-not-allowed disabled:opacity-30"
+          className="mt-1 flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/35 text-on-coral transition-colors hover:bg-white/15 disabled:cursor-not-allowed disabled:border-white/20 disabled:text-white/55"
           aria-label={copy.home.nextWeek}
         >
           <ChevronRight size={20} strokeWidth={1.8} />
@@ -97,14 +110,19 @@ export function WeeklyPlan({
       </div>
 
       {relative === 'upcoming' ? (
-        <p className="mt-4 text-center text-[13px] text-ink-soft">
+        <p className="relative mt-4 text-center text-[14px] text-white/85">
           {copy.home.forecastNote}
         </p>
       ) : null}
 
       {allDone ? (
-        <p className="mt-6 flex items-center justify-center gap-2 border-t border-line pt-5 text-[15px] font-medium text-sage">
-          <CircleCheck size={18} strokeWidth={2} aria-hidden="true" />
+        <p className="relative mt-6 flex items-center justify-center gap-2 border-t border-white/25 pt-5 text-[15px] font-medium text-on-coral">
+          <span
+            className="flex size-7 items-center justify-center rounded-full bg-white text-clay"
+            aria-hidden="true"
+          >
+            <Check size={16} strokeWidth={3} />
+          </span>
           {copy.home.allDoneThisWeek}
         </p>
       ) : null}
@@ -112,8 +130,8 @@ export function WeeklyPlan({
       {showSteps ? (
         <ul
           className={cn(
-            'space-y-2',
-            allDone ? 'mt-4' : 'mt-6 border-t border-line pt-5',
+            'relative space-y-3',
+            allDone ? 'mt-4' : 'mt-6',
           )}
         >
           {steps.map((step) => (
@@ -128,7 +146,7 @@ export function WeeklyPlan({
           ))}
         </ul>
       ) : relative !== 'upcoming' ? (
-        <p className="mt-6 border-t border-line pt-5 text-[16px] text-ink-muted">
+        <p className="relative mt-6 border-t border-white/25 pt-5 text-[16px] text-white/85">
           {copy.home.stepsOpen(0)}
         </p>
       ) : null}
@@ -149,12 +167,12 @@ function WeeklyStepRow({
   onToggle: () => void
   onPostpone: () => void
 }) {
-  const { startPath, openGuidedStep } = useApp()
+  const { startPath, openGuidedStep, pathProgress } = useApp()
   const copy = useCopy()
   const isSocial = step.pathId === PATH_SOCIAL
   const done = step.completed
-  const continueClassName =
-    'inline-flex shrink-0 cursor-pointer items-center text-[15px] font-medium text-clay transition-colors hover:text-clay-deep'
+  const currentSocialStepId = getCurrentSocialStepId(pathProgress[PATH_SOCIAL])
+  const isLiveRow = isSocial && !done && currentSocialStepId === step.stepId
 
   function openCompletedStep() {
     if (!done || !canReview) return
@@ -166,27 +184,35 @@ function WeeklyStepRow({
 
   const statusIcon = done ? (
     <span
-      className="weekly-step-check-icon flex size-7 items-center justify-center rounded-full bg-sage text-cream"
+      className="weekly-step-check-icon flex size-9 items-center justify-center rounded-full bg-white text-clay"
       aria-hidden="true"
     >
-      <CircleCheck size={18} strokeWidth={2.2} />
+      <Check size={18} strokeWidth={3} />
     </span>
   ) : canInteract ? (
     <button
       type="button"
       onClick={onToggle}
-      className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full text-ink-soft transition-colors hover:text-ink-muted"
+      className={cn(
+        'flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors',
+        isLiveRow
+          ? 'text-ink-soft hover:text-ink-muted'
+          : 'text-on-coral hover:text-white',
+      )}
       aria-pressed={false}
       aria-label={step.subtitle}
     >
-      <Circle size={22} strokeWidth={1.6} />
+      <Circle size={24} strokeWidth={1.8} />
     </button>
   ) : (
     <span
-      className="flex size-7 shrink-0 items-center justify-center text-ink-soft"
+      className={cn(
+        'flex size-9 shrink-0 items-center justify-center',
+        isLiveRow ? 'text-ink-soft' : 'text-on-coral',
+      )}
       aria-hidden="true"
     >
-      <Circle size={22} strokeWidth={1.6} />
+      <Circle size={24} strokeWidth={1.8} />
     </span>
   )
 
@@ -195,33 +221,44 @@ function WeeklyStepRow({
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
         <p
           className={cn(
-            'text-[13px] font-medium tracking-[0.04em] uppercase',
-            done
-              ? 'text-ink-soft line-through decoration-line-strong/80'
-              : 'text-ink-soft',
+            'text-[12px] font-[800] tracking-[0.1em] uppercase',
+            isLiveRow ? 'text-clay-ink' : 'text-white/80',
           )}
         >
           {step.themeTitle}
+          {isLiveRow ? ` · ${copy.home.guidedStep}` : null}
         </p>
         {done ? (
-          <span className="shrink-0 text-[11px] font-medium tracking-[0.12em] text-sage uppercase">
+          <span className="shrink-0 text-[13px] font-medium text-on-coral">
             {copy.home.completed}
           </span>
         ) : null}
       </div>
       <p
         className={cn(
-          'mt-0.5 text-[17px] leading-snug',
-          done ? 'text-ink-muted' : 'font-medium text-ink',
+          'mt-1 text-[18px] leading-snug font-medium',
+          done
+            ? 'text-on-coral line-through decoration-[#D6CDC2]'
+            : isLiveRow
+              ? 'text-ink'
+              : 'text-on-coral',
         )}
       >
         {step.subtitle}
       </p>
       {!done ? (
-        <p className="mt-1 text-[13px] text-ink-muted">
+        <p
+          className={cn(
+            'mt-1 text-[14px]',
+            isLiveRow ? 'text-ink-muted' : 'text-white/80',
+          )}
+        >
           {step.estimatedMinutes} min
           {step.carriedOver ? (
-            <span className="text-ink-soft"> · {copy.home.carriedOver}</span>
+            <span>
+              {' '}
+              · {copy.home.carriedOver}
+            </span>
           ) : null}
         </p>
       ) : null}
@@ -230,45 +267,62 @@ function WeeklyStepRow({
 
   const actions =
     !done && canInteract ? (
-      <div className="flex flex-col items-end gap-2">
+      <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:items-end">
         {isSocial ? (
           <button
             type="button"
-            className={continueClassName}
+            className={cn(
+              'inline-flex min-h-11 w-full items-center justify-center rounded-full px-5 py-2.5 text-[15px] font-bold transition-colors sm:w-auto',
+              isLiveRow
+                ? 'bg-ink text-on-coral hover:bg-ink/90'
+                : 'border-[1.5px] border-white/55 bg-transparent text-on-coral hover:bg-white/15',
+            )}
             onClick={() => {
               startPath(PATH_SOCIAL)
               openGuidedStep(step.stepId)
             }}
           >
-            {copy.home.startStep} →
+            {isLiveRow ? copy.home.resumeStep : copy.home.detailsStep}
           </button>
         ) : (
           <Link
             to={`/guide/${step.pathId}?step=${step.stepId}`}
-            className={continueClassName}
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-full border-[1.5px] border-white/55 bg-transparent px-5 py-2.5 text-[15px] font-bold text-on-coral transition-colors hover:bg-white/15 sm:w-auto"
           >
-            {copy.home.continueStep} →
+            {copy.home.detailsStep}
           </Link>
         )}
         <button
           type="button"
           onClick={onPostpone}
-          className="cursor-pointer text-[13px] text-ink-soft transition-colors hover:text-ink-muted"
+          className={cn(
+            'w-full cursor-pointer text-[13px] font-medium transition-colors sm:w-auto',
+            isLiveRow
+              ? 'text-ink-muted hover:text-ink'
+              : 'text-white/80 hover:text-on-coral',
+          )}
         >
           {copy.home.postpone}
         </button>
       </div>
     ) : done && canReview ? (
-      <span className="shrink-0 text-[13px] text-ink-soft">
+      <span
+        className={cn(
+          'shrink-0 text-[13px] font-medium',
+          isLiveRow ? 'text-ink-muted' : 'text-white/80',
+        )}
+      >
         {copy.home.reviewStep} →
       </span>
     ) : null
 
   const rowClassName = cn(
-    'weekly-step-row flex items-start gap-3 rounded-lg border px-3.5 py-3.5',
+    'weekly-step-row flex items-start gap-4 rounded-[18px] px-4 py-[18px] transition-colors',
     done
-      ? 'is-completed border-sage/20 bg-sage/[0.05]'
-      : 'border-transparent',
+      ? 'bg-white/[0.14]'
+      : isLiveRow
+        ? 'bg-paper'
+        : 'bg-transparent',
   )
 
   if (done && canReview && isSocial) {
@@ -279,12 +333,12 @@ function WeeklyStepRow({
           onClick={openCompletedStep}
           className={cn(
             rowClassName,
-            'w-full cursor-pointer text-left transition-colors hover:border-sage/35 hover:bg-sage/[0.08]',
+            'w-full cursor-pointer text-left hover:bg-white/[0.2]',
           )}
           aria-label={copy.home.reviewStepAria(step.subtitle)}
         >
           <div className="shrink-0 pt-0.5">{statusIcon}</div>
-          <div className="flex min-w-0 flex-1 flex-wrap items-start justify-between gap-x-4 gap-y-1">
+          <div className="flex min-w-0 flex-1 flex-col gap-y-2 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-x-4 sm:gap-y-1">
             {textBlock}
             {actions}
           </div>
@@ -298,13 +352,10 @@ function WeeklyStepRow({
       <li>
         <Link
           to={`/guide/${step.pathId}?step=${step.stepId}`}
-          className={cn(
-            rowClassName,
-            'transition-colors hover:border-sage/35 hover:bg-sage/[0.08]',
-          )}
+          className={cn(rowClassName, 'hover:bg-white/[0.2]')}
         >
           <div className="shrink-0 pt-0.5">{statusIcon}</div>
-          <div className="flex min-w-0 flex-1 flex-wrap items-start justify-between gap-x-4 gap-y-1">
+          <div className="flex min-w-0 flex-1 flex-col gap-y-2 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-x-4 sm:gap-y-1">
             {textBlock}
             {actions}
           </div>
@@ -317,7 +368,7 @@ function WeeklyStepRow({
     <li>
       <div className={rowClassName}>
         <div className="shrink-0 pt-0.5">{statusIcon}</div>
-        <div className="flex min-w-0 flex-1 flex-wrap items-start justify-between gap-x-4 gap-y-1">
+        <div className="flex min-w-0 flex-1 flex-col gap-y-2 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-x-4 sm:gap-y-1">
           {textBlock}
           {actions}
         </div>

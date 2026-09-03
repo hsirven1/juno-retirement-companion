@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, Link } from 'react-router-dom'
 import { Compass, House, Map, Search } from 'lucide-react'
 import { Logo } from './Logo'
 import { JunoChatOverlay } from './JunoChatOverlay'
@@ -6,10 +6,11 @@ import { GuidedThemeOverlay } from './GuidedThemeOverlay'
 import { useApp } from '../context/useApp'
 import { cn } from '../lib/cn'
 import { useCopy, LanguageSelector } from '../i18n'
+import { JunoOrb } from './JunoOrb'
 import type { ReactNode } from 'react'
 
 export function AppLayout({ children }: { children?: ReactNode }) {
-  const { openChat, chatOpen, guidedThemeOpen } = useApp()
+  const { openChat, chatOpen, guidedThemeOpen, profile } = useApp()
   const copy = useCopy()
 
   const links = [
@@ -20,16 +21,16 @@ export function AppLayout({ children }: { children?: ReactNode }) {
       icon: House,
     },
     {
-      to: '/plan',
-      label: copy.nav.plan,
-      shortLabel: copy.nav.planShort,
-      icon: Map,
-    },
-    {
       to: '/discover',
       label: copy.nav.discover,
       shortLabel: copy.nav.discoverShort,
       icon: Search,
+    },
+    {
+      to: '/plan',
+      label: copy.nav.plan,
+      shortLabel: copy.nav.planShort,
+      icon: Map,
     },
     {
       to: '/profile',
@@ -39,36 +40,56 @@ export function AppLayout({ children }: { children?: ReactNode }) {
     },
   ]
 
+  const initials = (profile.firstName || 'J')
+    .slice(0, 2)
+    .toUpperCase()
+
   return (
     <div className="flex min-h-svh flex-col bg-cream">
-      <header className="border-b border-line bg-cream/90 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-[1120px] items-center justify-between gap-8 px-6 py-5 sm:px-8">
-          <Logo to="/home" />
-          <LanguageSelector className="md:hidden" />
-          <nav className="hidden items-center gap-8 md:flex" aria-label={copy.nav.main}>
+      <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-[14px]">
+        <div className="mx-auto flex h-[76px] max-w-[1240px] items-center gap-6 px-5 sm:px-8 lg:px-9">
+          <Logo to="/home" className="shrink-0" />
+
+          <nav
+            className="hidden min-w-0 flex-1 items-center gap-1.5 md:flex"
+            aria-label={copy.nav.main}
+          >
             {links.map((link) => (
               <NavLink
                 key={link.to}
                 to={link.to}
                 className={({ isActive }) =>
                   cn(
-                    'text-[17px] transition-colors hover:text-ink',
-                    isActive ? 'text-ink' : 'text-ink-muted hover:text-ink',
+                    'rounded-full px-4 py-2 text-[16px] transition-colors duration-[160ms]',
+                    isActive
+                      ? 'bg-clay-tint font-bold text-clay-ink'
+                      : 'font-semibold text-ink-muted hover:text-ink',
                   )
                 }
               >
                 {link.label}
               </NavLink>
             ))}
+          </nav>
+
+          <div className="ml-auto flex items-center gap-2 sm:gap-3">
             <LanguageSelector />
             <button
               type="button"
               onClick={() => openChat()}
-              className="cursor-pointer rounded-md border border-line-strong px-4 py-2 text-[15px] text-ink transition-colors hover:border-ink/40 hover:bg-paper"
+              className="hidden cursor-pointer items-center gap-2.5 rounded-full bg-clay py-2 pr-[17px] pl-[11px] text-[15px] font-bold text-on-coral transition-colors hover:bg-clay-deep md:inline-flex"
             >
+              <JunoOrb size={21} />
               {copy.nav.talkToJuno}
             </button>
-          </nav>
+            <Link
+              to="/profile"
+              className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[#E3D6C6] bg-[#EFE4D6] text-[14px] font-[800] text-[#6B5F54] transition-colors hover:bg-cream-deep"
+              aria-label={copy.nav.profile}
+            >
+              {initials}
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -80,14 +101,15 @@ export function AppLayout({ children }: { children?: ReactNode }) {
         <button
           type="button"
           onClick={() => openChat()}
-          className="fixed right-4 bottom-[5.5rem] z-30 inline-flex min-h-11 cursor-pointer items-center rounded-full bg-clay px-4 text-[14px] font-medium text-cream shadow-[0_12px_30px_-12px_rgba(36,31,26,0.45)] transition-colors hover:bg-clay-deep md:right-5 md:bottom-8 md:min-h-12 md:px-5 md:text-[15px]"
+          className="fixed right-4 bottom-[5.5rem] z-30 inline-flex cursor-pointer rounded-full md:hidden"
+          aria-label={copy.nav.talkToJuno}
         >
-          {copy.nav.talkToJuno}
+          <JunoOrb size={60} glow />
         </button>
       ) : null}
 
       <nav
-        className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-paper pb-[env(safe-area-inset-bottom)] md:hidden"
+        className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-paper/94 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:hidden"
         aria-label={copy.nav.mobile}
       >
         <ul className="grid grid-cols-4">
@@ -99,13 +121,22 @@ export function AppLayout({ children }: { children?: ReactNode }) {
                   to={link.to}
                   className={({ isActive }) =>
                     cn(
-                      'flex min-h-16 flex-col items-center justify-center gap-1 px-1 text-[12px] tracking-[0.01em]',
-                      isActive ? 'text-ink' : 'text-ink-muted',
+                      'flex min-h-16 flex-col items-center justify-center gap-1 px-1 text-[12px] font-bold tracking-[0.01em]',
+                      isActive ? 'text-clay-ink' : 'text-ink-muted',
                     )
                   }
                 >
-                  <Icon size={20} strokeWidth={1.6} aria-hidden="true" />
-                  {link.shortLabel}
+                  {({ isActive }) => (
+                    <>
+                      <Icon
+                        size={22}
+                        strokeWidth={isActive ? 2.2 : 1.6}
+                        aria-hidden="true"
+                        className={isActive ? 'text-clay' : undefined}
+                      />
+                      {link.shortLabel}
+                    </>
+                  )}
                 </NavLink>
               </li>
             )

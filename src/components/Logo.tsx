@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { cn } from '../lib/cn'
 import { useCopy } from '../i18n'
+import { JunoOrb } from './JunoOrb'
 
 interface LogoProps {
   to?: string
@@ -14,11 +15,14 @@ export function Logo({ to = '/', className }: LogoProps) {
     <Link
       to={to}
       className={cn(
-        'font-display text-[1.35rem] font-medium tracking-[-0.02em] text-ink',
+        'inline-flex items-center gap-2.5 text-ink',
         className,
       )}
     >
-      {copy.brand.name}
+      <JunoOrb size={24} />
+      <span className="font-display text-[25px] font-medium leading-none tracking-[-0.02em] lowercase">
+        {copy.brand.name}
+      </span>
     </Link>
   )
 }

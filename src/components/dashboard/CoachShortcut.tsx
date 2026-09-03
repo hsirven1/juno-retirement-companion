@@ -1,49 +1,74 @@
 import { ArrowUp } from 'lucide-react'
-import { CardEyebrow, DashboardCard } from './DashboardCard'
-import { JunoAvatar } from '../JunoAvatar'
 import { useApp } from '../../context/useApp'
-import { useCopy } from '../../i18n'
+import { getSuggestionPills, useCopy, useLocale } from '../../i18n'
 import { profile } from '../../data/profile'
+import { JunoOrb } from '../JunoOrb'
 
+/**
+ * Home chat preview — Variant 1b uses a light card (not the dark immersive panel).
+ * Clicking anywhere still opens the existing chat overlay.
+ */
 export function CoachShortcut() {
   const { openChat } = useApp()
   const copy = useCopy()
+  const { chatLocale } = useLocale()
+  const pills = getSuggestionPills(chatLocale).slice(0, 2)
 
   return (
-    <DashboardCard className="relative transition-colors hover:border-ink/20">
+    <section className="relative rounded-[24px] border border-line bg-paper p-6 shadow-[var(--shadow-card)]">
       <button
         type="button"
         onClick={() => openChat()}
         className="absolute inset-0 z-10 cursor-pointer rounded-[inherit]"
         aria-label={copy.home.coachOpen}
       />
-      <CardEyebrow>{copy.home.coachTitle}</CardEyebrow>
 
-      <div className="mt-5 flex items-start gap-3">
-        <JunoAvatar />
-        <div className="min-w-0 flex-1">
-          <p className="text-[13px] font-medium tracking-[0.02em] text-ink">
-            {copy.brand.name}
-          </p>
-          <div className="mt-2 rounded-2xl rounded-tl-md bg-cream px-3.5 py-3">
-            <p className="text-[15px] leading-snug text-ink">
-              {copy.home.coachPreview(profile.firstName)}
+      <div className="relative z-0">
+        <div className="flex items-center gap-3">
+          <JunoOrb size={54} />
+          <div className="min-w-0 flex-1">
+            <p className="text-[20px] font-[800] leading-tight text-ink">
+              {copy.brand.name}
+            </p>
+            <p className="mt-0.5 text-[14px] text-ink-soft">
+              {copy.home.coachSubtitle}
             </p>
           </div>
         </div>
-      </div>
 
-      <div className="pointer-events-none mt-5 flex min-h-12 items-center gap-2 rounded-full border border-line-strong bg-cream px-4">
-        <span className="flex-1 text-[15px] text-ink-soft">
-          {copy.home.coachPlaceholder}
-        </span>
-        <span
-          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-clay text-cream"
-          aria-hidden="true"
-        >
-          <ArrowUp size={16} strokeWidth={2.2} />
-        </span>
+        <div className="mt-4 rounded-[18px] rounded-bl-md bg-[#F6EFE5] px-[19px] py-[17px]">
+          <p className="text-[17px] leading-[1.5] text-[#3B342E]">
+            {copy.home.coachPreview(profile.firstName)}
+          </p>
+        </div>
+
+        <div className="mt-3 flex flex-wrap gap-2">
+          {pills.map((pill, index) => (
+            <span
+              key={pill.label}
+              className={
+                index === 0
+                  ? 'rounded-full bg-clay-tint px-4 py-2.5 text-[15px] font-bold text-clay-ink'
+                  : 'rounded-full border-[1.5px] border-line-strong px-4 py-2.5 text-[15px] font-bold text-ink'
+              }
+            >
+              {pill.label}
+            </span>
+          ))}
+        </div>
+
+        <div className="pointer-events-none mt-4 flex min-h-11 items-center gap-3 rounded-full border border-line bg-cream py-1.5 pr-1.5 pl-5">
+          <span className="flex-1 text-[16px] text-[#9A9088]">
+            {copy.home.coachPlaceholder}
+          </span>
+          <span
+            className="flex size-10 shrink-0 items-center justify-center rounded-full bg-clay text-on-coral"
+            aria-hidden="true"
+          >
+            <ArrowUp size={16} strokeWidth={2.4} />
+          </span>
+        </div>
       </div>
-    </DashboardCard>
+    </section>
   )
 }
