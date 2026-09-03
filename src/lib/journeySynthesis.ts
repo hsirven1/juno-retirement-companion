@@ -72,31 +72,45 @@ export function getJourneySynthesis(
       const needs = workNeeds(stepResponses, prefs)
       if (needs.includes('little')) {
         return {
+          title: 'Ce qui ressort pour l’instant',
           paragraphs: [
-            'Le travail ne semblait pas apporter grand-chose à votre vie sociale — et c’est une information utile en soi.',
-            'On pourra explorer d’autres sources de lien, sans supposer qu’il « manque » quelque chose.',
+            'Pour l’instant, le travail ne semble pas avoir été une grande source de lien social — et c’est une information utile.',
+            'On pourra explorer d’autres sources de présence, sans supposer qu’il « manque » quelque chose.',
           ],
         }
       }
       if (needs.includes('informal') && needs.includes('entoure')) {
         return {
+          title: 'Ce qui ressort pour l’instant',
           paragraphs: [
-            'Ce qui vous manque n’est peut-être pas forcément d’avoir beaucoup plus d’activités.',
-            'Ce sont peut-être simplement ces petites occasions régulières de voir et d’échanger avec d’autres.',
+            'Ce qui semble compter, ce n’est pas forcément d’avoir **beaucoup plus d’activités**.',
+            'Ce sont plutôt ces **petites occasions régulières** de voir et d’échanger avec d’autres.',
           ],
         }
       }
       if (needs.includes('team') || needs.includes('collective')) {
         return {
+          title: 'Ce qui ressort pour l’instant',
           paragraphs: [
-            'Il semble que le collectif et avancer avec d’autres aient compté dans votre quotidien.',
+            'Vous semblez avoir apprécié **avancer avec d’autres** — le collectif dans le quotidien.',
             'On gardera cela en tête pour imaginer des situations qui pourraient recréer ce sentiment.',
           ],
         }
       }
+      const labels = needs.map((id) => WORK_NEED_LABELS[id]).filter(Boolean)
+      if (labels.length > 0) {
+        return {
+          title: 'Ce qui ressort pour l’instant',
+          paragraphs: [
+            `Ce qui semble avoir compté : **${labels.slice(0, 2).join('** et **')}**.`,
+            'On pourra chercher comment retrouver ce type de moments, sans tout reproduire à l’identique.',
+          ],
+        }
+      }
       return {
+        title: 'Ce qui ressort pour l’instant',
         paragraphs: [
-          'Comprendre ce qui comptait au travail peut aider à imaginer la suite — sans chercher à tout reproduire à l’identique.',
+          'Comprendre ce qui comptait au travail peut aider à imaginer la suite — sans chercher à tout reproduire.',
         ],
       }
     }
@@ -107,7 +121,7 @@ export function getJourneySynthesis(
       if (needs.includes('little')) {
         return {
           paragraphs: [
-            'Le travail ne semblait pas apporter grand-chose à votre vie sociale.',
+            'Pour l’instant, le travail ne semble pas avoir apporté grand-chose à votre vie sociale.',
             'On gardera cela en tête pour la suite.',
           ],
           tags: ['Exploration'],
@@ -121,7 +135,7 @@ export function getJourneySynthesis(
       return {
         title: synthesisId === 'work-social' ? 'Voilà ce que je retiens' : undefined,
         paragraphs: [
-          `${focus.charAt(0).toUpperCase() + focus.slice(1)} semble${labels.length > 1 ? 'nt' : ''} avoir compté dans votre quotidien professionnel.`,
+          `Vous semblez avoir tenu à **${focus}** dans votre quotidien professionnel.`,
           'Pour la suite, on pourra chercher comment retrouver ce type de moments d’une manière qui vous ressemble.',
         ],
         tags: workTags(needs),
@@ -144,26 +158,32 @@ export function getJourneySynthesis(
       const work = workNeeds(stepResponses, prefs)
       const refs: string[] = []
       if (work.includes('informal')) {
-        refs.push('Vous nous aviez dit apprécier les échanges informels au travail.')
+        refs.push(
+          'Vous aviez mentionné apprécier les **échanges informels** au travail.',
+        )
       }
       if (picked.includes('activites') && work.includes('entoure')) {
         return {
+          title: 'Ce qui ressort pour l’instant',
           paragraphs: [
-            refs[0] ?? 'Ce que vous recherchez semble proche de ce que le travail apportait.',
-            'Une activité régulière pourrait recréer à la fois du lien et une présence sociale, sans surcharge.',
+            refs[0] ??
+              'Ce que vous recherchez semble proche de ce que le travail apportait.',
+            'Une **activité régulière** pourrait recréer à la fois du lien et une présence sociale, sans surcharge.',
           ],
         }
       }
       if (picked.length > 0) {
         const labels = picked.map((id) => FORM_LABELS[id]).filter(Boolean)
         return {
+          title: 'Ce qui ressort pour l’instant',
           paragraphs: [
-            refs[0] ?? '',
-            `Vous semblez attiré par ${labels.join(' et ')} — c’est un bon point de départ pour la suite.`,
-          ].filter(Boolean),
+            ...(refs[0] ? [refs[0]] : []),
+            `Vous semblez attiré par **${labels.join('** et **')}** — un bon point de départ pour la suite.`,
+          ],
         }
       }
       return {
+        title: 'Ce qui ressort pour l’instant',
         paragraphs: [
           'Vous explorez ce qui pourrait vous convenir — sans précipitation.',
         ],
@@ -178,7 +198,7 @@ export function getJourneySynthesis(
       if (picked.length === 0) {
         return {
           paragraphs: [
-            'Vous prenez le temps d’explorer — c’est une bonne façon de commencer.',
+            'Pour l’instant, vous prenez le temps d’explorer — c’est une bonne façon de commencer.',
           ],
           tags: ['Exploration'],
         }
@@ -186,7 +206,7 @@ export function getJourneySynthesis(
       const labels = picked.map((id) => FORM_LABELS[id]).filter(Boolean)
       return {
         paragraphs: [
-          `Vous êtes attiré par ${labels.join(', ')}.`,
+          `Vous semblez attiré par **${labels.join(', ')}**.`,
           'On pourra affiner cela au fil des prochaines étapes.',
         ],
         tags: labels.map((l) => l.charAt(0).toUpperCase() + l.slice(1)),
@@ -204,20 +224,31 @@ export function getJourneySynthesis(
     case 'desires':
     case 'desires-summary': {
       const work = workNeeds(stepResponses, prefs)
+      const goals =
+        (stepResponses.goals as string[] | undefined) ?? prefs.goals
+      const connection =
+        (stepResponses.connectionPreference as string | undefined) ??
+        prefs.connectionPreference
       const intro = work.includes('informal')
-        ? 'Vous nous aviez dit apprécier les échanges informels — '
+        ? 'Vous aviez mentionné apprécier les échanges informels — '
         : ''
       const wantsNew =
-        prefs.goals.includes('nouvelles') ||
-        prefs.connectionPreference === 'new'
+        goals.includes('nouvelles') || connection === 'new'
       const wantsExisting =
-        prefs.goals.includes('proches') ||
-        prefs.connectionPreference === 'existing'
+        goals.includes('proches') || connection === 'existing'
+      const wantsActivity = goals.includes('activite')
+      if (wantsNew && wantsActivity) {
+        return {
+          paragraphs: [
+            `${intro}vous semblez préférer rencontrer de **nouvelles personnes** autour d’une **activité concrète**, plutôt que dans de grands groupes.`,
+          ],
+          tags: ['Nouvelles rencontres', 'Activité'],
+        }
+      }
       if (wantsNew && wantsExisting) {
         return {
           paragraphs: [
-            `${intro}vous cherchez un équilibre entre approfondir ce que vous avez déjà et élargir un peu votre cercle.`,
-            'On gardera cela en tête.',
+            `${intro}pour l’instant, vous cherchez un **équilibre** entre approfondir ce que vous avez déjà et élargir un peu votre cercle.`,
           ],
           tags: ['Équilibre', 'Proches', 'Nouvelles rencontres'],
         }
@@ -225,7 +256,7 @@ export function getJourneySynthesis(
       if (wantsNew) {
         return {
           paragraphs: [
-            `${intro}vous aimeriez surtout rencontrer de nouvelles personnes, à votre rythme.`,
+            `${intro}vous semblez vouloir surtout **rencontrer de nouvelles personnes**, à votre rythme.`,
           ],
           tags: ['Nouvelles rencontres'],
         }
@@ -233,14 +264,14 @@ export function getJourneySynthesis(
       if (wantsExisting) {
         return {
           paragraphs: [
-            `${intro}vous souhaitez surtout voir davantage les personnes que vous connaissez déjà.`,
+            `${intro}vous semblez vouloir surtout voir davantage les **personnes que vous connaissez déjà**.`,
           ],
           tags: ['Proches'],
         }
       }
       return {
         paragraphs: [
-          'Vous avancez sans pression — c’est une bonne façon de clarifier ce qui vous conviendrait.',
+          'Pour l’instant, vous avancez sans pression — une bonne façon de clarifier ce qui vous conviendrait.',
         ],
         tags: ['Exploration'],
       }
@@ -249,23 +280,35 @@ export function getJourneySynthesis(
     case 'scenario-why-reflection': {
       const why =
         (stepResponses.scenarioWhy as string[] | undefined) ?? prefs.scenarioWhy
-      if (why.includes('petit-groupe')) {
-        return {
-          paragraphs: [
-            'Les petits groupes semblent vous convenir — un cadre où l’on peut vraiment échanger.',
-          ],
-        }
+      const invitation = String(
+        stepResponses.scenarioInvitation ?? prefs.scenarioInvitation ?? '',
+      )
+      const whyLabels: Record<string, string> = {
+        'petit-groupe': 'un petit groupe',
+        activite: 'une activité concrète',
+        decouvrir: 'découvrir des gens',
+        detendu: 'une ambiance détendue',
+        utile: 'vous sentir utile',
       }
-      if (why.includes('utile')) {
+      const reasons = why
+        .map((id) => whyLabels[id])
+        .filter(Boolean)
+        .slice(0, 2)
+      if (reasons.length > 0) {
         return {
+          title: 'Ce qui ressort pour l’instant',
           paragraphs: [
-            'Participer à quelque chose d’utile tout en étant avec d’autres semble vous parler.',
+            `Ce qui semble vous attirer : **${reasons.join('** et **')}**.`,
+            invitation === 'cafe' || invitation === 'benevolat'
+              ? 'Plutôt qu’un grand groupe, vous semblez préférer un cadre où l’on peut vraiment échanger.'
+              : 'On gardera cela en tête pour imaginer des situations qui vous ressemblent.',
           ],
         }
       }
       return {
+        title: 'Ce qui ressort pour l’instant',
         paragraphs: [
-          'Vos choix nous aident à imaginer des situations qui vous ressembleraient.',
+          'Vos choix aident à imaginer des situations qui pourraient vous ressembler.',
         ],
       }
     }
@@ -275,6 +318,11 @@ export function getJourneySynthesis(
       const invitation = String(
         stepResponses.scenarioInvitation ?? prefs.scenarioInvitation ?? '',
       )
+      const why =
+        (stepResponses.scenarioWhy as string[] | undefined) ?? prefs.scenarioWhy
+      const frequency =
+        (stepResponses.preferredFrequency as string | undefined) ??
+        prefs.preferredFrequency
       const size =
         invitation === 'cafe' || invitation === 'benevolat'
           ? 'les petits groupes'
@@ -284,18 +332,30 @@ export function getJourneySynthesis(
               ? 'les petits groupes'
               : 'différents formats'
       const freq =
-        prefs.preferredFrequency === 'regular' ||
-        prefs.preferredFrequency === 'more'
+        frequency === 'regular' || frequency === 'more'
           ? 'des rendez-vous réguliers'
           : 'des occasions plus souples'
+      const activityLed =
+        why.includes('activite') ||
+        prefs.preferredContexts.includes('activity') ||
+        invitation === 'atelier'
+      const newPeople = why.includes('decouvrir')
+      let main = `Vous semblez préférer **${size}** et **${freq}**.`
+      if (activityLed && newPeople) {
+        main =
+          'Vous semblez préférer rencontrer de **nouvelles personnes** autour d’une **activité concrète**, plutôt que dans de grands groupes.'
+      } else if (activityLed) {
+        main = `Vous semblez préférer **${size}** autour d’une **activité concrète**, avec **${freq}**.`
+      }
       return {
         paragraphs: [
-          `Vous semblez préférer ${size} et ${freq}.`,
-          'Cela nous aide à imaginer des pistes concrètes qui pourraient vous convenir.',
+          main,
+          'Cela aide à imaginer des pistes concrètes qui pourraient vous convenir.',
         ],
         tags: [
           size.includes('petit') ? 'Petit groupe' : 'Groupe',
-          prefs.preferredContexts.includes('activity') ? 'Activité' : 'Convivialité',
+          activityLed ? 'Activité' : 'Convivialité',
+          ...(newPeople ? ['Nouvelles rencontres'] : []),
         ].filter(Boolean),
       }
     }
@@ -313,7 +373,10 @@ export function getJourneySynthesis(
 
     case 'ideal-week':
     case 'ideal-week-summary': {
-      const activities = prefs.idealWeekActivities
+      const activityIds =
+        (stepResponses.idealWeekActivities as string[] | undefined) ??
+        prefs.idealWeekActivities
+      const activities = activityIds
         .map((id) => ACTIVITY_LABELS[id])
         .filter(Boolean)
       const bullets =
@@ -323,9 +386,15 @@ export function getJourneySynthesis(
       return {
         title: 'Votre équilibre pourrait ressembler à…',
         bullets,
-        paragraphs: [
-          'Ce n’est pas un programme à suivre. Juste une direction qui pourra évoluer.',
-        ],
+        paragraphs:
+          activities.length > 0
+            ? [
+                `Pour l’instant, ce qui ressort : **${activities.slice(0, 2).join('** et **')}**.`,
+                'Ce n’est pas un programme à suivre — juste une direction qui pourra évoluer.',
+              ]
+            : [
+                'Ce n’est pas un programme à suivre. Juste une direction qui pourra évoluer.',
+              ],
         tags: bullets.slice(0, 2),
       }
     }

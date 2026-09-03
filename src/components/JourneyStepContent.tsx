@@ -2,7 +2,10 @@ import { useMemo, useState, type ReactNode } from 'react'
 import { Button } from './Button'
 import { JunoOrb } from './JunoOrb'
 import { QuizOption } from './journey/QuizOption'
+import { AnswerChip } from './journey/AnswerChip'
 import { AbstractComposition } from './journey/AbstractComposition'
+import { HighlightedCopy } from './journey/HighlightedCopy'
+import { getChoiceLayout } from './journey/choiceLayout'
 import { useApp } from '../context/useApp'
 import type {
   JourneyScreen,
@@ -17,6 +20,7 @@ import {
   TimelineVisual,
 } from './JourneyStepCompletion'
 import {
+  getJourneyPhaseLabels,
   getJourneySynthesis,
   getOpportunityTypesForStep,
   getSocialJourneyStep,
@@ -26,7 +30,7 @@ import {
 } from '../i18n'
 import { getRecommendedResourceCards } from '../lib/lilleRecommendations'
 import { makeResourceLabelFns } from '../lib/resourceLabels'
-import { SOCIAL_STEP_ORDER } from '../data/socialJourney'
+import { getSocialPhaseForStep, SOCIAL_STEP_ORDER } from '../data/socialJourney'
 import { getCompletedSocialStepIds } from '../lib/journeyScheduling'
 import { PATH_SOCIAL } from '../data/paths'
 
@@ -78,14 +82,19 @@ export function JourneyStepContent({
     SOCIAL_STEP_ORDER.length,
     Math.max(1, completedCount + (reviewMode ? 0 : 1)),
   )
+  const phase = getSocialPhaseForStep(stepId)
+  const phaseLabels = getJourneyPhaseLabels(locale)
+  const progressEyebrow = phase
+    ? `${phaseLabels[phase.type]} · ${screenIndex + 1} ${locale === 'en' ? 'of' : 'sur'} ${journeyStep.screens.length}`
+    : undefined
 
   return (
     <div
       key={`${stepId}-${screen.id}`}
       className={
         stepDirection === 'back'
-          ? 'guided-step-enter-back flex min-h-full flex-col pb-4'
-          : 'guided-step-enter flex min-h-full flex-col pb-4'
+          ? 'guided-step-enter-back flex min-h-full flex-col pb-2'
+          : 'guided-step-enter flex min-h-full flex-col pb-2'
       }
     >
       <ScreenRenderer
@@ -93,6 +102,7 @@ export function JourneyStepContent({
         screen={screen}
         surface={surface}
         weekNumber={weekNumber}
+        progressEyebrow={progressEyebrow}
         prefs={socialPreferences}
         responses={responses}
         feedback={socialFeedback}
@@ -114,6 +124,7 @@ function ScreenRenderer({
   screen,
   surface: _surface,
   weekNumber,
+  progressEyebrow,
   prefs,
   responses,
   feedback,
@@ -130,6 +141,7 @@ function ScreenRenderer({
   screen: JourneyScreen
   surface: JourneySurface
   weekNumber: number
+  progressEyebrow?: string
   prefs: SocialPreferences
   responses: Record<string, unknown>
   feedback: {
@@ -183,56 +195,13 @@ function ScreenRenderer({
       locale,
     )
     return (
-      <ScreenShell
-        onDark
-        cta={
-          <div className="flex w-full flex-col gap-3">
-            <ContinueButton inverted={false} solid onClick={onContinue}>
-              {copy.journeyUi.insightConfirm}
-            </ContinueButton>
-            <button
-              type="button"
-              onClick={onContinue}
-              className="min-h-11 cursor-pointer rounded-full border border-white/35 px-5 text-[16px] font-bold text-white transition-colors hover:bg-white/10"
-            >
-              {copy.journeyUi.insightAdjust}
-            </button>
-          </div>
-        }
-      >
-        <div className="flex flex-col items-center text-center">
-          <JunoOrb size={88} glow />
-          <p
-            className="mt-5 text-[12px] font-extrabold tracking-[0.1em] uppercase"
-            style={{ color: 'var(--journey-solid, #d6455e)' }}
-          >
-            {copy.journeyUi.whatIUnderstand}
-          </p>
-        </div>
-        {insight.title ? (
-          <h1 className="mt-4 text-center font-display text-[1.75rem] font-medium leading-tight tracking-[-0.02em] text-white sm:text-[2rem]">
-            {insight.title}
-          </h1>
-        ) : null}
-        <ul className="mt-7 space-y-3 text-left">
-          {insight.paragraphs.map((p) => (
-            <li
-              key={p}
-              className="rounded-[16px] bg-white/8 px-4 py-4 text-[16px] leading-relaxed text-white/92"
-            >
-              {p}
-            </li>
-          ))}
-          {(insight.bullets ?? []).map((p) => (
-            <li
-              key={p}
-              className="rounded-[16px] bg-white/8 px-4 py-4 text-[16px] leading-relaxed text-white/92"
-            >
-              {p}
-            </li>
-          ))}
-        </ul>
-      </ScreenShell>
+      <InsightScreen
+        title={insight.title}
+        paragraphs={insight.paragraphs}
+        bullets={insight.bullets}
+        tags={insight.tags}
+        onContinue={onContinue}
+      />
     )
   }
 
@@ -292,6 +261,8 @@ function ScreenRenderer({
   }
 
   if (screen.type === 'content') {
+    const lead = (screen.paragraphs ?? [])[0]
+    const rest = (screen.paragraphs ?? []).slice(1)
     return (
       <ScreenShell
         onDark
@@ -301,17 +272,33 @@ function ScreenRenderer({
           </ContinueButton>
         }
       >
-        <AbstractComposition variant="orbit" tone="on-solid" />
+        <AbstractComposition
+          variant="orbit"
+          tone="on-solid"
+          className="h-36 max-w-[220px] sm:h-44 sm:max-w-[260px]"
+        />
+        {progressEyebrow ? (
+          <p className="mt-3 text-center text-[11px] font-extrabold tracking-[0.1em] text-white/80 uppercase sm:mt-4 sm:text-[12px]">
+            {progressEyebrow}
+          </p>
+        ) : null}
         {screen.title ? (
-          <h1 className="mt-4 text-center font-display text-[2rem] font-medium leading-tight tracking-[-0.02em] text-white sm:text-[2.35rem]">
+          <h1 className="mt-2.5 text-center font-display text-[1.75rem] font-medium leading-tight tracking-[-0.02em] text-white sm:mt-3 sm:text-[2.1rem]">
             {screen.title}
           </h1>
         ) : null}
-        <div className="mt-5 space-y-4 text-center text-[17px] leading-relaxed text-white/90 sm:text-[18px]">
-          {(screen.paragraphs ?? []).map((p) => (
-            <p key={p}>{p}</p>
-          ))}
-        </div>
+        {lead ? (
+          <p className="mt-4 text-center text-[16px] leading-relaxed text-white/90 sm:text-[17px]">
+            {lead}
+          </p>
+        ) : null}
+        {rest.length > 0 ? (
+          <div className="mt-3 space-y-2 text-center text-[15px] leading-relaxed text-white/80">
+            {rest.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+          </div>
+        ) : null}
       </ScreenShell>
     )
   }
@@ -405,12 +392,11 @@ function ScreenRenderer({
       locale,
     )
     return (
-      <SynthesisBlock
+      <InsightScreen
         title={synthesis.title}
         paragraphs={synthesis.paragraphs}
         bullets={synthesis.bullets}
         tags={synthesis.tags}
-        cta={cta}
         onContinue={onContinue}
       />
     )
@@ -474,7 +460,7 @@ function ScreenShell({
   return (
     <div className="flex min-h-full flex-col">
       <div className={cn('flex-1', onDark ? 'text-white' : '')}>{children}</div>
-      {cta ? <div className="mt-auto pt-8">{cta}</div> : null}
+      {cta ? <div className="mt-auto pt-6 sm:pt-7">{cta}</div> : null}
     </div>
   )
 }
@@ -484,7 +470,7 @@ function ContinueButton({
   onClick,
   disabled,
   inverted = false,
-  solid = false,
+  solid: _solid = false,
 }: {
   children: ReactNode
   onClick: () => void
@@ -498,26 +484,15 @@ function ContinueButton({
         type="button"
         disabled={disabled}
         onClick={onClick}
-        className="min-h-12 w-full cursor-pointer rounded-full bg-white px-6 text-[17px] font-bold text-[color:var(--journey-ink,#a82b44)] transition-transform active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-50"
+        className="min-h-12 w-full cursor-pointer rounded-full bg-white px-6 text-[17px] font-bold text-[color:var(--journey-ink,#a82b44)] transition-transform active:scale-[0.985] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--journey-solid,#d6455e)] disabled:cursor-not-allowed disabled:bg-white/70 disabled:text-[color:var(--journey-ink,#a82b44)]"
       >
         {children}
       </button>
     )
   }
-  if (solid) {
-    return (
-      <Button
-        className="min-h-12 w-full text-[17px] font-bold"
-        disabled={disabled}
-        onClick={onClick}
-      >
-        {children}
-      </Button>
-    )
-  }
   return (
     <Button
-      className="min-h-12 w-full text-[17px] font-bold sm:w-auto"
+      className="min-h-12 w-full text-[17px] font-bold"
       disabled={disabled}
       onClick={onClick}
     >
@@ -536,7 +511,7 @@ function Title({
   return (
     <h1
       className={cn(
-        'font-display text-[1.85rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2.2rem]',
+        'font-display text-[1.65rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[1.95rem]',
         className,
       )}
     >
@@ -545,7 +520,7 @@ function Title({
   )
 }
 
-function SynthesisBlock({
+function InsightScreen({
   title,
   paragraphs,
   bullets,
@@ -556,23 +531,26 @@ function SynthesisBlock({
   paragraphs: string[]
   bullets?: string[]
   tags?: string[]
-  cta: string
   onContinue: () => void
 }) {
   const copy = useCopy()
+  const facts = [
+    ...paragraphs,
+    ...(bullets ?? []),
+  ].filter(Boolean)
 
   return (
     <ScreenShell
       onDark
       cta={
-        <div className="flex w-full flex-col gap-3">
+        <div className="flex w-full flex-col gap-2.5 sm:flex-row sm:gap-3">
           <ContinueButton solid onClick={onContinue}>
             {copy.journeyUi.insightConfirm}
           </ContinueButton>
           <button
             type="button"
             onClick={onContinue}
-            className="min-h-11 cursor-pointer rounded-full border border-white/35 px-5 text-[16px] font-bold text-white transition-colors hover:bg-white/10"
+            className="min-h-12 cursor-pointer rounded-full border border-white/35 px-5 text-[16px] font-bold text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#241c18] sm:min-w-[10rem]"
           >
             {copy.journeyUi.insightAdjust}
           </button>
@@ -580,47 +558,42 @@ function SynthesisBlock({
       }
     >
       <div className="flex flex-col items-center text-center">
-        <JunoOrb size={88} glow />
+        <JunoOrb size={72} glow className="sm:hidden" />
+        <JunoOrb size={88} glow className="hidden sm:inline-block" />
         <p
-          className="mt-5 text-[12px] font-extrabold tracking-[0.1em] uppercase"
+          className="mt-4 text-[11px] font-extrabold tracking-[0.1em] uppercase sm:mt-5 sm:text-[12px]"
           style={{ color: 'var(--journey-solid, #d6455e)' }}
         >
           {copy.journeyUi.whatIUnderstand}
         </p>
       </div>
       {title ? (
-        <h1 className="mt-4 text-center font-display text-[1.75rem] font-medium leading-tight tracking-[-0.02em] text-white sm:text-[2rem]">
-          {title}
+        <h1 className="mt-3 text-center font-display text-[1.55rem] font-medium leading-tight tracking-[-0.02em] text-white sm:mt-4 sm:text-[1.85rem]">
+          <HighlightedCopy
+            text={title}
+            highlightColor="var(--journey-solid, #E1503A)"
+          />
         </h1>
       ) : null}
-      <div className="mt-6 space-y-3 text-left">
-        {paragraphs.map((p) => (
-          <p
+      <ul className="mt-5 space-y-2.5 text-left sm:mt-6 sm:space-y-3">
+        {facts.map((p) => (
+          <li
             key={p}
-            className="rounded-[16px] bg-white/8 px-4 py-4 text-[16px] leading-relaxed text-white/92"
+            className="rounded-[16px] bg-[#2C2420] px-4 py-3.5 text-[15px] leading-relaxed text-white/92 sm:py-4 sm:text-[16px]"
           >
-            {p}
-          </p>
+            <HighlightedCopy
+              text={p}
+              highlightColor="var(--journey-solid, #E1503A)"
+            />
+          </li>
         ))}
-      </div>
-      {bullets && bullets.length > 0 ? (
-        <ul className="mt-3 space-y-3 text-left">
-          {bullets.map((item) => (
-            <li
-              key={item}
-              className="rounded-[16px] bg-white/8 px-4 py-4 text-[16px] leading-relaxed text-white/92"
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
-      ) : null}
+      </ul>
       {tags && tags.length > 0 ? (
-        <div className="mt-5 flex flex-wrap justify-center gap-2">
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
           {tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[13px] text-white/85"
+              className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[12px] text-white/85 sm:text-[13px]"
             >
               {tag}
             </span>
@@ -651,6 +624,7 @@ function ChoiceScreen({
   multi?: boolean
 }) {
   const copy = useCopy()
+  const layout = getChoiceLayout(options, multi)
 
   return (
     <ScreenShell
@@ -661,29 +635,94 @@ function ChoiceScreen({
       }
     >
       <p
-        className="text-[12px] font-extrabold tracking-[0.1em] uppercase"
+        className="text-[11px] font-extrabold tracking-[0.1em] uppercase sm:text-[12px]"
         style={{ color: 'var(--journey-ink, var(--color-clay-ink))' }}
       >
         {copy.journeyUi.aQuestion}
       </p>
-      <h1 className="mt-2 text-[1.55rem] font-extrabold leading-snug tracking-[-0.02em] text-ink sm:text-[1.85rem]">
+      <h1 className="mt-1.5 text-[1.4rem] font-extrabold leading-snug tracking-[-0.02em] text-ink sm:text-[1.7rem]">
         {question}
       </h1>
-      <p className="mt-2 text-[15px] text-ink-soft">
+      <p className="mt-1.5 text-[14px] text-ink-soft sm:text-[15px]">
         {multi ? copy.journeyUi.severalAnswers : copy.journeyUi.singleAnswer}
       </p>
-      <div className="mt-7 flex flex-col gap-3">
-        {options.map((option) => (
-          <QuizOption
-            key={option.id}
-            label={option.label}
-            selected={selected.includes(option.id)}
-            onSelect={() => onToggle(option.id)}
-            accent="var(--journey-solid, var(--color-clay))"
-            accentTint="var(--journey-tint, var(--color-clay-tint))"
-          />
-        ))}
-      </div>
+
+      {layout === 'chips' ? (
+        <div
+          className="mt-5 flex flex-wrap gap-2.5 sm:mt-6"
+          role={multi ? 'group' : 'radiogroup'}
+          aria-label={question}
+        >
+          {options.map((option) => (
+            <AnswerChip
+              key={option.id}
+              label={option.label}
+              selected={selected.includes(option.id)}
+              onSelect={() => onToggle(option.id)}
+              accent="var(--journey-solid, var(--color-clay))"
+              accentTint="var(--journey-tint, #FDF1EF)"
+            />
+          ))}
+        </div>
+      ) : layout === 'scale' ? (
+        <div
+          className="mt-5 grid gap-2.5 sm:mt-6"
+          style={{
+            gridTemplateColumns: `repeat(${Math.min(options.length, 4)}, minmax(0, 1fr))`,
+          }}
+          role="radiogroup"
+          aria-label={question}
+        >
+          {options.map((option) => {
+            const isSelected = selected.includes(option.id)
+            return (
+              <button
+                key={option.id}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                onClick={() => onToggle(option.id)}
+                className={cn(
+                  'flex min-h-[64px] cursor-pointer flex-col items-center justify-center rounded-[16px] border-2 px-2 py-3 text-center text-[15px] font-bold transition-[border-color,background-color,transform] duration-150 sm:min-h-[72px] sm:text-[16px]',
+                  'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(225,80,58,0.35)] focus-visible:ring-offset-2',
+                  'active:scale-[0.98]',
+                  isSelected
+                    ? 'text-ink'
+                    : 'border-line bg-paper text-ink hover:border-[#DCD1C1] hover:bg-[#FDFBF7]',
+                )}
+                style={
+                  isSelected
+                    ? {
+                        borderColor: 'var(--journey-solid, var(--color-clay))',
+                        backgroundColor: 'var(--journey-tint, #FDF1EF)',
+                      }
+                    : undefined
+                }
+              >
+                {option.label}
+              </button>
+            )
+          })}
+        </div>
+      ) : (
+        <div
+          className="mt-5 flex flex-col gap-2.5 sm:mt-6 sm:gap-3"
+          role={multi ? 'group' : 'radiogroup'}
+          aria-label={question}
+        >
+          {options.map((option) => (
+            <QuizOption
+              key={option.id}
+              label={option.label}
+              selected={selected.includes(option.id)}
+              onSelect={() => onToggle(option.id)}
+              multi={multi}
+              accent="var(--journey-solid, var(--color-clay))"
+              accentTint="var(--journey-tint, #FDF1EF)"
+            />
+          ))}
+        </div>
+      )}
     </ScreenShell>
   )
 }

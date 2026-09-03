@@ -1,7 +1,10 @@
 import type { AnswerValue, SocialPreferences } from '../../types'
 import type { Locale } from '../types'
 import { getJourneySynthesis as getJourneySynthesisFr } from '../../lib/journeySynthesis'
-import { getJourneySynthesisEn } from './journeySynthesis.en'
+import {
+  getJourneySynthesisEn,
+  hasEnglishSynthesis,
+} from './journeySynthesis.en'
 import { buildSocialProfileSummary as buildSocialProfileSummaryFr } from '../../lib/journeySynthesis'
 
 export function getJourneySynthesis(
@@ -10,9 +13,14 @@ export function getJourneySynthesis(
   responses: Record<string, AnswerValue>,
   locale: Locale,
 ) {
-  return locale === 'en'
-    ? getJourneySynthesisEn(synthesisId, prefs, responses)
-    : getJourneySynthesisFr(synthesisId, prefs, responses)
+  if (locale === 'en') {
+    if (hasEnglishSynthesis(synthesisId)) {
+      return getJourneySynthesisEn(synthesisId, prefs, responses)
+    }
+    // Prefer French content over a weak English placeholder for uncovered ids
+    return getJourneySynthesisFr(synthesisId, prefs, responses)
+  }
+  return getJourneySynthesisFr(synthesisId, prefs, responses)
 }
 
 export function buildSocialProfileSummary(

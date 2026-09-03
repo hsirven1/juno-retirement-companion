@@ -24,7 +24,7 @@ export function SegmentedStepProgress({
 
   return (
     <div
-      className={cn('flex w-full gap-1.5', className)}
+      className={cn('flex w-full gap-[5px]', className)}
       role="progressbar"
       aria-valuemin={1}
       aria-valuemax={total}
@@ -47,7 +47,7 @@ export function SegmentedStepProgress({
           <span
             key={index}
             aria-hidden="true"
-            className="h-[5px] min-w-0 flex-1 rounded-full"
+            className="h-[5px] min-w-0 flex-1 rounded-full transition-[background] duration-300 ease-out"
             style={{ background }}
           />
         )

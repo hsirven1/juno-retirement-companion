@@ -118,7 +118,7 @@ export function getJourneySynthesisEn(
         title:
           synthesisId === 'work-social' ? 'Here’s what stands out' : undefined,
         paragraphs: [
-          `${capitalize(focus)} seem${labels.length > 1 ? '' : 's'} to have mattered in your working life.`,
+          `${capitalize(focus)} seem${labels.length > 1 ? '' : 's'} to have mattered in your working life — **${focus}**.`,
           'From here, we can look for ways to find that kind of moment again, in a way that suits you.',
         ],
         tags: workTags(needs),
@@ -141,7 +141,7 @@ export function getJourneySynthesisEn(
       const labels = picked.map((id) => FORM_LABELS_EN[id]).filter(Boolean)
       return {
         paragraphs: [
-          `You’re drawn to ${labels.join(', ')}.`,
+          `You seem drawn to **${labels.join(', ')}**.`,
           'We can refine that over the next few steps.',
         ],
         tags: labels.map(capitalize),
@@ -151,20 +151,31 @@ export function getJourneySynthesisEn(
     case 'desires':
     case 'desires-summary': {
       const work = workNeeds(stepResponses, prefs)
+      const goals =
+        (stepResponses.goals as string[] | undefined) ?? prefs.goals
+      const connection =
+        (stepResponses.connectionPreference as string | undefined) ??
+        prefs.connectionPreference
       const intro = work.includes('informal')
-        ? 'You told us you enjoy informal conversation — '
+        ? 'You mentioned enjoying informal conversation — '
         : ''
       const wantsNew =
-        prefs.goals.includes('nouvelles') ||
-        prefs.connectionPreference === 'new'
+        goals.includes('nouvelles') || connection === 'new'
       const wantsExisting =
-        prefs.goals.includes('proches') ||
-        prefs.connectionPreference === 'existing'
+        goals.includes('proches') || connection === 'existing'
+      const wantsActivity = goals.includes('activite')
+      if (wantsNew && wantsActivity) {
+        return {
+          paragraphs: [
+            `${intro}you seem to prefer meeting **new people** around a **concrete activity**, rather than in large groups.`,
+          ],
+          tags: ['New encounters', 'Activity'],
+        }
+      }
       if (wantsNew && wantsExisting) {
         return {
           paragraphs: [
-            `${intro}${intro ? 'y' : 'Y'}ou’re looking for a balance between deepening what you already have and widening your circle a little.`,
-            'We’ll keep that in mind.',
+            `${intro}for now, you’re looking for a **balance** between deepening what you already have and widening your circle a little.`,
           ],
           tags: ['Balance', 'People close to you', 'New encounters'],
         }
@@ -172,7 +183,7 @@ export function getJourneySynthesisEn(
       if (wantsNew) {
         return {
           paragraphs: [
-            `${intro}${intro ? 'y' : 'Y'}ou’d mainly like to meet new people, at your own pace.`,
+            `${intro}you seem to mainly want to **meet new people**, at your own pace.`,
           ],
           tags: ['New encounters'],
         }
@@ -180,14 +191,14 @@ export function getJourneySynthesisEn(
       if (wantsExisting) {
         return {
           paragraphs: [
-            `${intro}${intro ? 'y' : 'Y'}ou’d mainly like to see more of the people you already know.`,
+            `${intro}you seem to mainly want to see more of the **people you already know**.`,
           ],
           tags: ['People close to you'],
         }
       }
       return {
         paragraphs: [
-          'You’re moving forward without pressure — a good way to work out what would suit you.',
+          'For now, you’re moving forward without pressure — a good way to work out what would suit you.',
         ],
         tags: ['Exploring'],
       }
@@ -198,6 +209,11 @@ export function getJourneySynthesisEn(
       const invitation = String(
         stepResponses.scenarioInvitation ?? prefs.scenarioInvitation ?? '',
       )
+      const why =
+        (stepResponses.scenarioWhy as string[] | undefined) ?? prefs.scenarioWhy
+      const frequency =
+        (stepResponses.preferredFrequency as string | undefined) ??
+        prefs.preferredFrequency
       const size =
         invitation === 'cafe' || invitation === 'benevolat'
           ? 'small groups'
@@ -207,27 +223,40 @@ export function getJourneySynthesisEn(
               ? 'small groups'
               : 'a range of formats'
       const freq =
-        prefs.preferredFrequency === 'regular' ||
-        prefs.preferredFrequency === 'more'
+        frequency === 'regular' || frequency === 'more'
           ? 'regular get-togethers'
           : 'more flexible occasions'
+      const activityLed =
+        why.includes('activite') ||
+        prefs.preferredContexts.includes('activity') ||
+        invitation === 'atelier'
+      const newPeople = why.includes('decouvrir')
+      let main = `You seem to prefer **${size}** and **${freq}**.`
+      if (activityLed && newPeople) {
+        main =
+          'You seem to prefer meeting **new people** around a **concrete activity**, rather than in large groups.'
+      } else if (activityLed) {
+        main = `You seem to prefer **${size}** around a **concrete activity**, with **${freq}**.`
+      }
       return {
         paragraphs: [
-          `You seem to prefer ${size} and ${freq}.`,
+          main,
           'That helps us picture practical ideas that could suit you.',
         ],
         tags: [
           size.includes('small') ? 'Small group' : 'Group',
-          prefs.preferredContexts.includes('activity')
-            ? 'Activity'
-            : 'Good company',
+          activityLed ? 'Activity' : 'Good company',
+          ...(newPeople ? ['New encounters'] : []),
         ].filter(Boolean),
       }
     }
 
     case 'ideal-week':
     case 'ideal-week-summary': {
-      const activities = prefs.idealWeekActivities
+      const activityIds =
+        (stepResponses.idealWeekActivities as string[] | undefined) ??
+        prefs.idealWeekActivities
+      const activities = activityIds
         .map((id) => ACTIVITY_LABELS_EN[id])
         .filter(Boolean)
       const bullets =
@@ -237,9 +266,15 @@ export function getJourneySynthesisEn(
       return {
         title: 'Your balance could look something like…',
         bullets,
-        paragraphs: [
-          'This isn’t a schedule to follow. Just a direction, and it can change.',
-        ],
+        paragraphs:
+          activities.length > 0
+            ? [
+                `For now, what stands out: **${activities.slice(0, 2).join('** and **')}**.`,
+                'This isn’t a schedule to follow — just a direction, and it can change.',
+              ]
+            : [
+                'This isn’t a schedule to follow. Just a direction, and it can change.',
+              ],
         tags: bullets.slice(0, 2),
       }
     }

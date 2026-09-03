@@ -88,8 +88,8 @@ export function AbstractComposition({
     <div
       aria-hidden="true"
       className={cn(
-        'relative mx-auto flex h-52 w-full max-w-[280px] items-center justify-center',
-        className,
+        'relative mx-auto flex w-full max-w-[280px] items-center justify-center',
+        className ?? 'h-44 sm:h-52',
       )}
     >
       <span
