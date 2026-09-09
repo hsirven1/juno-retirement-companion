@@ -13,6 +13,8 @@ import { CoachPage } from './pages/CoachPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { GuidedPathPage } from './pages/GuidedPathPage'
 import { SocialLifeRedirect } from './pages/SocialLifeRedirect'
+import { MentorMatchPage } from './pages/MentorMatchPage'
+import { MentorProfilePage } from './pages/MentorProfilePage'
 
 export default function App() {
   return (
@@ -34,6 +36,8 @@ export default function App() {
               <Route path="/home" element={<HomePage />} />
               <Route path="/plan" element={<PlanPage />} />
               <Route path="/discover" element={<DiscoverPage />} />
+              <Route path="/mentors/match" element={<MentorMatchPage />} />
+              <Route path="/mentors/:mentorId" element={<MentorProfilePage />} />
               <Route path="/vie-sociale" element={<SocialLifeRedirect />} />
               <Route path="/guide/:pathId" element={<GuidedPathPage />} />
               <Route path="/coach" element={<CoachPage />} />

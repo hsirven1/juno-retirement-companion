@@ -4,11 +4,15 @@ import type {
   AnswerValue,
   ChatMessage,
   ChatOpenOptions,
+  MentorCall,
+  MentorMatchResult,
   PathProgress,
   ResourceRecommendation,
   RetirementProfile,
   SocialFeedback,
   SocialPreferences,
+  TodoItem,
+  TodoStatus,
   WeeklyStepItem,
 } from '../types'
 import type { PersistedState } from '../lib/persistence'
@@ -75,6 +79,25 @@ export interface AppState {
   addSocialWeekStep: (resource: ResourceRecommendation) => void
   locale: import('../i18n/types').Locale
   setLocale: (locale: import('../i18n/types').Locale) => void
+  /** Mentor-first foundations */
+  todos: TodoItem[]
+  matchedMentorId: string | null
+  mentorShortlistIds: string[]
+  setMatchedMentorId: (mentorId: string | null) => void
+  setMentorShortlistIds: (ids: string[]) => void
+  /** Select mentor, persist shortlist, seed demo todos when empty. */
+  selectMentor: (mentorId: string, shortlistIds?: string[]) => void
+  mentorCalls: MentorCall[]
+  scheduleMentorCall: (mentorId: string, startAt: string) => void
+  cancelMentorCall: (callId: string) => void
+  /** Fix stale mentor-authored todo names for the selected mentor. */
+  realignMentorTodos: () => void
+  addTodo: (
+    todo: Omit<TodoItem, 'id' | 'createdAt'> & { id?: string },
+  ) => void
+  updateTodoStatus: (todoId: string, status: TodoStatus) => void
+  getMentorMatches: (limit?: number) => MentorMatchResult[]
+  resetPrototypeData: () => void
 }
 
 export const AppContext = createContext<AppState | null>(null)

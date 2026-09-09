@@ -345,32 +345,9 @@ export interface ResourceIdea {
 }
 
 export type QuestionType = 'single' | 'multiple' | 'scale' | 'text'
-export type QuestionLayout = 'list' | 'grid'
+export type QuestionLayout = 'list' | 'grid' | 'chips'
 export type QuestionAdvance = 'auto' | 'continue'
 export type RetirementStage = 'pre' | 'retired' | 'unknown'
-
-export interface AssessmentQuestion {
-  id: string
-  prompt: string
-  type: QuestionType
-  options?: string[]
-  helper?: string
-  scaleStart?: string
-  scaleEnd?: string
-  layout?: QuestionLayout
-  advance?: QuestionAdvance
-  allowOther?: boolean
-  otherLabel?: string
-  exclusiveOption?: string
-  stagePrompts?: {
-    pre: string
-    retired: string
-  }
-  stageHelpers?: {
-    pre: string
-    retired: string
-  }
-}
 
 export type AnswerValue =
   | string
@@ -379,6 +356,284 @@ export type AnswerValue =
   | Record<string, string>
 
 export type AssessmentAnswers = Record<string, AnswerValue>
+
+export interface LocalizedText {
+  fr: string
+  en: string
+}
+
+export interface AssessmentOption {
+  /** Language-neutral value stored in answers. */
+  id: string
+  label: LocalizedText
+}
+
+export interface AssessmentQuestion {
+  id: string
+  prompt: LocalizedText
+  type: QuestionType
+  options?: AssessmentOption[]
+  helper?: LocalizedText
+  scaleStart?: LocalizedText
+  scaleEnd?: LocalizedText
+  layout?: QuestionLayout
+  advance?: QuestionAdvance
+  allowOther?: boolean
+  /** Option id used for free-text "other". */
+  otherOptionId?: string
+  otherLabel?: LocalizedText
+  /** Exclusive option id for multi-select. */
+  exclusiveOption?: string
+  stagePrompts?: {
+    pre: LocalizedText
+    retired: LocalizedText
+  }
+  stageHelpers?: {
+    pre: LocalizedText
+    retired: LocalizedText
+  }
+  /** Lightweight branching — omit question when false. */
+  showIf?: (answers: AssessmentAnswers) => boolean
+}
+
+/** Language-neutral matching tags used by mentor scoring. */
+export type MentorCareerFamily =
+  | 'engineering'
+  | 'education'
+  | 'management'
+  | 'entrepreneurship'
+  | 'healthcare'
+  | 'public_sector'
+  | 'unpaid_care'
+  | 'creative'
+  | 'other'
+
+export type MentorSocialStyle = 'reserved' | 'balanced' | 'outgoing'
+export type MentorAdventureLevel = 'low' | 'moderate' | 'high'
+export type MentorLivingSituation =
+  | 'alone'
+  | 'with_partner'
+  | 'with_family'
+  | 'other'
+
+export type MentorFamilySituation =
+  | 'children_nearby'
+  | 'children_far'
+  | 'no_children'
+  | 'other'
+
+/** Internal tags — not shown as raw ids in UI. */
+export type MentorChallengeTag =
+  | 'loss_of_structure'
+  | 'joining_alone'
+  | 'isolation'
+  | 'identity_shift'
+  | 'finding_purpose'
+  | 'overcommitted'
+  | 'energy_or_health'
+
+export type MentorHelpTopic =
+  | 'structure'
+  | 'social'
+  | 'activities_alone'
+  | 'volunteering'
+  | 'personal_project'
+  | 'travel'
+  | 'learning'
+  | 'transmitting'
+
+export type MentorInterestTag =
+  | 'culture'
+  | 'travel'
+  | 'sport'
+  | 'outdoors'
+  | 'learning'
+  | 'volunteering'
+  | 'cooking'
+  | 'gardening'
+  | 'music'
+  | 'community'
+  | 'craft'
+  | 'business'
+
+export interface MentorLocalizedCopy {
+  formerCareer: string
+  formerIndustry?: string
+  retirementStory: string
+  shortBio: string
+  quote: string
+  availability: string
+  /** Display labels for interests (UI only). */
+  interestLabels: string[]
+  challengeLabels: string[]
+  helpTopicLabels: string[]
+  personalityTraitLabels: string[]
+  familySituationLabel: string
+  livingSituationLabel: string
+}
+
+export interface Mentor {
+  id: string
+  /** Always a first name only — demo personas, not real people. */
+  firstName: string
+  age: number
+  city: string
+  yearsRetired: number
+  languages: string[]
+  /** Optional portrait for demo personas. Falls back to initials avatar. */
+  photoUrl?: string
+  /** Matching signals (language-neutral). */
+  careerFamily: MentorCareerFamily
+  livingSituation: MentorLivingSituation
+  familySituation: MentorFamilySituation
+  socialStyle: MentorSocialStyle
+  adventureLevel: MentorAdventureLevel
+  interests: MentorInterestTag[]
+  challengesFaced: MentorChallengeTag[]
+  topicsTheyCanHelpWith: MentorHelpTopic[]
+  personalityTraits: string[]
+  copy: {
+    fr: MentorLocalizedCopy
+    en: MentorLocalizedCopy
+  }
+}
+
+export type TodoStatus = 'todo' | 'done' | 'later'
+export type TodoSource = 'mentor' | 'juno' | 'user' | 'resource' | 'exercise'
+
+export interface TodoItem {
+  id: string
+  title: string
+  status: TodoStatus
+  source: TodoSource
+  relatedMentorId?: string
+  relatedResourceId?: string
+  relatedExerciseStepId?: string
+  /** Only when a real-world date exists. */
+  dueDate?: string
+  createdAt: string
+}
+
+/** Prototype mentor call booking — local only. */
+export type MentorCallStatus = 'scheduled' | 'cancelled'
+
+export interface MentorCall {
+  id: string
+  mentorId: string
+  /** ISO datetime for the selected slot. */
+  startAt: string
+  status: MentorCallStatus
+}
+
+export interface MentorMatchReason {
+  id: string
+  /** Longer explanation — used on mentor profile. */
+  text: string
+  /** Compact signal for match cards / comparison. */
+  shortLabel: string
+}
+
+export interface MentorMatchResult {
+  mentor: Mentor
+  /** Internal ranking only — never shown as a percentage. */
+  score: number
+  matchReasons: MentorMatchReason[]
+}
+
+export type RetirementStageTag =
+  | 'still_working'
+  | 'retiring_soon'
+  | 'recently_retired'
+  | 'retired_years'
+
+export type SocialNetworkStrength =
+  | 'regular'
+  | 'close_few'
+  | 'rare'
+  | 'few_around'
+  | 'often_alone'
+
+export type JoiningReassuranceNeed =
+  | 'small_group'
+  | 'others_alone'
+  | 'welcomed'
+  | 'speak_organizer'
+  | 'clear_activity'
+  | 'go_with_someone'
+  | 'know_what_to_expect'
+
+export type WorkProvidedTag =
+  | 'structure'
+  | 'social_contact'
+  | 'purpose'
+  | 'learning'
+  | 'status'
+  | 'usefulness'
+  | 'activity'
+  | 'teamwork'
+  | 'income'
+  | 'routine'
+
+export type WantMoreOfTag =
+  | 'social_contact'
+  | 'structure'
+  | 'activity'
+  | 'learning'
+  | 'travel'
+  | 'usefulness'
+  | 'personal_projects'
+  | 'creativity'
+  | 'family_time'
+  | 'new_experiences'
+  | 'financial_projects'
+  | 'starting_something'
+  | 'quieter_life'
+
+export type AmbitionTag =
+  | 'volunteer'
+  | 'small_business'
+  | 'invest_property'
+  | 'travel_more'
+  | 'learn_something'
+  | 'take_up_sport'
+  | 'join_group'
+  | 'creative_project'
+  | 'family_time'
+  | 'meet_people'
+  | 'not_sure'
+
+/**
+ * Lightweight matching profile derived from bilan + prefs + retirement profile.
+ */
+export interface MentorMatchingProfile {
+  retirementStage?: RetirementStageTag | null
+  careerFamily?: MentorCareerFamily | null
+  careerIdentityImportance?: 'low' | 'moderate' | 'high' | null
+  workProvided: WorkProvidedTag[]
+  livingSituation?: MentorLivingSituation | null
+  familySituation?: MentorFamilySituation | null
+  socialNetworkStrength?: SocialNetworkStrength | null
+  socialStyle?: MentorSocialStyle | null
+  adventureLevel?: MentorAdventureLevel | null
+  interests: MentorInterestTag[]
+  challenges: MentorChallengeTag[]
+  helpTopics: MentorHelpTopic[]
+  needForStructure?: 'low' | 'moderate' | 'high' | null
+  comfortDoingThingsAlone?: 'low' | 'moderate' | 'high' | null
+  joiningReassuranceNeeds: JoiningReassuranceNeed[]
+  wantMoreOf: WantMoreOfTag[]
+  ambitions: AmbitionTag[]
+  goals: string[]
+}
+
+/** Lightweight signals consumed by resource recommendations. */
+export interface BilanResourceSignals {
+  aloneComfort?: 'low' | 'moderate' | 'high' | null
+  needForStructure?: 'low' | 'moderate' | 'high' | null
+  joiningReassuranceNeeds: JoiningReassuranceNeed[]
+  interests: MentorInterestTag[]
+  wantMoreOf: WantMoreOfTag[]
+}
 
 export type MessageRole = 'user' | 'coach'
 

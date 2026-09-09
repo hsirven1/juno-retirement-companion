@@ -1,5 +1,6 @@
 import { HashLink } from './HashLink'
 import { Logo } from './Logo'
+import { Container } from './Container'
 import { useApp } from '../context/useApp'
 import { useNavigate } from 'react-router-dom'
 import { useCopy, LanguageSelector } from '../i18n'
@@ -11,9 +12,15 @@ export function LandingHeader() {
 
   return (
     <header className="relative z-10">
-      <div className="mx-auto flex max-w-[1120px] items-center justify-between gap-6 px-6 py-6 sm:px-8">
-        <Logo />
-        <nav className="flex items-center gap-6 sm:gap-8" aria-label={copy.nav.landing}>
+      <Container
+        width="wide"
+        className="flex items-center justify-between gap-6 py-6"
+      >
+        <Logo size="landing" />
+        <nav
+          className="flex items-center gap-6 sm:gap-8"
+          aria-label={copy.nav.landing}
+        >
           <HashLink href="#how-it-works">{copy.nav.howItWorks}</HashLink>
           <HashLink href="#about">{copy.nav.about}</HashLink>
           <LanguageSelector />
@@ -28,7 +35,7 @@ export function LandingHeader() {
             {copy.nav.signIn}
           </button>
         </nav>
-      </div>
+      </Container>
     </header>
   )
 }

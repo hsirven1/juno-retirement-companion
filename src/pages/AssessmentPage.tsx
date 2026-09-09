@@ -1,41 +1,52 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { OnboardingHeader } from '../components/OnboardingHeader'
 import { OptionButton, OptionChip } from '../components/OptionButton'
 import { Button } from '../components/Button'
 import { Container } from '../components/Container'
-import { assessmentQuestions, OTHER_DREAM } from '../data/assessment'
+import {
+  assessmentQuestions,
+  OTHER_INTEREST_ID,
+  OTHER_INTEREST_TEXT_KEY,
+} from '../data/assessment'
 import { useApp } from '../context/useApp'
-import { useCopy } from '../i18n'
+import { useCopy, useLocale } from '../i18n'
 import { cn } from '../lib/cn'
 import {
   getRetirementStage,
+  getVisibleQuestions,
+  localizeText,
   questionHelper,
   questionPrompt,
 } from '../lib/retirementStage'
 import type { AssessmentQuestion } from '../types'
 
-const OTHER_KEY = 'dreamOther'
-
 export function AssessmentPage() {
   const navigate = useNavigate()
   const { answers, setAnswer } = useApp()
   const copy = useCopy()
+  const { locale } = useLocale()
   const generatingMessages = copy.assessment.generatingMessages
   const [index, setIndex] = useState(0)
   const [generating, setGenerating] = useState(false)
   const [generatingIndex, setGeneratingIndex] = useState(0)
-  const [locked, setLocked] = useState(false)
 
-  const question = assessmentQuestions[index]
-  const total = assessmentQuestions.length
-  const isLast = index === total - 1
+  const visible = useMemo(() => getVisibleQuestions(answers), [answers])
+  const total = visible.length
+  const safeIndex = Math.min(index, Math.max(0, total - 1))
+  const question = visible[safeIndex] ?? assessmentQuestions[0]
+  const isLast = safeIndex === total - 1
   const value = answers[question.id]
   const stage = getRetirementStage(answers)
-  const prompt = questionPrompt(question, stage)
-  const helper = questionHelper(question, stage)
-  const needsContinue =
-    question.advance === 'continue' || question.type !== 'single'
+  const prompt = questionPrompt(question, stage, locale)
+  const helper = questionHelper(question, stage, locale)
+  const otherOptionId = question.otherOptionId ?? OTHER_INTEREST_ID
+
+  useEffect(() => {
+    if (index > total - 1 && total > 0) {
+      setIndex(total - 1)
+    }
+  }, [index, total])
 
   useEffect(() => {
     if (!generating) return
@@ -62,33 +73,26 @@ export function AssessmentPage() {
     setIndex((current) => current + 1)
   }
 
-  function selectSingle(option: string) {
-    if (locked) return
-    setAnswer(question.id, option)
-    if (needsContinue) return
-    setLocked(true)
-    window.setTimeout(() => {
-      setLocked(false)
-      setIndex((current) => Math.min(current + 1, total - 1))
-    }, 350)
+  function selectSingle(optionId: string) {
+    setAnswer(question.id, optionId)
   }
 
-  function toggleMultiple(option: string) {
+  function toggleMultiple(optionId: string) {
     const current = Array.isArray(value) ? value : []
-    if (question.exclusiveOption && option === question.exclusiveOption) {
-      setAnswer(question.id, current.includes(option) ? [] : [option])
+    if (question.exclusiveOption && optionId === question.exclusiveOption) {
+      setAnswer(question.id, current.includes(optionId) ? [] : [optionId])
       return
     }
     const withoutExclusive = question.exclusiveOption
       ? current.filter((item) => item !== question.exclusiveOption)
       : current
-    const next = withoutExclusive.includes(option)
-      ? withoutExclusive.filter((item) => item !== option)
-      : [...withoutExclusive, option]
+    const next = withoutExclusive.includes(optionId)
+      ? withoutExclusive.filter((item) => item !== optionId)
+      : [...withoutExclusive, optionId]
     setAnswer(question.id, next)
   }
 
-  const canContinue = canProceed(question, value, answers[OTHER_KEY])
+  const canContinue = canProceed(question, value, answers[OTHER_INTEREST_TEXT_KEY])
 
   if (generating) {
     return (
@@ -113,14 +117,15 @@ export function AssessmentPage() {
 
   const selectedList = Array.isArray(value) ? value : []
   const showOtherInput =
-    Boolean(question.allowOther) && selectedList.includes(OTHER_DREAM)
+    Boolean(question.allowOther) && selectedList.includes(otherOptionId)
   const options = question.options ?? []
+  const useChips = question.layout === 'chips'
 
   return (
     <div className="flex min-h-svh flex-col bg-cream">
       <OnboardingHeader
-        stepLabel={copy.assessment.questionProgress(index + 1, total)}
-        progress={(index + 1) / total}
+        stepLabel={copy.assessment.questionProgress(safeIndex + 1, total)}
+        progress={(safeIndex + 1) / Math.max(total, 1)}
       />
       <main className="flex flex-1 flex-col py-12 sm:py-16">
         <Container width="narrow" className="flex flex-1 flex-col">
@@ -137,44 +142,60 @@ export function AssessmentPage() {
             ) : null}
 
             <div className="mt-9">
-              {question.type === 'single' && question.layout !== 'grid' ? (
+              {question.type === 'single' && question.layout === 'list' ? (
                 <div className="flex flex-col gap-2.5">
-                  {options.map((option) => (
-                    <OptionButton
-                      key={option}
-                      label={option}
-                      selected={value === option}
-                      onSelect={() => selectSingle(option)}
-                    />
-                  ))}
+                  {options.map((option) => {
+                    const label = localizeText(option.label, locale) ?? option.id
+                    return (
+                      <OptionButton
+                        key={option.id}
+                        label={label}
+                        selected={value === option.id}
+                        onSelect={() => selectSingle(option.id)}
+                      />
+                    )
+                  })}
                 </div>
               ) : null}
 
               {(question.type === 'multiple' ||
-                (question.type === 'single' && question.layout === 'grid')) &&
+                (question.type === 'single' &&
+                  (question.layout === 'grid' || question.layout === 'chips'))) &&
               options.length > 0 ? (
-                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                  {options.map((option) => (
-                    <OptionChip
-                      key={option}
-                      label={option}
-                      selected={
-                        question.type === 'single'
-                          ? value === option
-                          : selectedList.includes(option)
-                      }
-                      onSelect={() =>
-                        question.type === 'single'
-                          ? selectSingle(option)
-                          : toggleMultiple(option)
-                      }
-                    />
-                  ))}
+                <div
+                  className={
+                    useChips
+                      ? 'flex flex-wrap gap-2'
+                      : 'grid grid-cols-1 gap-2.5 sm:grid-cols-2'
+                  }
+                >
+                  {options.map((option) => {
+                    const label = localizeText(option.label, locale) ?? option.id
+                    return (
+                      <OptionChip
+                        key={option.id}
+                        label={label}
+                        selected={
+                          question.type === 'single'
+                            ? value === option.id
+                            : selectedList.includes(option.id)
+                        }
+                        onSelect={() =>
+                          question.type === 'single'
+                            ? selectSingle(option.id)
+                            : toggleMultiple(option.id)
+                        }
+                      />
+                    )
+                  })}
                   {question.allowOther ? (
                     <OptionChip
-                      label={question.otherLabel ?? OTHER_DREAM}
-                      selected={selectedList.includes(OTHER_DREAM)}
-                      onSelect={() => toggleMultiple(OTHER_DREAM)}
+                      label={
+                        localizeText(question.otherLabel, locale) ??
+                        copy.assessment.otherLabel
+                      }
+                      selected={selectedList.includes(otherOptionId)}
+                      onSelect={() => toggleMultiple(otherOptionId)}
                     />
                   ) : null}
                 </div>
@@ -182,8 +203,8 @@ export function AssessmentPage() {
 
               {question.type === 'scale' ? (
                 <ScaleQuestion
-                  start={question.scaleStart ?? ''}
-                  end={question.scaleEnd ?? ''}
+                  start={localizeText(question.scaleStart, locale) ?? ''}
+                  end={localizeText(question.scaleEnd, locale) ?? ''}
                   value={typeof value === 'number' ? value : null}
                   onSelect={(next) => setAnswer(question.id, next)}
                 />
@@ -192,8 +213,14 @@ export function AssessmentPage() {
               {showOtherInput ? (
                 <input
                   type="text"
-                  value={typeof answers[OTHER_KEY] === 'string' ? answers[OTHER_KEY] : ''}
-                  onChange={(event) => setAnswer(OTHER_KEY, event.target.value)}
+                  value={
+                    typeof answers[OTHER_INTEREST_TEXT_KEY] === 'string'
+                      ? answers[OTHER_INTEREST_TEXT_KEY]
+                      : ''
+                  }
+                  onChange={(event) =>
+                    setAnswer(OTHER_INTEREST_TEXT_KEY, event.target.value)
+                  }
                   className="mt-4 w-full rounded-md border border-line-strong bg-paper px-4 py-3.5 text-[18px] text-ink placeholder:text-ink-soft"
                   placeholder={copy.assessment.otherPlaceholder}
                 />
@@ -202,11 +229,11 @@ export function AssessmentPage() {
           </div>
 
           <div className="mt-10 flex items-center justify-between gap-4">
-            {index > 0 ? (
+            {safeIndex > 0 ? (
               <button
                 type="button"
                 className="min-h-12 cursor-pointer text-[16px] text-ink-muted transition-colors hover:text-ink"
-                onClick={() => setIndex((current) => current - 1)}
+                onClick={() => setIndex((current) => Math.max(0, current - 1))}
               >
                 {copy.assessment.back}
               </button>
@@ -214,13 +241,9 @@ export function AssessmentPage() {
               <span />
             )}
 
-            {needsContinue ? (
-              <Button onClick={goNext} disabled={!canContinue}>
-                {isLast ? copy.assessment.submit : copy.assessment.continue}
-              </Button>
-            ) : (
-              <span />
-            )}
+            <Button onClick={goNext} disabled={!canContinue}>
+              {isLast ? copy.assessment.submit : copy.assessment.continue}
+            </Button>
           </div>
         </Container>
       </main>
@@ -233,9 +256,10 @@ function canProceed(
   value: unknown,
   otherValue: unknown,
 ) {
+  const otherId = question.otherOptionId ?? OTHER_INTEREST_ID
   if (question.type === 'multiple') {
     if (!Array.isArray(value) || value.length === 0) return false
-    if (question.allowOther && value.includes(OTHER_DREAM) && value.length === 1) {
+    if (question.allowOther && value.includes(otherId) && value.length === 1) {
       return typeof otherValue === 'string' && otherValue.trim().length > 0
     }
     return true

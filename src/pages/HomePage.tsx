@@ -1,60 +1,92 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Container } from '../components/Container'
-import { WeeklyPlan } from '../components/dashboard/WeeklyPlan'
-import { PrioritiesPreview } from '../components/dashboard/PrioritiesPreview'
-import { CoachShortcut } from '../components/dashboard/CoachShortcut'
+import { MentorEmptyHomeCard } from '../components/mentor/MentorMatchCard'
+import { HomeMentorConversationPanel } from '../components/mentor/HomeMentorConversationPanel'
+import { HomeTodosSection } from '../components/mentor/HomeTodosSection'
+import {
+  formatMentorCallParts,
+  MentorCallBookingOverlay,
+} from '../components/mentor/MentorCallBookingOverlay'
 import { RecommendationList } from '../components/dashboard/RecommendationList'
 import { ResourceDetailDialog } from '../components/ResourceDetailDialog'
+import { getMentorById } from '../data/mentors'
 import { useApp } from '../context/useApp'
-import { weeks } from '../lib/weekRecommendations'
+import { getMentorCopy } from '../lib/mentorCopy'
+import { buildMentorHomePreview } from '../lib/mentorHomePreview'
 import {
-  formatWeekDateRange,
-  getLocalizedActiveThemes,
-  useCopy,
-  useLocale,
-} from '../i18n'
+  buildMentorMatchingProfile,
+  toBilanResourceSignals,
+} from '../lib/mentorMatching'
 import { getRecommendedResourceCards } from '../lib/lilleRecommendations'
 import { makeResourceLabelFns } from '../lib/resourceLabels'
+import { useCopy, useLocale } from '../i18n'
 import type { ResourceRecommendation } from '../types'
 
 export function HomePage() {
   const {
     profile,
     activeThemeIds,
-    pathProgress,
-    getWeekSteps,
-    toggleWeeklyStepComplete,
-    postponeWeeklyStep,
-    postponeNotice,
-    clearPostponeNotice,
-    mockCurrentWeekIndex,
-    setMockCurrentWeekIndex,
     socialPreferences,
     socialFeedback,
+    matchedMentorId,
+    todos,
+    updateTodoStatus,
+    addTodo,
+    answers,
+    mentorCalls,
+    scheduleMentorCall,
+    realignMentorTodos,
   } = useApp()
   const copy = useCopy()
   const { locale } = useLocale()
-  const [weekIndex, setWeekIndex] = useState(mockCurrentWeekIndex)
   const [activeResource, setActiveResource] =
     useState<ResourceRecommendation | null>(null)
+  const [bookingOpen, setBookingOpen] = useState(false)
 
-  const viewedWeek = weeks[weekIndex]
-  const weekSteps = getWeekSteps(weekIndex)
-  const themes = getLocalizedActiveThemes(activeThemeIds, locale)
+  useEffect(() => {
+    realignMentorTodos()
+  }, [matchedMentorId, realignMentorTodos])
+
+  const mentor = matchedMentorId ? getMentorById(matchedMentorId) : undefined
+  const mentorCopy = mentor ? getMentorCopy(mentor, locale) : null
   const labels = useMemo(() => makeResourceLabelFns(copy, locale), [copy, locale])
 
-  const today = new Date()
-  const todayLabel = new Intl.DateTimeFormat(
-    locale === 'fr' ? 'fr-FR' : 'en-US',
-    {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-    },
-  ).format(today)
+  const matchingProfile = useMemo(
+    () =>
+      buildMentorMatchingProfile({
+        answers,
+        profile,
+        socialPreferences,
+      }),
+    [answers, profile, socialPreferences],
+  )
 
-  const socialTheme = themes.find((t) => t.id === 'social')
-  const weekNumber = mockCurrentWeekIndex + 1
+  const upcomingCall = useMemo(() => {
+    if (!matchedMentorId) return null
+    const now = Date.now()
+    return (
+      mentorCalls
+        .filter(
+          (call) =>
+            call.mentorId === matchedMentorId &&
+            call.status === 'scheduled' &&
+            new Date(call.startAt).getTime() >= now - 60_000,
+        )
+        .sort(
+          (a, b) =>
+            new Date(a.startAt).getTime() - new Date(b.startAt).getTime(),
+        )[0] ?? null
+    )
+  }, [mentorCalls, matchedMentorId])
+
+  const nextCallParts = upcomingCall
+    ? formatMentorCallParts(upcomingCall.startAt, locale)
+    : null
+
+  const bilanSignals = useMemo(
+    () => toBilanResourceSignals(matchingProfile),
+    [matchingProfile],
+  )
 
   const forYou = useMemo(
     () =>
@@ -64,8 +96,9 @@ export function HomePage() {
         socialPreferences,
         socialFeedback,
         journeyRole: 'act',
-        limit: 2,
+        limit: 3,
         preferConcretePlaces: true,
+        bilanSignals,
         typeLabel: labels.typeLabel,
         commitmentLabel: labels.commitmentLabel,
         savedIds: socialFeedback.interestedIds,
@@ -75,113 +108,72 @@ export function HomePage() {
       activeThemeIds,
       socialPreferences,
       socialFeedback,
+      bilanSignals,
       labels,
     ],
   )
 
-  function goToWeek(index: number) {
-    const next = Math.max(0, Math.min(weeks.length - 1, index))
-    setWeekIndex(next)
-    setMockCurrentWeekIndex(next)
-  }
+  const previewMessage = mentor
+    ? buildMentorHomePreview(
+        mentor,
+        profile.firstName,
+        locale,
+        matchingProfile,
+      )
+    : ''
 
   return (
-    <Container width="wide" className="pt-5 pb-10 sm:pt-6 sm:pb-12 lg:pt-7 lg:pb-14">
-      <header className="mb-4 sm:mb-5">
-        <p className="text-[13px] font-medium tracking-[0.04em] text-ink-soft uppercase">
-          {todayLabel}
-        </p>
-        <h1 className="mt-1 font-display text-[2.25rem] leading-tight tracking-[-0.02em] text-ink sm:text-[2.6rem]">
-          {copy.home.greeting(profile.firstName, new Date().getHours())}.
-        </h1>
-
-        {socialTheme ? (
-          <div className="mt-3 rounded-xl border border-line bg-paper px-4 py-3 lg:hidden">
-            <p className="text-[12px] font-[800] tracking-[0.11em] text-ink-label uppercase">
-              {copy.home.journeyInProgress}
-            </p>
-            <p className="mt-1 text-[15px] font-medium text-ink">
-              {socialTheme.title} • {weekNumber} {copy.home.weekLabel}
-            </p>
+    <Container width="wide" className="pt-2 pb-8 sm:pt-3 sm:pb-10 lg:pt-4">
+      <div className="flex flex-col gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:items-start lg:gap-5">
+          <div className="min-w-0">
+            {mentor && mentorCopy ? (
+              <HomeMentorConversationPanel
+                mentorId={mentor.id}
+                firstName={mentor.firstName}
+                age={mentor.age}
+                city={mentor.city}
+                formerCareer={mentorCopy.formerCareer}
+                previewMessage={previewMessage}
+                onSchedule={() => setBookingOpen(true)}
+                nextCall={nextCallParts}
+                onModifyCall={() => setBookingOpen(true)}
+              />
+            ) : (
+              <MentorEmptyHomeCard />
+            )}
           </div>
-        ) : null}
-      </header>
 
-      <details className="mb-4 rounded-md border border-line bg-paper px-4 py-3 text-[14px] text-ink-muted">
-        <summary className="cursor-pointer font-medium text-ink">
-          {copy.home.prototypeWeekSimulator}
-        </summary>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {weeks.map((week, index) => (
-            <button
-              key={week.id}
-              type="button"
-              onClick={() => goToWeek(index)}
-              className={
-                index === mockCurrentWeekIndex
-                  ? 'cursor-pointer rounded-full border border-ink bg-ink px-3 py-1.5 text-[13px] text-cream'
-                  : 'cursor-pointer rounded-full border border-line-strong px-3 py-1.5 text-[13px] text-ink hover:border-ink/40'
+          <div className="min-w-0">
+            <HomeTodosSection
+              todos={todos}
+              onStatus={updateTodoStatus}
+              onAdd={(title) =>
+                addTodo({ title, source: 'user', status: 'todo' })
               }
-            >
-              {copy.home.weekShort(index + 1)} ·{' '}
-              {formatWeekDateRange(week.offset, locale)}
-            </button>
-          ))}
-        </div>
-      </details>
-
-      {postponeNotice ? (
-        <p
-          className="mb-4 rounded-md border border-line bg-paper px-4 py-3 text-[14px] text-ink-muted"
-          role="status"
-        >
-          {postponeNotice}
-          <button
-            type="button"
-            className="ml-3 cursor-pointer text-clay"
-            onClick={clearPostponeNotice}
-          >
-            OK
-          </button>
-        </p>
-      ) : null}
-
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:gap-6">
-        <div className="flex flex-col gap-5 lg:col-span-8">
-          <WeeklyPlan
-            week={viewedWeek}
-            weekIndex={weekIndex}
-            currentWeekIndex={mockCurrentWeekIndex}
-            totalWeeksAvailable={weeks.length}
-            steps={weekSteps}
-            onToggle={toggleWeeklyStepComplete}
-            onPostpone={postponeWeeklyStep}
-            onPrev={() => setWeekIndex((current) => Math.max(0, current - 1))}
-            onNext={() =>
-              setWeekIndex((current) =>
-                Math.min(weeks.length - 1, current + 1),
-              )
-            }
-          />
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col gap-5 lg:col-span-4">
-          <CoachShortcut />
-        </div>
-
-        <div className="flex flex-col gap-5 lg:col-span-8">
-          <RecommendationList items={forYou} onOpen={setActiveResource} />
-        </div>
-
-        <div className="flex flex-col gap-5 lg:col-span-4">
-          <PrioritiesPreview themes={themes} pathProgress={pathProgress} />
-        </div>
+        <RecommendationList items={forYou} onOpen={setActiveResource} />
       </div>
 
       {activeResource ? (
         <ResourceDetailDialog
           resource={activeResource}
           onClose={() => setActiveResource(null)}
+        />
+      ) : null}
+
+      {mentor ? (
+        <MentorCallBookingOverlay
+          mentor={mentor}
+          open={bookingOpen}
+          onClose={() => setBookingOpen(false)}
+          initialStartAt={upcomingCall?.startAt}
+          onConfirm={(startAt) => {
+            scheduleMentorCall(mentor.id, startAt)
+          }}
         />
       ) : null}
     </Container>

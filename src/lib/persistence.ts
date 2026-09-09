@@ -1,11 +1,14 @@
 import type {
+  AssessmentAnswers,
   AnswerValue,
   CustomWeeklyStep,
   JourneyStepProgress,
+  MentorCall,
   PathProgress,
   RetirementProfile,
   SocialFeedback,
   SocialPreferences,
+  TodoItem,
 } from '../types'
 import { guidedPaths, haroldActiveThemeIds, PATH_SOCIAL } from '../data/paths'
 import { emptySocialPreferences } from '../data/socialLife'
@@ -36,6 +39,13 @@ export interface PersistedState {
   mockCurrentWeekIndex: number
   /** UI language preference — does not affect journey progress */
   locale: Locale
+  /** Mentor-first pivot foundations */
+  todos: TodoItem[]
+  matchedMentorId: string | null
+  mentorShortlistIds: string[]
+  mentorCalls: MentorCall[]
+  assessmentAnswers: AssessmentAnswers
+  onboardingComplete: boolean
 }
 
 function emptyProgress(): PathProgress {
@@ -47,7 +57,9 @@ function emptyProgress(): PathProgress {
   }
 }
 
-export function createInitialPersistedState(): PersistedState {
+export function createInitialPersistedState(
+  locale: Locale = DEFAULT_LOCALE,
+): PersistedState {
   const pathProgress: Record<string, PathProgress> = {}
   for (const path of guidedPaths) {
     pathProgress[path.id] = emptyProgress()
@@ -71,7 +83,13 @@ export function createInitialPersistedState(): PersistedState {
     journeyStepProgress: {},
     activeJourneyStepId: null,
     mockCurrentWeekIndex: 0,
-    locale: DEFAULT_LOCALE,
+    locale,
+    todos: [],
+    matchedMentorId: null,
+    mentorShortlistIds: [],
+    mentorCalls: [],
+    assessmentAnswers: {},
+    onboardingComplete: false,
   }
 }
 
@@ -79,8 +97,10 @@ export function loadPersistedState(): PersistedState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return createInitialPersistedState()
-    const parsed = JSON.parse(raw) as PersistedState
-    const base = createInitialPersistedState()
+    const parsed = JSON.parse(raw) as Partial<PersistedState>
+    const base = createInitialPersistedState(
+      isLocale(parsed.locale) ? parsed.locale : DEFAULT_LOCALE,
+    )
     return {
       ...base,
       ...parsed,
@@ -98,6 +118,17 @@ export function loadPersistedState(): PersistedState {
       activeJourneyStepId: parsed.activeJourneyStepId ?? null,
       mockCurrentWeekIndex: parsed.mockCurrentWeekIndex ?? 0,
       locale: isLocale(parsed.locale) ? parsed.locale : DEFAULT_LOCALE,
+      todos: Array.isArray(parsed.todos) ? parsed.todos : [],
+      matchedMentorId: parsed.matchedMentorId ?? null,
+      mentorShortlistIds: Array.isArray(parsed.mentorShortlistIds)
+        ? parsed.mentorShortlistIds
+        : [],
+      mentorCalls: Array.isArray(parsed.mentorCalls) ? parsed.mentorCalls : [],
+      assessmentAnswers:
+        parsed.assessmentAnswers && typeof parsed.assessmentAnswers === 'object'
+          ? parsed.assessmentAnswers
+          : {},
+      onboardingComplete: Boolean(parsed.onboardingComplete),
     }
   } catch {
     return createInitialPersistedState()
@@ -110,6 +141,11 @@ export function savePersistedState(state: PersistedState) {
   } catch {
     // ignore
   }
+}
+
+/** Prototype reset — keeps locale, clears journey / mentor / bilan progress. */
+export function createResetPersistedState(locale: Locale): PersistedState {
+  return createInitialPersistedState(locale)
 }
 
 export function mergeProfile(

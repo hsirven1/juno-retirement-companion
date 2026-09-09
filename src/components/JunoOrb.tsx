@@ -1,8 +1,8 @@
 import { cn } from '../lib/cn'
 
 /**
- * CSS Juno character — radial orb + two vertical eye pills.
- * Eyes are percentage-positioned for true symmetry at every size.
+ * CSS Juno character — warm coral orb + face.
+ * Keep expression minimal and adult: calm eyes + a tiny curved smile.
  */
 export function JunoOrb({
   size = 44,
@@ -15,12 +15,6 @@ export function JunoOrb({
   glow?: boolean
 }) {
   const breathe = size >= 44
-  // Vertical pills (~11.5% × 16.5%) — taller than wide, matching the handoff.
-  // Horizontal ovals read as sleepy / sideways; keep these upright.
-  const eyeW = Math.max(3, Math.round(size * 0.115))
-  const eyeH = Math.max(4, Math.round(size * 0.165))
-  // Soft vertical pill (design: border-radius 50% / 4–6px)
-  const eyeRadius = `${Math.max(2, Math.round(eyeW * 0.55))}px`
 
   return (
     <span
@@ -42,33 +36,26 @@ export function JunoOrb({
       }}
       aria-hidden="true"
     >
-      {/*
-        Gaze: both eyes share the same top (40.5%) so they are level.
-        Left/right use mirrored percentages so the pair is centered
-        on the vertical midline — straight-ahead, calm, attentive.
-      */}
-      <span
-        className="absolute"
-        style={{
-          width: eyeW,
-          height: eyeH,
-          top: '40.5%',
-          left: '29%',
-          borderRadius: eyeRadius,
-          background: '#3A1B12',
-        }}
-      />
-      <span
-        className="absolute"
-        style={{
-          width: eyeW,
-          height: eyeH,
-          top: '40.5%',
-          left: '58%',
-          borderRadius: eyeRadius,
-          background: '#3A1B12',
-        }}
-      />
+      <svg
+        className="absolute inset-0"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        {/* Calm eyes: slightly softened vertical pills. */}
+        <rect x="26" y="39" width="14" height="18" rx="9" fill="#3A1B12" opacity="0.9" />
+        <rect x="60" y="39" width="14" height="18" rx="9" fill="#3A1B12" opacity="0.9" />
+
+        {/* Tiny curved smile (restrained, no teeth). */}
+        <path
+          d="M40 64 Q50 70 60 64"
+          fill="none"
+          stroke="#3A1B12"
+          strokeOpacity="0.85"
+          strokeWidth="4"
+          strokeLinecap="round"
+        />
+      </svg>
     </span>
   )
 }

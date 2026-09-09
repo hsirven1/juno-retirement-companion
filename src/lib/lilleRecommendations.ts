@@ -1,5 +1,6 @@
 import type { Locale } from '../i18n/types'
 import type {
+  BilanResourceSignals,
   DiscoverFilter,
   ResourceRecommendation,
   SocialFeedback,
@@ -17,6 +18,7 @@ import {
   toResourceRecommendation,
   type AdaptOptions,
 } from './lilleResourceAdapter'
+import { primaryLilleThemeId } from './resourceTheme'
 
 export interface RecommendArgs {
   locale: Locale
@@ -26,6 +28,8 @@ export interface RecommendArgs {
   journeyRole?: JourneyRole
   limit?: number
   preferConcretePlaces?: boolean
+  /** Optional bilan-derived signals from Phase 3. */
+  bilanSignals?: BilanResourceSignals | null
 }
 
 const NETWORK_TO_CHILDREN: Record<string, string[]> = {
@@ -103,10 +107,11 @@ export function scoreLilleResource(
     prefs: SocialPreferences
     feedback: SocialFeedback
     journeyRole?: JourneyRole
+    bilanSignals?: BilanResourceSignals | null
   },
 ): number {
   let score = 0
-  const { activeLilleThemes, prefs, feedback, journeyRole } = args
+  const { activeLilleThemes, prefs, feedback, journeyRole, bilanSignals } = args
 
   const themeHits = resource.themeIds.filter((t) =>
     activeLilleThemes.includes(t),
@@ -198,6 +203,99 @@ export function scoreLilleResource(
     }
   }
 
+  // Phase 3 bilan signals — light adjustments only
+  if (bilanSignals) {
+    if (bilanSignals.aloneComfort === 'low') {
+      if (
+        resource.socialFormat.includes('small_group') ||
+        resource.tags.includes('small_group_possible') ||
+        resource.tags.includes('newcomer_friendly') ||
+        resource.interactionStyle.includes('activity_based')
+      ) {
+        score += 2
+      }
+      if (
+        resource.commitment.level === 'very_low' ||
+        resource.commitment.level === 'low'
+      ) {
+        score += 1
+      }
+      if (
+        resource.socialFormat.includes('large_group') &&
+        !resource.socialFormat.includes('small_group')
+      ) {
+        score -= 1
+      }
+    }
+
+    if (bilanSignals.needForStructure === 'high') {
+      if (
+        resource.themeIds.includes('new_rhythm') ||
+        resource.commitment.cadence.includes('weekly') ||
+        resource.interactionStyle.includes('activity_based')
+      ) {
+        score += 2
+      }
+    }
+
+    if (bilanSignals.joiningReassuranceNeeds.includes('small_group')) {
+      if (
+        resource.socialFormat.includes('small_group') ||
+        resource.tags.includes('small_group_possible')
+      ) {
+        score += 1
+      }
+    }
+    if (bilanSignals.joiningReassuranceNeeds.includes('clear_activity')) {
+      if (resource.interactionStyle.includes('activity_based')) score += 1
+    }
+    if (bilanSignals.joiningReassuranceNeeds.includes('know_what_to_expect')) {
+      if (
+        resource.commitment.level === 'low' ||
+        resource.commitment.level === 'very_low' ||
+        resource.tags.includes('drop_in')
+      ) {
+        score += 1
+      }
+    }
+
+    if (
+      bilanSignals.interests.includes('culture') &&
+      (resource.tags.includes('culture') ||
+        resource.tags.includes('museum') ||
+        resource.tags.includes('art'))
+    ) {
+      score += 1
+    }
+    if (
+      bilanSignals.interests.includes('travel') &&
+      resource.themeIds.includes('travel')
+    ) {
+      score += 1
+    }
+    if (
+      bilanSignals.interests.includes('learning') &&
+      (resource.themeIds.includes('learn') ||
+        resource.interactionStyle.includes('learning'))
+    ) {
+      score += 1
+    }
+    if (
+      bilanSignals.wantMoreOf.includes('social_contact') &&
+      (resource.themeIds.includes('social') || resource.tags.includes('social'))
+    ) {
+      score += 1
+    }
+    if (
+      bilanSignals.wantMoreOf.includes('usefulness') &&
+      (resource.themeIds.includes('contribute') ||
+        resource.tags.includes('volunteer') ||
+        resource.tags.includes('benevolat'))
+    ) {
+      score += 1
+    }
+  }
+
   if (feedback.dismissedIds.includes(resource.id)) score -= 5
   if (feedback.laterIds.includes(resource.id)) score -= 2
   if (feedback.interestedIds.includes(resource.id)) score += 3
@@ -257,6 +355,7 @@ export function getRecommendedLilleResources(
       prefs: args.socialPreferences,
       feedback: args.socialFeedback,
       journeyRole: args.journeyRole,
+      bilanSignals: args.bilanSignals,
     }),
   }))
 
@@ -266,7 +365,43 @@ export function getRecommendedLilleResources(
 
   ranked = dedupeHierarchy(ranked, preferConcrete)
 
-  return ranked.slice(0, limit).map((item) => item.resource)
+  return pickDiverseRecommendations(ranked, limit).map((item) => item.resource)
+}
+
+/**
+ * Rank-first selection with light category diversity for Home / strips.
+ * Keeps top result; remaining slots prefer a different primary theme among
+ * similarly scored candidates (within ~3 score points of the next pick).
+ */
+function pickDiverseRecommendations(
+  ranked: Array<{ resource: LilleResource; score: number }>,
+  limit: number,
+): Array<{ resource: LilleResource; score: number }> {
+  if (ranked.length <= limit) return ranked
+
+  const picked: Array<{ resource: LilleResource; score: number }> = []
+  const used = new Set<string>()
+  const remaining = [...ranked]
+
+  const take = (index: number) => {
+    const [item] = remaining.splice(index, 1)
+    if (!item) return
+    picked.push(item)
+    used.add(primaryLilleThemeId(item.resource.themeIds))
+  }
+
+  take(0)
+
+  while (picked.length < limit && remaining.length > 0) {
+    const bestScore = remaining[0]!.score
+    const diverseIndex = remaining.findIndex((item) => {
+      const theme = primaryLilleThemeId(item.resource.themeIds)
+      return !used.has(theme) && bestScore - item.score <= 3
+    })
+    take(diverseIndex >= 0 ? diverseIndex : 0)
+  }
+
+  return picked
 }
 
 export function getRecommendedResourceCards(
@@ -327,6 +462,7 @@ export function getFilteredLilleResourceCards(args: {
         prefs: args.rank!.socialPreferences,
         feedback: args.rank!.socialFeedback,
         journeyRole: args.rank!.journeyRole ?? 'explore',
+        bilanSignals: args.rank!.bilanSignals,
       }),
     }))
     .sort((a, b) => b.score - a.score)

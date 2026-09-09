@@ -1,5 +1,5 @@
 import { NavLink, Outlet, Link } from 'react-router-dom'
-import { Compass, House, Map, Search } from 'lucide-react'
+import { Compass, House, Search } from 'lucide-react'
 import { Logo } from './Logo'
 import { JunoChatOverlay } from './JunoChatOverlay'
 import { GuidedThemeOverlay } from './GuidedThemeOverlay'
@@ -27,12 +27,6 @@ export function AppLayout({ children }: { children?: ReactNode }) {
       icon: Search,
     },
     {
-      to: '/plan',
-      label: copy.nav.plan,
-      shortLabel: copy.nav.planShort,
-      icon: Map,
-    },
-    {
       to: '/profile',
       label: copy.nav.profile,
       shortLabel: copy.nav.profileShort,
@@ -48,7 +42,7 @@ export function AppLayout({ children }: { children?: ReactNode }) {
     <div className="flex min-h-svh flex-col bg-cream">
       <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-[14px]">
         <div className="mx-auto flex h-[76px] max-w-[1240px] items-center gap-6 px-5 sm:px-8 lg:px-9">
-          <Logo to="/home" className="shrink-0" />
+          <Logo to="/home" size="nav" className="shrink-0" />
 
           <nav
             className="hidden min-w-0 flex-1 items-center gap-1.5 md:flex"
@@ -112,7 +106,7 @@ export function AppLayout({ children }: { children?: ReactNode }) {
         className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-paper/94 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:hidden"
         aria-label={copy.nav.mobile}
       >
-        <ul className="grid grid-cols-4">
+        <ul className="grid grid-cols-3">
           {links.map((link) => {
             const Icon = link.icon
             return (

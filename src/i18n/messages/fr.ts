@@ -22,62 +22,50 @@ export const messages = {
   },
 
   landing: {
-    eyebrow: 'Bien vivre sa retraite',
-    headline: 'La retraite, c’est aussi le début de quelque chose.',
+    headline:
+      'Parlez avec quelqu’un qui a déjà vécu le passage à la retraite.',
     supporting:
-      'Juno vous aide à réfléchir à ce que vous voulez faire de cette nouvelle étape, à construire votre propre rythme et à passer de vos envies à des projets concrets.',
+      'Juno vous aide à trouver un mentor retraité qui comprend votre situation, vos envies et les questions que vous vous posez aujourd’hui.',
     cta: 'Faire mon bilan',
-    reassurance: 'Environ 10 minutes',
-    dimensionsTitle:
-      'Bien préparer sa retraite, ce n’est pas seulement une question d’argent.',
-    dimensionsSupporting:
-      'Les questions qui comptent maintenant vont plus loin : comment vous allez passer vos journées, avec qui, et ce qui donnera à ce temps le sentiment d’être vraiment le vôtre.',
-    howItWorksTitle: 'Votre retraite, une étape après l’autre.',
-    howItWorksSupporting:
-      'Juno apprend ce qui compte pour vous et propose un parcours qui évolue avec vous. Rien n’est figé. C’est vous qui décidez.',
+    ctaMicro:
+      '5 minutes pour découvrir votre profil et les personnes qui pourraient vous correspondre.',
+    valueTitle: 'Une nouvelle étape, avec plus de soutien.',
+    valuePoints: [
+      'Un mentor qui vous ressemble',
+      'Un espace rassurant pour parler',
+      'Des idées concrètes pour avancer',
+      'Un accompagnement à votre rythme',
+    ],
+    howItWorksTitle: 'Comment ça marche',
     steps: [
       {
         number: '01',
-        title: 'Une conversation, pas un formulaire',
-        body: 'Racontez à Juno où vous en êtes, et ce que cette nouvelle étape pourrait devenir. Comptez une dizaine de minutes.',
+        title: 'Faites votre bilan',
+        body: 'Quelques minutes pour comprendre ce qui compte pour vous.',
       },
       {
         number: '02',
-        title: 'Découvrez votre bilan',
-        body: 'Un regard clair sur vos projets, votre entourage, votre forme, vos finances et vos envies — dans vos mots, pas en notes.',
+        title: 'Découvrez votre mentor',
+        body: 'Une personne à la retraite dont le parcours résonne avec le vôtre.',
       },
       {
         number: '03',
-        title: 'Un parcours qui évolue avec vous',
-        body: 'Des priorités, des prochaines étapes, et des ressources utiles — adaptées à ce qui compte pour vous, au fil du temps.',
+        title: 'Avancez à votre rythme',
+        body: 'Parlez, explorez des idées, et essayez ce qui vous convient.',
       },
     ],
-    aboutEyebrow: 'À propos',
-    aboutTitle: 'Un compagnon pour la vie après le travail.',
-    aboutBody:
-      'Quitter le travail, c’est l’un des plus grands changements que l’on traverse. Ça peut être enthousiasmant, un peu déroutant, ou les deux. Juno est là pour les questions qui ne tiennent pas dans un tableur : vos projets, les gens autour de vous, votre forme, votre argent, et les envies qui donnent à une semaine le goût d’une vraie vie.',
-    finalHeadline: 'Profitez de ce qui vient.',
-    weekPreviewLabel: 'Exemple de prochaines étapes avec Juno',
-    weekPreviewEyebrow: 'Cette semaine',
-    weekPreviewCaption: 'Juno transforme vos priorités en prochaines étapes.',
-    weekPreviewTitle: 'Des pistes concrètes, pas un emploi du temps.',
-    weekPreviewItems: [
-      {
-        day: 'Étape',
-        title: 'Découvrir une activité régulière',
-        status: 'todo' as const,
-      },
-      {
-        day: 'Étape',
-        title: 'Explorer le mentorat',
-        status: 'todo' as const,
-      },
-      {
-        day: 'Fait',
-        title: 'Imaginer le rythme qui vous convient',
-        status: 'done' as const,
-      },
-    ],
+    duoLine:
+      'Votre mentor partage son expérience. Juno vous aide à garder le fil, préparer vos échanges et trouver des idées concrètes.',
+    finalHeadline: 'Et si on commençait par vous ?',
+    previewLabel: 'Conversation avec un mentor',
+    previewEyebrow: 'Votre mentor',
+    previewCareer: 'Ancienne ingénieure',
+    previewCallStatus: 'En appel',
+    previewBubble:
+      'Les premiers mois, j’avais beaucoup de temps… et je ne savais pas vraiment par où commencer.',
+    previewReply: 'C’est exactement ce que je ressens en ce moment.',
+    previewJunoCue: 'Juno peut vous aider à préparer votre prochain échange.',
+    previewDemoNote: 'Illustration — persona de démonstration.',
   },
 
   assessment: {
@@ -85,6 +73,7 @@ export const messages = {
     questionProgress: (current: number, total: number) =>
       `${current} sur ${total}`,
     chooseSeveral: 'Vous pouvez en choisir plusieurs.',
+    otherLabel: 'Autre',
     otherPlaceholder: 'Dites-nous en un mot...',
     back: 'Retour',
     continue: 'Continuer',
@@ -101,21 +90,97 @@ export const messages = {
   },
 
   map: {
-    eyebrow: 'Votre bilan retraite',
+    eyebrow: 'Votre bilan',
     opening: (name: string) => `${name}, voici ce que nous retenons.`,
-    insightLabel: 'Une lecture de Juno',
-    title: 'Votre bilan retraite',
-    bridge:
-      'À partir de votre bilan, voici les sujets qui semblent particulièrement importants pour vous.',
-    themesTitle: 'Les sujets qui comptent pour vous',
-    themesLead: 'Juno va vous accompagner sur ces sujets, étape par étape.',
-    cta: 'Commencer mon parcours',
+    profileSummaryLabel: 'Votre profil en quelques mots',
+    profileSummaryFallback:
+      'À partir de votre bilan, nous avons retenu ce qui semble compter pour vous dans cette nouvelle étape.',
+    prioritiesLabel: 'Ce qui compte le plus pour vous',
+    mentorRevealTitle:
+      'Bonne nouvelle ! Nous avons trouvé des mentors qui pourraient vous correspondre.',
+    mentorRevealLead:
+      'Leur parcours et leur expérience font écho à ce que vous nous avez partagé.',
+    cta: 'Découvrir mes mentors',
+  },
+
+  mentors: {
+    matchEyebrow: 'Des personnes qui pourraient vous comprendre',
+    matchTitle: 'Voici les mentors qui vous correspondent le mieux.',
+    matchLead:
+      'D’après votre profil, vos envies et ce que vous recherchez aujourd’hui.',
+    bestMatch: 'Correspondance principale',
+    whyConnect: 'Pourquoi Juno pense que vous pourriez bien vous entendre',
+    commonGround: 'Points en commun',
+    whyPropose: 'Pourquoi Juno vous la propose',
+    whyProposeHim: 'Pourquoi Juno vous le propose',
+    viewProfile: 'Voir le profil',
+    choose: (name: string) => `Choisir ${name}`,
+    yourMentor: 'Votre mentor',
+    findSomeoneTitle: 'Trouvez quelqu’un qui pourrait vous accompagner.',
+    findSomeoneBody:
+      'À partir de votre bilan, Juno peut vous proposer des personnes dont le parcours résonne avec le vôtre.',
+    seeMatches: 'Voir mes correspondances',
+    writeTo: (name: string) => `Écrire à ${name}`,
+    talkTo: (name: string) => `Parler à ${name}`,
+    changeMentor: 'Changer de mentor',
+    myJourney: 'Mon parcours',
+    whatHelped: 'Ce qui m’a aidé·e',
+    weCouldTalk: 'On pourrait parler de',
+    myInterests: 'Mes centres d’intérêt',
+    backToMatches: 'Retour aux correspondances',
+    demoNote:
+      'Profils de démonstration — personas fictifs pour tester le produit.',
+    chatPrototypeNote: 'Conversation prototype — données de démonstration.',
+    chatClose: 'Fermer la conversation',
+    chatPlaceholder: (name: string) => `Écrire à ${name}…`,
+    chatSend: 'Envoyer',
+    chatEmptyHint: 'Ceci est un aperçu du produit. Les messages ne sont pas envoyés.',
+    notFound: 'Ce profil mentor est introuvable.',
+    backHome: 'Retour à l’accueil',
   },
 
   home: {
     greeting: (name: string, hour: number) =>
       `${hour < 18 ? 'Bonjour' : 'Bonsoir'} ${name}`,
     intro: 'Voici vos prochaines étapes.',
+    todosTitle: 'À faire',
+    todosLead: 'De petites prochaines étapes, sans agenda artificiel.',
+    todosEmpty: 'Aucune étape pour le moment.',
+    todosAdd: 'Ajouter',
+    todosAddPlaceholder: 'Une chose à faire…',
+    todosDone: 'Fait',
+    todosLater: 'Plus tard',
+    todosReopen: 'Remettre à faire',
+    todosCompleted: 'Terminées',
+    todosLaterSection: 'Plus tard',
+    todoMoreActions: 'Autres actions',
+    todoSourceMentor: (name: string) => `Suggéré par ${name}`,
+    todoSourceJuno: 'Suggéré par Juno',
+    todoSourceUser: 'Ajouté par vous',
+    todoSourceResource: 'Lié à une ressource',
+    todoSourceExercise: 'Issu d’un exercice',
+    scheduleCall: 'Planifier un appel',
+    nextCallLabel: 'Prochain appel',
+    bookingTitle: (name: string) => `Planifier un appel avec ${name}`,
+    bookingDemoNote: 'Disponibilités de démonstration — prototype uniquement.',
+    bookingPickDate: 'Choisissez une date',
+    bookingPickSlot: 'Choisissez un horaire',
+    bookingConfirm: 'Confirmer l’appel',
+    bookingBack: 'Retour',
+    bookingClose: 'Fermer',
+    bookingDone: 'Terminer',
+    bookingModify: 'Modifier',
+    bookingConfirmed: (name: string, day: string, time: string) =>
+      `Votre appel avec ${name} est prévu le ${day} à ${time}.`,
+    forYouLead:
+      'Des idées qui correspondent à ce que vous recherchez en ce moment.',
+    junoMentorPrep: (name: string) =>
+      `Vous voulez préparer votre première conversation avec ${name} ?`,
+    junoMentorActivity: (name: string) =>
+      `${name} vous a proposé de regarder une activité. Je peux vous aider à trouver quelque chose.`,
+    junoNoMentor:
+      'Quand vous aurez choisi un mentor, je pourrai vous aider à préparer vos échanges et à trouver des idées près de chez vous.',
+    talkToJuno: 'Parler à Juno',
     thisWeek: 'Votre semaine',
     weekLead: 'Trois choses. Rien de plus.',
     journeyInProgress: 'PARCOURS EN COURS',
@@ -267,7 +332,20 @@ export const messages = {
 
   discover: {
     title: 'Découvrir',
-    subtitle: 'Des idées choisies pour vous, à Lille.',
+    heroTitle: 'Des personnes et des idées pour votre retraite.',
+    subtitle: 'Des mentors, des activités et des ressources près de chez vous.',
+    tabsAria: 'Sections Découvrir',
+    tabForYou: 'Pour vous',
+    tabMentors: 'Mentors',
+    tabActivities: 'Activités & ressources',
+    peopleSectionTitle: 'Des personnes qui pourraient vous comprendre',
+    ideasSectionTitle: 'Des idées qui pourraient vous plaire',
+    ideasSectionLead:
+      'Des activités et lieux à Lille, choisis à partir de votre bilan.',
+    seeAllMentors: 'Voir tous les mentors →',
+    seeAllActivities: 'Voir toutes les activités →',
+    noMentorsYet:
+      'Complétez votre bilan pour voir des correspondances mentor.',
     searchPlaceholder: 'Chercher une activité, un lieu, une association',
     searchAria: 'Rechercher des ressources',
     filters: [
@@ -416,5 +494,15 @@ export const messages = {
     cancel: 'Annuler',
     updateMap: 'Relire mon bilan',
     quote: (text: string) => `« ${text} »`,
+    resetPrototype: 'Réinitialiser les données prototype',
+    resetPrototypeHint:
+      'Efface bilan, mentor, todos et progression — conserve la langue. Développement uniquement.',
+    mentorsDemoNote:
+      'Les mentors sont des personas de démonstration, pas des personnes réelles.',
+    yourMentor: 'Votre mentor',
+    viewMentorProfile: 'Voir le profil',
+    changeMentor: 'Changer de mentor',
+    noMentorYet: 'Pas encore de mentor sélectionné.',
+    findMentor: 'Voir mes correspondances',
   },
 } as const

@@ -44,6 +44,10 @@
   --theme-contribute-tint: #f7ebd8;
   --theme-contribute-ink: #8a5d0a;
 
+  --theme-travel-solid: #2f8f8a;
+  --theme-travel-tint: #e2f2f0;
+  --theme-travel-ink: #1f6a66;
+
   /* Borders */
   --color-line: #ede5da; /* hairline */
   --color-line-strong: #dcd1c1; /* stronger controls */

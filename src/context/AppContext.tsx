@@ -16,6 +16,7 @@ import { adaptAllLilleResources } from '../lib/lilleResourceAdapter'
 import { makeResourceLabelFns } from '../lib/resourceLabels'
 import {
   applyStepResponseToProfile,
+  createResetPersistedState,
   loadPersistedState,
   mergeProfile,
   savePersistedState,
@@ -27,13 +28,22 @@ import {
   mergeScreenResponse,
 } from '../lib/journeyProgress'
 import {
+  buildMentorMatchingProfile,
+  matchMentors,
+} from '../lib/mentorMatching'
+import { getMentorById } from '../data/mentors'
+import {
+  alignMentorTodosToSelectedMentor,
+  buildSeedTodosForMentor,
+} from '../lib/seedMentorTodos'
+import { createTodoItem } from '../lib/todos'
+import {
   getNextWeekId,
   getRecommendedStepsForWeek,
   weeks,
 } from '../lib/weekRecommendations'
 import { AppContext } from './state'
 import type {
-  AssessmentAnswers,
   AnswerValue,
   ChatMessage,
   ChatOpenOptions,
@@ -41,6 +51,8 @@ import type {
   PathProgress,
   ResourceRecommendation,
   SocialPreferences,
+  TodoItem,
+  TodoStatus,
   WeeklyStepItem,
 } from '../types'
 
@@ -49,8 +61,6 @@ function emptyStepProgress(): JourneyStepProgress {
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [onboardingComplete, setOnboardingComplete] = useState(false)
-  const [answers, setAnswers] = useState<AssessmentAnswers>({})
   const [persisted, setPersisted] = useState<PersistedState>(() =>
     loadPersistedState(),
   )
@@ -62,6 +72,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [guidedThemeOpen, setGuidedThemeOpen] = useState(false)
   const [postponeNotice, setPostponeNotice] = useState<string | null>(null)
   const messagesRef = useRef(messages)
+
+  const onboardingComplete = persisted.onboardingComplete
+  const answers = persisted.assessmentAnswers
 
   const resources = useMemo(() => {
     const copy = getMessages(persisted.locale)
@@ -88,16 +101,31 @@ export function AppProvider({ children }: { children: ReactNode }) {
   )
 
   const completeOnboarding = useCallback(() => {
-    setOnboardingComplete(true)
-  }, [])
+    updatePersisted((current) => ({
+      ...current,
+      onboardingComplete: true,
+    }))
+  }, [updatePersisted])
 
   const enterAsReturningUser = useCallback(() => {
-    setOnboardingComplete(true)
-  }, [])
+    updatePersisted((current) => ({
+      ...current,
+      onboardingComplete: true,
+    }))
+  }, [updatePersisted])
 
-  const setAnswer = useCallback((questionId: string, value: AnswerValue) => {
-    setAnswers((current) => ({ ...current, [questionId]: value }))
-  }, [])
+  const setAnswer = useCallback(
+    (questionId: string, value: AnswerValue) => {
+      updatePersisted((current) => ({
+        ...current,
+        assessmentAnswers: {
+          ...current.assessmentAnswers,
+          [questionId]: value,
+        },
+      }))
+    },
+    [updatePersisted],
+  )
 
   const startPath = useCallback((pathId: string) => {
     updatePersisted((current) => {
@@ -619,6 +647,194 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [persisted.profileOverrides],
   )
 
+  const setMatchedMentorId = useCallback(
+    (mentorId: string | null) => {
+      updatePersisted((current) => ({
+        ...current,
+        matchedMentorId: mentorId,
+      }))
+    },
+    [updatePersisted],
+  )
+
+  const setMentorShortlistIds = useCallback(
+    (ids: string[]) => {
+      updatePersisted((current) => {
+        if (
+          current.mentorShortlistIds.length === ids.length &&
+          current.mentorShortlistIds.every((id, index) => id === ids[index])
+        ) {
+          return current
+        }
+        return {
+          ...current,
+          mentorShortlistIds: ids,
+        }
+      })
+    },
+    [updatePersisted],
+  )
+
+  const selectMentor = useCallback(
+    (mentorId: string, shortlistIds?: string[]) => {
+      updatePersisted((current) => {
+        const mentor = getMentorById(mentorId)
+        if (!mentor) {
+          return {
+            ...current,
+            matchedMentorId: mentorId,
+            mentorShortlistIds: shortlistIds ?? current.mentorShortlistIds,
+          }
+        }
+
+        const todos =
+          current.todos.length === 0
+            ? buildSeedTodosForMentor({
+                mentorId,
+                mentorFirstName: mentor.firstName,
+                locale: current.locale,
+              })
+            : alignMentorTodosToSelectedMentor({
+                todos: current.todos,
+                mentorId,
+                mentorFirstName: mentor.firstName,
+                locale: current.locale,
+              })
+
+        return {
+          ...current,
+          matchedMentorId: mentorId,
+          mentorShortlistIds: shortlistIds ?? current.mentorShortlistIds,
+          todos,
+        }
+      })
+    },
+    [updatePersisted],
+  )
+
+  const scheduleMentorCall = useCallback(
+    (mentorId: string, startAt: string) => {
+      updatePersisted((current) => {
+        const nextCall = {
+          id: `call-${Date.now()}`,
+          mentorId,
+          startAt,
+          status: 'scheduled' as const,
+        }
+        const withoutActiveForMentor = current.mentorCalls.map((call) =>
+          call.mentorId === mentorId && call.status === 'scheduled'
+            ? { ...call, status: 'cancelled' as const }
+            : call,
+        )
+        return {
+          ...current,
+          mentorCalls: [...withoutActiveForMentor, nextCall],
+        }
+      })
+    },
+    [updatePersisted],
+  )
+
+  const cancelMentorCall = useCallback(
+    (callId: string) => {
+      updatePersisted((current) => ({
+        ...current,
+        mentorCalls: current.mentorCalls.map((call) =>
+          call.id === callId ? { ...call, status: 'cancelled' as const } : call,
+        ),
+      }))
+    },
+    [updatePersisted],
+  )
+
+  const realignMentorTodos = useCallback(() => {
+    updatePersisted((current) => {
+      const mentorId = current.matchedMentorId
+      if (!mentorId) return current
+      const mentor = getMentorById(mentorId)
+      if (!mentor) return current
+      const next = alignMentorTodosToSelectedMentor({
+        todos: current.todos,
+        mentorId,
+        mentorFirstName: mentor.firstName,
+        locale: current.locale,
+      })
+      const unchanged = next.every(
+        (todo, index) =>
+          todo.relatedMentorId === current.todos[index]?.relatedMentorId &&
+          todo.title === current.todos[index]?.title,
+      )
+      if (unchanged) return current
+      return { ...current, todos: next }
+    })
+  }, [updatePersisted])
+
+  const addTodo = useCallback(
+    (todo: Omit<TodoItem, 'id' | 'createdAt'> & { id?: string }) => {
+      updatePersisted((current) => {
+        const next = createTodoItem({
+          title: todo.title,
+          source: todo.source,
+          status: todo.status,
+          relatedMentorId: todo.relatedMentorId,
+          relatedResourceId: todo.relatedResourceId,
+          relatedExerciseStepId: todo.relatedExerciseStepId,
+          dueDate: todo.dueDate,
+        })
+        if (todo.id) next.id = todo.id
+        return {
+          ...current,
+          todos: [...current.todos, next],
+        }
+      })
+    },
+    [updatePersisted],
+  )
+
+  const updateTodoStatus = useCallback(
+    (todoId: string, status: TodoStatus) => {
+      updatePersisted((current) => ({
+        ...current,
+        todos: current.todos.map((todo) =>
+          todo.id === todoId ? { ...todo, status } : todo,
+        ),
+      }))
+    },
+    [updatePersisted],
+  )
+
+  const getMentorMatches = useCallback(
+    (limit = 5) => {
+      const matchingProfile = buildMentorMatchingProfile({
+        answers: persisted.assessmentAnswers,
+        profile,
+        socialPreferences: persisted.socialPreferences,
+      })
+      return matchMentors(matchingProfile, {
+        locale: persisted.locale,
+        limit,
+      })
+    },
+    [
+      persisted.assessmentAnswers,
+      persisted.socialPreferences,
+      persisted.locale,
+      profile,
+    ],
+  )
+
+  const resetPrototypeData = useCallback(() => {
+    const next = createResetPersistedState(persisted.locale)
+    setPersisted(next)
+    setMessages([])
+    setChatOpen(false)
+    setChatOptions(null)
+    setGuidedThemeOpen(false)
+    setPostponeNotice(null)
+    setSavedResourceIds([])
+    setAddedResourceIds([])
+  }, [persisted.locale])
+
   const value = useMemo(
     () => ({
       onboardingComplete,
@@ -670,6 +886,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
       addSocialWeekStep,
       locale: persisted.locale,
       setLocale,
+      todos: persisted.todos,
+      matchedMentorId: persisted.matchedMentorId,
+      mentorShortlistIds: persisted.mentorShortlistIds,
+      mentorCalls: persisted.mentorCalls,
+      setMatchedMentorId,
+      setMentorShortlistIds,
+      selectMentor,
+      scheduleMentorCall,
+      cancelMentorCall,
+      realignMentorTodos,
+      addTodo,
+      updateTodoStatus,
+      getMentorMatches,
+      resetPrototypeData,
     }),
     [
       onboardingComplete,
@@ -710,6 +940,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
       laterSocialResource,
       addSocialWeekStep,
       setLocale,
+      setMatchedMentorId,
+      setMentorShortlistIds,
+      selectMentor,
+      scheduleMentorCall,
+      cancelMentorCall,
+      realignMentorTodos,
+      addTodo,
+      updateTodoStatus,
+      getMentorMatches,
+      resetPrototypeData,
     ],
   )
 

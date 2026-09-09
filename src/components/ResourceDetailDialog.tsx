@@ -8,7 +8,7 @@ import { useCopy, useLocale } from '../i18n'
 import { formatLastChecked } from '../lib/lilleResourceAdapter'
 import { getCommitmentLabel } from '../lib/resourceLabels'
 import { getLilleResourceById } from '../lib/lilleRecommendations'
-import { getResourceTheme } from '../lib/resourceTheme'
+import { getResourceTheme, mediaVariantForResource } from '../lib/resourceTheme'
 import { cn } from '../lib/cn'
 import type { ResourceRecommendation } from '../types'
 
@@ -159,10 +159,21 @@ export function ResourceDetailDialog({
                 alt=""
                 aspect="hero"
                 radius="lg"
+                variant={mediaVariantForResource(resource)}
               />
               <div className="mt-3 hidden grid-cols-2 gap-3 sm:grid">
-                <MediaBlock theme={theme} aspect="thumb" radius="md" />
-                <MediaBlock theme={theme} aspect="thumb" radius="md" />
+                <MediaBlock
+                  theme={theme}
+                  aspect="thumb"
+                  radius="md"
+                  variant={(mediaVariantForResource(resource) + 1) % 4}
+                />
+                <MediaBlock
+                  theme={theme}
+                  aspect="thumb"
+                  radius="md"
+                  variant={(mediaVariantForResource(resource) + 2) % 4}
+                />
               </div>
             </div>
 

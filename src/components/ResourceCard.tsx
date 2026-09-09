@@ -3,6 +3,7 @@ import { MediaBlock } from './MediaBlock'
 import {
   getResourceTheme,
   mediaHintForResource,
+  mediaVariantForResource,
 } from '../lib/resourceTheme'
 import type { ResourceRecommendation } from '../types'
 
@@ -39,6 +40,7 @@ export function ResourceCard({
         imageUrl={item.image}
         alt=""
         aspect="card"
+        variant={mediaVariantForResource(item)}
       />
 
       <p
@@ -103,6 +105,7 @@ export function ResourceCardCompact({
         aspect="square"
         radius="md"
         className="w-24 shrink-0 sm:w-32"
+        variant={mediaVariantForResource(item)}
       />
       <div className="min-w-0 flex-1">
         <p

@@ -2,12 +2,23 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container } from '../components/Container'
 import { Button } from '../components/Button'
+import { MentorAvatar } from '../components/mentor/MentorAvatar'
+import { getMentorById } from '../data/mentors'
 import { useApp } from '../context/useApp'
 import { buildSocialProfileSummary, useCopy, useLocale } from '../i18n'
 
 export function ProfilePage() {
   const navigate = useNavigate()
-  const { profile, socialPreferences, pathProgress } = useApp()
+  const {
+    profile,
+    socialPreferences,
+    pathProgress,
+    resetPrototypeData,
+    matchedMentorId,
+  } = useApp()
+  const matchedMentor = matchedMentorId
+    ? getMentorById(matchedMentorId)
+    : undefined
   const copy = useCopy()
   const { locale } = useLocale()
   const [situation, setSituation] = useState(profile.situation)
@@ -56,6 +67,58 @@ export function ProfilePage() {
       <p className="mt-4 max-w-[36rem] text-[18px] text-ink-muted">
         {copy.profile.subtitle}
       </p>
+
+      <section className="mt-12 rounded-[20px] border border-line bg-paper p-5 sm:p-6">
+        <h2 className="text-[13px] font-medium tracking-[0.16em] text-ink-soft uppercase">
+          {copy.profile.yourMentor}
+        </h2>
+        {matchedMentor ? (
+          <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <MentorAvatar
+                id={matchedMentor.id}
+                firstName={matchedMentor.firstName}
+                size={48}
+              />
+              <div>
+                <p className="text-[18px] font-bold text-ink">
+                  {matchedMentor.firstName}
+                </p>
+                <p className="text-[13px] text-ink-soft">
+                  {copy.profile.mentorsDemoNote}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                to={`/mentors/${matchedMentor.id}`}
+                variant="secondary"
+                className="min-h-10 px-4 text-[15px]"
+              >
+                {copy.profile.viewMentorProfile}
+              </Button>
+              <Button
+                to="/mentors/match"
+                variant="ghost"
+                className="min-h-10 px-4 text-[15px]"
+              >
+                {copy.profile.changeMentor}
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="mt-4">
+            <p className="text-[16px] text-ink-muted">
+              {copy.profile.noMentorYet}
+            </p>
+            <div className="mt-4">
+              <Button to="/mentors/match" className="min-h-10 px-4 text-[15px]">
+                {copy.profile.findMentor}
+              </Button>
+            </div>
+          </div>
+        )}
+      </section>
 
       <section className="mt-12">
         <SectionHeader
@@ -147,10 +210,33 @@ export function ProfilePage() {
         </blockquote>
       </section>
 
-      <div className="mt-14">
+      <div className="mt-14 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
         <Button to="/retirement-map" variant="secondary">
           {copy.profile.updateMap}
         </Button>
+        {import.meta.env.DEV ? (
+          <div className="max-w-[28rem]">
+            <Button
+              variant="ghost"
+              className="text-[15px] text-ink-muted"
+              onClick={() => {
+                if (
+                  window.confirm(
+                    `${copy.profile.resetPrototype}\n\n${copy.profile.resetPrototypeHint}`,
+                  )
+                ) {
+                  resetPrototypeData()
+                  void navigate('/')
+                }
+              }}
+            >
+              {copy.profile.resetPrototype}
+            </Button>
+            <p className="mt-1 text-[13px] text-ink-soft">
+              {copy.profile.resetPrototypeHint}
+            </p>
+          </div>
+        ) : null}
       </div>
     </Container>
   )
