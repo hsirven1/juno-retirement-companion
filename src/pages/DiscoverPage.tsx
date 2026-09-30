@@ -1,45 +1,25 @@
 import { useMemo, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
-import { Search, X } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
+import { LayoutGrid, MapPin, Search, X } from 'lucide-react'
 import { Container } from '../components/Container'
-import { CollectionTile } from '../components/CollectionTile'
-import { ResourceCard, ResourceCardCompact } from '../components/ResourceCard'
+import { ResourceCard } from '../components/ResourceCard'
 import { ResourceDetailDialog } from '../components/ResourceDetailDialog'
-import { DiscoverMentorCard } from '../components/mentor/DiscoverMentorCard'
-import { useApp } from '../context/useApp'
+import { PillarArt } from '../components/pillars/PillarCard'
+import { PILLARS, isPillarId } from '../data/pillars'
 import { useCopy, useLocale } from '../i18n'
 import { cn } from '../lib/cn'
-import {
-  getFilteredLilleResourceCards,
-  getRecommendedResourceCards,
-} from '../lib/lilleRecommendations'
-import {
-  buildMentorMatchingProfile,
-  toBilanResourceSignals,
-} from '../lib/mentorMatching'
-import { matchesDiscoverFilter } from '../lib/lilleResourceAdapter'
-import { makeResourceLabelFns } from '../lib/resourceLabels'
-import { lilleResources } from '../data/lilleResources'
-import type { DiscoverFilter, ResourceRecommendation } from '../types'
+import { displayTags } from '../lib/resourceLabels'
+import { useResourceHub } from '../lib/useResourceHub'
+import type { Locale } from '../i18n/types'
+import type { PillarId, ResourceRecommendation } from '../types'
 
-type DiscoverTab = 'for-you' | 'mentors' | 'activities'
+type Scope = 'all' | PillarId
 
-function resolveTab(raw: string | null): DiscoverTab {
-  if (raw === 'mentors' || raw === 'activities' || raw === 'for-you') return raw
-  return 'for-you'
-}
-
-function resolveFilter(
-  raw: string | null,
-  filters: readonly { id: DiscoverFilter }[],
-): DiscoverFilter {
-  if (raw && filters.some((item) => item.id === raw)) {
-    return raw as DiscoverFilter
-  }
-  return 'all'
-}
-
-function matchesQuery(item: ResourceRecommendation, query: string): boolean {
+function matchesQuery(
+  item: ResourceRecommendation,
+  query: string,
+  locale: Locale,
+): boolean {
   if (!query) return true
   const haystack = [
     item.title,
@@ -49,7 +29,7 @@ function matchesQuery(item: ResourceRecommendation, query: string): boolean {
     item.neighborhood,
     item.sourceName,
     item.categoryLabel,
-    ...(item.tags ?? []),
+    ...displayTags(item.tags, locale, 20),
   ]
     .filter(Boolean)
     .join(' ')
@@ -57,185 +37,181 @@ function matchesQuery(item: ResourceRecommendation, query: string): boolean {
   return haystack.includes(query)
 }
 
-function isLowCommitment(item: ResourceRecommendation): boolean {
-  const level = item.commitmentLevel ?? ''
+function SectionHeading({
+  title,
+  lead,
+  count,
+}: {
+  title: string
+  lead?: string
+  count?: string
+}) {
   return (
-    level === 'very_low' ||
-    level === 'low' ||
-    level === 'flexible' ||
-    (item.tags ?? []).some((t) =>
-      /low_barrier|try_once|flexible|drop.?in/i.test(t),
-    )
+    <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <h2 className="text-[23px] font-[800] tracking-[-0.02em] text-ink sm:text-[27px]">
+          {title}
+        </h2>
+        {lead ? (
+          <p className="mt-1 max-w-[40rem] text-[16px] text-ink-muted sm:text-[17px]">
+            {lead}
+          </p>
+        ) : null}
+      </div>
+      {count ? (
+        <p className="text-[15px] font-semibold text-ink-soft">{count}</p>
+      ) : null}
+    </div>
+  )
+}
+
+function ResourceGrid({
+  items,
+  onOpen,
+  pillarId,
+}: {
+  items: ResourceRecommendation[]
+  onOpen: (item: ResourceRecommendation) => void
+  pillarId?: PillarId
+}) {
+  return (
+    <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {items.map((item) => (
+        <li key={item.id}>
+          <ResourceCard item={item} onOpen={onOpen} pillarId={pillarId} />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function TopicChip({
+  label,
+  selected,
+  onClick,
+  inkVar,
+  forYouLabel,
+}: {
+  label: string
+  selected: boolean
+  onClick: () => void
+  inkVar: string
+  forYouLabel?: string
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={selected}
+      onClick={onClick}
+      className={cn(
+        'inline-flex min-h-10 items-center gap-2 rounded-full border-[1.5px] px-3.5 text-[14.5px] font-bold whitespace-nowrap transition-colors',
+        selected ? 'text-[#FDF9F4]' : 'border-transparent bg-paper hover:bg-paper/70',
+      )}
+      style={
+        selected
+          ? { backgroundColor: `var(${inkVar})`, borderColor: `var(${inkVar})` }
+          : { color: `var(${inkVar})` }
+      }
+    >
+      {label}
+      {forYouLabel ? (
+        <span
+          className={cn(
+            'rounded-full px-1.5 py-px text-[11px] font-extrabold tracking-[0.04em] uppercase',
+            selected ? 'bg-paper/20' : 'bg-cream-deep',
+          )}
+        >
+          {forYouLabel}
+        </span>
+      ) : null}
+    </button>
   )
 }
 
 export function DiscoverPage() {
-  const {
-    activeThemeIds,
-    socialPreferences,
-    socialFeedback,
-    openChat,
-    answers,
-    profile,
-    getMentorMatches,
-  } = useApp()
   const copy = useCopy()
   const { locale } = useLocale()
   const [searchParams, setSearchParams] = useSearchParams()
-  const tab = resolveTab(searchParams.get('tab'))
-  const filter = resolveFilter(searchParams.get('filter'), copy.discover.filters)
+  const rawPillar = searchParams.get('pillar')
+  const scope: Scope = isPillarId(rawPillar) ? rawPillar : 'all'
+  const rawTopic = searchParams.get('topic')
+  const localOnly = searchParams.get('local') === '1'
   const [active, setActive] = useState<ResourceRecommendation | null>(null)
   const [query, setQuery] = useState('')
-  const [showAllCollections, setShowAllCollections] = useState(false)
-  const [showAllCatalogue, setShowAllCatalogue] = useState(false)
-
-  const labels = useMemo(() => makeResourceLabelFns(copy, locale), [copy, locale])
   const normalizedQuery = query.trim().toLowerCase()
 
-  const bilanSignals = useMemo(
+  const hub = useResourceHub({ recommendedLimit: 6, localLimit: 6 })
+
+  const scoped = scope === 'all' ? hub.all : hub.byPillar[scope]
+  const searchResults = useMemo(
     () =>
-      toBilanResourceSignals(
-        buildMentorMatchingProfile({
-          answers,
-          profile,
-          socialPreferences,
-        }),
+      scoped.filter(
+        (item) =>
+          (!localOnly || item.isLocal) && matchesQuery(item, normalizedQuery, locale),
       ),
-    [answers, profile, socialPreferences],
+    [scoped, normalizedQuery, locale, localOnly],
   )
 
-  const mentorMatches = useMemo(
-    () => getMentorMatches(6),
-    [getMentorMatches],
-  )
+  const guides = useMemo(() => hub.all.filter((item) => !item.isLocal), [hub.all])
 
-  const rankArgs = useMemo(
-    () => ({
-      activeThemeIds,
-      socialPreferences,
-      socialFeedback,
-      journeyRole: 'explore' as const,
-      bilanSignals,
-    }),
-    [activeThemeIds, socialPreferences, socialFeedback, bilanSignals],
-  )
-
-  const allRanked = useMemo(
+  const pillarTopics = scope === 'all' ? [] : hub.topics[scope]
+  const activeTopic = pillarTopics.find((topic) => topic.id === rawTopic) ?? null
+  const topicItems = useMemo(
     () =>
-      getFilteredLilleResourceCards({
-        filter: 'all',
-        locale,
-        typeLabel: labels.typeLabel,
-        commitmentLabel: labels.commitmentLabel,
-        savedIds: socialFeedback.interestedIds,
-        rank: rankArgs,
-      }),
-    [locale, labels, socialFeedback.interestedIds, rankArgs],
+      scope === 'all' || !activeTopic
+        ? []
+        : hub.byPillar[scope].filter((item) => item.topicIds?.includes(activeTopic.id)),
+    [scope, activeTopic, hub.byPillar],
   )
+  const sections = scope === 'all' ? null : hub.sections[scope]
 
-  const filtered = useMemo(() => {
-    const base =
-      filter === 'all'
-        ? allRanked
-        : getFilteredLilleResourceCards({
-            filter,
-            locale,
-            typeLabel: labels.typeLabel,
-            commitmentLabel: labels.commitmentLabel,
-            savedIds: socialFeedback.interestedIds,
-            rank: rankArgs,
-          })
-    return base.filter((item) => matchesQuery(item, normalizedQuery))
-  }, [
-    filter,
-    allRanked,
-    locale,
-    labels,
-    socialFeedback.interestedIds,
-    rankArgs,
-    normalizedQuery,
-  ])
-
-  const forYouIdeas = useMemo(
-    () =>
-      getRecommendedResourceCards({
-        locale,
-        activeThemeIds,
-        socialPreferences,
-        socialFeedback,
-        journeyRole: 'explore',
-        limit: 3,
-        preferConcretePlaces: true,
-        bilanSignals,
-        typeLabel: labels.typeLabel,
-        commitmentLabel: labels.commitmentLabel,
-        savedIds: socialFeedback.interestedIds,
-      }),
-    [
-      locale,
-      activeThemeIds,
-      socialPreferences,
-      socialFeedback,
-      bilanSignals,
-      labels,
-    ],
-  )
-
-  const lowCommitment = useMemo(
-    () => allRanked.filter(isLowCommitment).slice(0, 6),
-    [allRanked],
-  )
-
-  const collectionCounts = useMemo(() => {
-    const counts: Partial<Record<DiscoverFilter, number>> = {
-      all: lilleResources.length,
-    }
-    for (const item of copy.discover.filters) {
-      if (item.id === 'all') continue
-      counts[item.id] = lilleResources.filter((r) =>
-        matchesDiscoverFilter(r, item.id),
-      ).length
-    }
-    return counts
-  }, [copy.discover.filters])
-
-  function setTab(next: DiscoverTab) {
+  function setScope(next: Scope) {
     const params = new URLSearchParams(searchParams)
-    if (next === 'for-you') params.delete('tab')
-    else params.set('tab', next)
-    if (next !== 'activities') {
-      params.delete('filter')
-    }
+    params.delete('tab')
+    params.delete('filter')
+    params.delete('topic')
+    if (next === 'all') params.delete('pillar')
+    else params.set('pillar', next)
     setSearchParams(params)
   }
 
-  function setFilter(next: DiscoverFilter) {
+  function toggleLocal() {
     const params = new URLSearchParams(searchParams)
-    params.set('tab', 'activities')
-    if (next === 'all') params.delete('filter')
-    else params.set('filter', next)
-    setSearchParams(params)
-    if (next !== 'all') setShowAllCatalogue(true)
+    if (localOnly) params.delete('local')
+    else params.set('local', '1')
+    setSearchParams(params, { replace: true })
   }
 
-  const tabs = [
-    { id: 'for-you' as const, label: copy.discover.tabForYou },
-    { id: 'mentors' as const, label: copy.discover.tabMentors },
-    { id: 'activities' as const, label: copy.discover.tabActivities },
+  function setTopic(next: string | null) {
+    const params = new URLSearchParams(searchParams)
+    if (next) params.set('topic', next)
+    else params.delete('topic')
+    setSearchParams(params, { replace: true })
+  }
+
+  const tabs: Array<{ id: Scope; label: string }> = [
+    { id: 'all', label: copy.discover.tabAll },
+    ...hub.pillarOrder.map((id) => ({ id, label: PILLARS[id].title[locale] })),
   ]
 
-  const browsingCatalogue =
-    filter !== 'all' || normalizedQuery.length > 0 || showAllCatalogue
+  const activePillar = scope === 'all' ? null : PILLARS[scope]
+  const pillarNote =
+    scope === 'financial'
+      ? copy.discover.pillarFinancialNote
+      : scope === 'health'
+        ? copy.discover.pillarHealthNote
+        : null
 
   return (
     <Container width="wide" className="py-8 sm:py-10 lg:py-12">
-      <header className="max-w-[40rem]">
+      <header className="max-w-[44rem]">
         <p className="text-[12px] font-extrabold tracking-[0.12em] text-ink-label uppercase">
           {copy.discover.title}
         </p>
         <h1 className="mt-2 font-display text-[2.1rem] font-medium leading-[1.12] tracking-[-0.02em] text-ink sm:text-[2.55rem]">
           {copy.discover.heroTitle}
         </h1>
+        <p className="mt-3 text-[17px] text-ink-muted">{copy.discover.subtitle}</p>
       </header>
 
       <div className="-mx-5 mt-8 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
@@ -244,346 +220,274 @@ export function DiscoverPage() {
           role="tablist"
           aria-label={copy.discover.tabsAria}
         >
-          {tabs.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              role="tab"
-              aria-selected={tab === item.id}
-              onClick={() => setTab(item.id)}
-              className={cn(
-                'min-h-11 shrink-0 snap-start rounded-full border-[1.5px] px-5 text-[16px] font-bold transition-colors duration-160',
-                tab === item.id
-                  ? 'border-ink bg-ink text-[#FDF9F4]'
-                  : 'border-line-strong bg-paper text-ink hover:bg-[#F6EFE5]',
-              )}
-            >
-              {item.label}
-            </button>
-          ))}
+          {tabs.map((item) => {
+            const selected = scope === item.id
+            const pillar = item.id === 'all' ? null : PILLARS[item.id]
+            const Icon = pillar?.icon ?? LayoutGrid
+            return (
+              <button
+                key={item.id}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                onClick={() => setScope(item.id)}
+                className={cn(
+                  'inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border-[1.5px] px-4 text-[16px] font-bold transition-colors duration-160 sm:px-5',
+                  selected && !pillar && 'border-ink bg-ink text-[#FDF9F4]',
+                  !selected &&
+                    'border-line-strong bg-paper text-ink hover:bg-[#F6EFE5]',
+                )}
+                style={
+                  selected && pillar
+                    ? {
+                        borderColor: `var(${pillar.theme.solidVar})`,
+                        backgroundColor: `var(${pillar.theme.tintVar})`,
+                        color: `var(${pillar.theme.inkVar})`,
+                      }
+                    : undefined
+                }
+              >
+                <Icon size={17} strokeWidth={2} aria-hidden="true" />
+                {item.label}
+                {pillar && hub.highlighted.includes(item.id as PillarId) ? (
+                  <span
+                    className="size-2 rounded-full"
+                    style={{ backgroundColor: `var(${pillar.theme.solidVar})` }}
+                    aria-hidden="true"
+                  />
+                ) : null}
+              </button>
+            )
+          })}
         </div>
       </div>
 
-      {tab === 'for-you' ? (
-        <div className="mt-10 space-y-10">
-          <section>
-            <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <h2 className="text-[12px] font-extrabold tracking-[0.11em] text-ink-label uppercase">
-                  {copy.discover.forYouTitle}
-                </h2>
-                <p className="mt-2 text-[22px] font-[800] tracking-[-0.02em] text-ink sm:text-[26px]">
-                  {copy.discover.ideasSectionTitle}
-                </p>
-                <p className="mt-1 max-w-[36rem] text-[16px] text-ink-muted">
-                  {copy.discover.ideasSectionLead}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setTab('activities')}
-                className="cursor-pointer text-[15px] font-bold text-clay-ink hover:text-clay-deep"
+      {activePillar ? (
+        <section
+          className="relative mt-8 overflow-hidden rounded-[28px] px-5 py-6 sm:px-8 sm:py-8"
+          style={{ backgroundColor: `var(${activePillar.theme.tintVar})` }}
+        >
+          <PillarArt
+            id={activePillar.id}
+            size={220}
+            className="origin-bottom-right scale-[0.6] opacity-80 sm:scale-100"
+          />
+          <div className="relative flex items-start gap-4">
+            <div className="min-w-0 pr-16 sm:pr-48">
+              <h2
+                className="font-display text-[30px] leading-none font-bold tracking-[-0.03em] sm:text-[40px]"
+                style={{ color: `var(${activePillar.theme.inkVar})` }}
               >
-                {copy.discover.seeAllActivities}
-              </button>
-            </div>
-            {forYouIdeas.length > 0 ? (
-              <div className="-mx-5 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:overflow-visible sm:px-0 lg:grid lg:grid-cols-3 lg:gap-5 [&::-webkit-scrollbar]:hidden">
-                <ul className="flex w-max gap-4 sm:w-auto sm:grid sm:grid-cols-2 sm:gap-5 lg:contents">
-                  {forYouIdeas.map((item) => (
-                    <li
-                      key={item.id}
-                      className="w-[min(78vw,304px)] shrink-0 snap-start sm:w-auto"
-                    >
-                      <ResourceCard
-                        item={item}
-                        onOpen={setActive}
-                        borderless
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <p className="text-[16px] text-ink-muted">
-                {copy.discover.emptyFilter}
-              </p>
-            )}
-          </section>
-        </div>
-      ) : null}
-
-      {tab === 'mentors' ? (
-        <section className="mt-10">
-          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h2 className="text-[23px] font-[800] tracking-[-0.02em] text-ink sm:text-[27px]">
-                {copy.discover.tabMentors}
+                {activePillar.title[locale]}
               </h2>
-              <p className="mt-1 max-w-[36rem] text-[16px] text-ink-muted">
-                {copy.discover.peopleSectionTitle}
+              <p className="mt-1 max-w-[40rem] text-[16px] text-ink sm:text-[17px]">
+                {activePillar.description[locale]}
               </p>
-              <p className="mt-2 text-[13px] text-ink-soft">
-                {copy.mentors.demoNote}
-              </p>
+              {pillarNote ? (
+                <p className="mt-3 max-w-[44rem] text-[14px] leading-snug text-ink-muted">
+                  {pillarNote}
+                </p>
+              ) : null}
             </div>
-            <Link
-              to="/mentors/match"
-              className="text-[15px] font-bold text-clay-ink hover:text-clay-deep"
-            >
-              {copy.discover.seeAllMentors}
-            </Link>
           </div>
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {mentorMatches.map((match) => (
-              <li key={match.mentor.id}>
-                <DiscoverMentorCard match={match} />
+
+          {pillarTopics.length > 0 ? (
+            <ul
+              className="relative mt-5 flex flex-wrap gap-2"
+              aria-label={copy.discover.topicsAria}
+            >
+              <li>
+                <TopicChip
+                  label={copy.discover.topicAll}
+                  selected={!activeTopic}
+                  onClick={() => setTopic(null)}
+                  inkVar={activePillar.theme.inkVar}
+                />
               </li>
-            ))}
-          </ul>
+              {pillarTopics.map((topic) => (
+                <li key={topic.id}>
+                  <TopicChip
+                    label={topic.label}
+                    selected={activeTopic?.id === topic.id}
+                    onClick={() => setTopic(topic.id)}
+                    inkVar={activePillar.theme.inkVar}
+                    forYouLabel={topic.forYou ? copy.discover.topicForYou : undefined}
+                  />
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </section>
       ) : null}
 
-      {tab === 'activities' ? (
-        <>
-          <div className="mt-8 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <label className="relative block w-full max-w-md">
-              <span className="sr-only">{copy.discover.searchAria}</span>
-              <Search
-                size={18}
-                strokeWidth={1.8}
-                className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-ink-soft"
-                aria-hidden="true"
-              />
-              <input
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder={copy.discover.searchPlaceholder}
-                className="min-h-12 w-full rounded-full border border-line bg-paper py-3 pr-11 pl-11 text-[16px] text-ink placeholder:text-[#9A9088] focus:border-line-strong focus:outline-none"
-              />
-              {query ? (
-                <button
-                  type="button"
-                  onClick={() => setQuery('')}
-                  className="absolute top-1/2 right-3 flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-ink-soft hover:bg-cream-deep hover:text-ink"
-                  aria-label={copy.discover.clearSearch}
-                >
-                  <X size={16} strokeWidth={2} />
-                </button>
-              ) : null}
-            </label>
-          </div>
-
-          <div className="-mx-5 mt-5 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
-            <div className="flex w-max gap-2 sm:w-auto sm:flex-wrap">
-              {copy.discover.filters.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setFilter(item.id)}
-                  className={cn(
-                    'min-h-10 shrink-0 snap-start rounded-full border-[1.5px] px-4 text-[15px] font-bold transition-colors duration-160',
-                    filter === item.id
-                      ? 'border-clay bg-clay-tint text-clay-ink'
-                      : 'border-line-strong bg-paper text-ink hover:bg-[#F6EFE5]',
-                  )}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {!browsingCatalogue ? (
-            <>
-              <section className="mt-10">
-                <div className="mb-5">
-                  <h2 className="text-[23px] font-[800] tracking-[-0.02em] text-ink sm:text-[27px]">
-                    {copy.discover.collectionsTitle}
-                  </h2>
-                  <p className="mt-1 text-[16px] text-ink-muted sm:text-[17px]">
-                    {copy.discover.collectionsSubtitle(lilleResources.length)}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-[14px] sm:gap-[18px] lg:grid-cols-3">
-                  {copy.discover.collections.map((collection, index) => (
-                    <CollectionTile
-                      key={collection.id}
-                      title={collection.title}
-                      solid={collection.solid}
-                      countLabel={copy.discover.countProposals(
-                        collectionCounts[collection.id] ?? 0,
-                      )}
-                      onClick={() => setFilter(collection.id)}
-                      className={cn(
-                        !showAllCollections && index >= 4 && 'max-lg:hidden',
-                      )}
-                    />
-                  ))}
-                  <CollectionTile
-                    variant="outline"
-                    title={copy.discover.browseAll}
-                    countLabel={copy.discover.browseAllCount(
-                      lilleResources.length,
-                    )}
-                    onClick={() => setShowAllCatalogue(true)}
-                    className={cn(
-                      !showAllCollections &&
-                        'col-span-2 max-lg:hidden lg:col-span-1',
-                      showAllCollections && 'col-span-2 lg:col-span-1',
-                    )}
-                  />
-                </div>
-
-                {!showAllCollections ? (
-                  <button
-                    type="button"
-                    onClick={() => setShowAllCollections(true)}
-                    className="mt-4 flex min-h-12 w-full items-center justify-center rounded-full border-[1.5px] border-line-strong bg-paper text-[16px] font-bold text-ink lg:hidden"
-                  >
-                    {copy.discover.seeAllCollections}
-                  </button>
-                ) : null}
-              </section>
-
-              {forYouIdeas.length > 0 ? (
-                <section className="mt-12">
-                  <div className="mb-5">
-                    <h2 className="text-[23px] font-[800] tracking-[-0.02em] text-ink sm:text-[27px]">
-                      {copy.discover.ideasSectionTitle}
-                    </h2>
-                    <p className="mt-1 max-w-[40rem] text-[16px] text-ink-muted sm:text-[17px]">
-                      {copy.discover.ideasSectionLead}
-                    </p>
-                  </div>
-                  <div className="-mx-5 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:overflow-visible sm:px-0 lg:grid lg:grid-cols-3 lg:gap-5 [&::-webkit-scrollbar]:hidden">
-                    <ul className="flex w-max gap-4 sm:w-auto sm:grid sm:grid-cols-2 sm:gap-5 lg:contents">
-                      {forYouIdeas.map((item) => (
-                        <li
-                          key={item.id}
-                          className="w-[min(78vw,304px)] shrink-0 snap-start sm:w-auto"
-                        >
-                          <ResourceCard
-                            item={item}
-                            onOpen={setActive}
-                            borderless
-                          />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </section>
-              ) : null}
-
-              {lowCommitment.length > 0 ? (
-                <section className="full-bleed mt-12 -mx-5 bg-cream-deep px-5 py-8 sm:mx-0 sm:rounded-[24px] sm:px-6 sm:py-8">
-                  <div className="mb-5">
-                    <h2 className="text-[23px] font-[800] tracking-[-0.02em] text-ink sm:text-[27px]">
-                      {copy.discover.lowCommitmentTitle}
-                    </h2>
-                    <p className="mt-1 max-w-[40rem] text-[16px] text-ink-muted sm:text-[17px]">
-                      {copy.discover.lowCommitmentSubtitle}
-                    </p>
-                  </div>
-                  <ul className="grid gap-3 sm:grid-cols-2">
-                    {lowCommitment.map((item) => (
-                      <li key={item.id}>
-                        <ResourceCardCompact item={item} onOpen={setActive} />
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              ) : null}
-
-              <section className="mt-12">
-                <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-                  <div>
-                    <h2 className="text-[23px] font-[800] tracking-[-0.02em] text-ink sm:text-[27px]">
-                      {copy.discover.aroundTitle}
-                    </h2>
-                    <p className="mt-1 text-[16px] text-ink-muted">
-                      {copy.discover.countProposals(allRanked.length)}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowAllCatalogue(true)}
-                    className="cursor-pointer text-[15px] font-bold text-clay-ink hover:text-clay-deep"
-                  >
-                    {copy.discover.browseAll} →
-                  </button>
-                </div>
-                <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                  {allRanked.map((item) => (
-                    <li key={item.id}>
-                      <ResourceCard item={item} onOpen={setActive} />
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            </>
-          ) : (
-            <section className="mt-10">
-              <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-                <div>
-                  <h2 className="text-[23px] font-[800] tracking-[-0.02em] text-ink sm:text-[27px]">
-                    {filter === 'all'
-                      ? copy.discover.aroundTitle
-                      : copy.discover.filters.find((f) => f.id === filter)
-                          ?.label}
-                  </h2>
-                  <p className="mt-1 text-[16px] text-ink-muted">
-                    {copy.discover.countProposals(filtered.length)}
-                  </p>
-                </div>
-                {filter !== 'all' || normalizedQuery ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setQuery('')
-                      setFilter('all')
-                      setShowAllCatalogue(false)
-                    }}
-                    className="text-[15px] font-bold text-clay-ink hover:text-clay-deep"
-                  >
-                    {copy.discover.browseAll} →
-                  </button>
-                ) : null}
-              </div>
-
-              {filtered.length === 0 ? (
-                <p className="mt-8 text-[16px] text-ink-muted">
-                  {normalizedQuery
-                    ? copy.discover.emptySearch
-                    : copy.discover.emptyFilter}
-                </p>
-              ) : (
-                <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                  {filtered.map((item) => (
-                    <li key={item.id}>
-                      <ResourceCard item={item} onOpen={setActive} />
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        <label className="relative block w-full max-w-md">
+          <span className="sr-only">{copy.discover.searchAria}</span>
+          <Search
+            size={18}
+            strokeWidth={1.8}
+            className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-ink-soft"
+            aria-hidden="true"
+          />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={copy.discover.searchPlaceholder}
+            className="min-h-12 w-full rounded-full border border-line bg-paper py-3 pr-11 pl-11 text-[16px] text-ink placeholder:text-[#9A9088] focus:border-line-strong focus:outline-none"
+          />
+          {query ? (
+            <button
+              type="button"
+              onClick={() => setQuery('')}
+              className="absolute top-1/2 right-3 flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-ink-soft hover:bg-cream-deep hover:text-ink"
+              aria-label={copy.discover.clearSearch}
+            >
+              <X size={16} strokeWidth={2} />
+            </button>
+          ) : null}
+        </label>
+        <button
+          type="button"
+          aria-pressed={localOnly}
+          onClick={toggleLocal}
+          className={cn(
+            'inline-flex min-h-12 items-center gap-2 rounded-full border-[1.5px] px-5 text-[16px] font-bold transition-colors',
+            localOnly
+              ? 'border-ink bg-ink text-[#FDF9F4]'
+              : 'border-line-strong bg-paper text-ink hover:bg-[#F6EFE5]',
           )}
-        </>
-      ) : null}
+        >
+          <MapPin size={17} strokeWidth={2} aria-hidden="true" />
+          {copy.discover.localFilter}
+        </button>
+      </div>
+
+      {normalizedQuery || localOnly ? (
+        <section className="mt-10">
+          <SectionHeading
+            title={
+              localOnly
+                ? copy.discover.localTitle
+                : activePillar
+                  ? activePillar.title[locale]
+                  : copy.discover.catalogueTitle
+            }
+            count={copy.discover.countProposals(searchResults.length)}
+          />
+          {searchResults.length > 0 ? (
+            <ResourceGrid
+              items={searchResults}
+              onOpen={setActive}
+              pillarId={scope === 'all' ? undefined : scope}
+            />
+          ) : (
+            <p className="text-[16px] text-ink-muted">{copy.discover.emptySearch}</p>
+          )}
+        </section>
+      ) : scope === 'all' ? (
+        <div className="mt-10 space-y-14">
+          {hub.recommended.length > 0 ? (
+            <section>
+              <SectionHeading
+                title={copy.discover.recommendedTitle}
+                lead={copy.discover.recommendedLead}
+              />
+              <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {hub.recommended.map((item) => (
+                  <li key={item.id}>
+                    <ResourceCard
+                      item={item}
+                      onOpen={setActive}
+                      pillarId={item.primaryPillarId}
+                      borderless
+                    />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
+          {hub.local.length > 0 ? (
+            <section className="-mx-5 bg-cream-deep px-5 py-8 sm:mx-0 sm:rounded-[24px] sm:px-6">
+              <SectionHeading
+                title={copy.discover.localTitle}
+                lead={copy.discover.localLead}
+              />
+              <ResourceGrid items={hub.local} onOpen={setActive} />
+            </section>
+          ) : null}
+
+          {guides.length > 0 ? (
+            <section>
+              <SectionHeading
+                title={copy.discover.guidesTitle}
+                lead={copy.discover.guidesLead}
+              />
+              <ResourceGrid items={guides} onOpen={setActive} />
+            </section>
+          ) : null}
+
+          <section>
+            <SectionHeading
+              title={copy.discover.catalogueTitle}
+              count={copy.discover.countProposals(hub.all.length)}
+            />
+            <ResourceGrid items={hub.all} onOpen={setActive} />
+          </section>
+        </div>
+      ) : activeTopic ? (
+        <section className="mt-10">
+          <SectionHeading
+            title={activeTopic.label}
+            count={copy.discover.countProposals(topicItems.length)}
+          />
+          <ResourceGrid items={topicItems} onOpen={setActive} pillarId={scope} />
+        </section>
+      ) : (
+        <div className="mt-10 space-y-14">
+          {sections && sections.primary.length > 0 ? (
+            <section>
+              <SectionHeading
+                title={
+                  sections.mode === 'start'
+                    ? copy.discover.pillarStartNow
+                    : copy.discover.pillarForYou
+                }
+                lead={
+                  sections.mode === 'start'
+                    ? copy.discover.pillarStartNowLead
+                    : undefined
+                }
+              />
+              <ResourceGrid
+                items={sections.primary}
+                onOpen={setActive}
+                pillarId={scope}
+              />
+            </section>
+          ) : null}
+
+          {sections && sections.further.length > 0 ? (
+            <section>
+              <SectionHeading
+                title={copy.discover.pillarFurther}
+                count={copy.discover.countProposals(hub.byPillar[scope].length)}
+              />
+              <ResourceGrid items={sections.further} onOpen={setActive} pillarId={scope} />
+            </section>
+          ) : null}
+
+          {hub.byPillar[scope].length === 0 ? (
+            <p className="text-[16px] text-ink-muted">{copy.discover.emptyFilter}</p>
+          ) : null}
+        </div>
+      )}
 
       {active ? (
         <ResourceDetailDialog
           resource={active}
           onClose={() => setActive(null)}
-          onAskJuno={() => {
-            setActive(null)
-            openChat({
-              greeting: active.personalizationReason,
-              relatedPriorityId: active.themeIds?.[0],
-            })
-          }}
         />
       ) : null}
     </Container>

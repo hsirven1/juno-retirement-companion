@@ -1,6 +1,7 @@
 export const messages = {
   brand: {
-    name: 'Juno',
+    name: 'Happy Retraite',
+    documentTitle: 'Happy Retraite — Useful resources for your retirement',
     tagline: 'Make the most of what comes next.',
   },
 
@@ -14,58 +15,28 @@ export const messages = {
     home: 'Home',
     plan: 'My journey',
     planShort: 'Journey',
-    discover: 'Discover',
-    discoverShort: 'Discover',
+    discover: 'Explore',
+    discoverShort: 'Explore',
     profile: 'My profile',
     profileShort: 'Profile',
-    talkToJuno: 'Talk to Juno',
+    talkToJuno: 'Ask a question',
   },
 
   landing: {
-    headline:
-      'Talk to someone who has already been through the transition into retirement.',
-    supporting:
-      'Juno helps you find a retired mentor who understands your situation, what you want, and the questions you’re asking yourself right now.',
+    headline: 'Make the most of your retirement!',
+    supporting: 'Ideas, resources and activities suited to your situation.',
     cta: 'Start my assessment',
-    ctaMicro:
-      '5 minutes to see your profile and the people who may be a good fit.',
-    valueTitle: 'A new chapter — with more support.',
-    valuePoints: [
-      'A mentor who feels familiar',
-      'A reassuring space to talk',
-      'Concrete ideas to move forward',
-      'Support at your own pace',
-    ],
+    ctaMicro: 'It only takes a few minutes.',
     howItWorksTitle: 'How it works',
     steps: [
-      {
-        number: '01',
-        title: 'Complete your assessment',
-        body: 'A few minutes to understand what matters to you.',
-      },
-      {
-        number: '02',
-        title: 'Meet your mentor',
-        body: 'A retired peer whose path resonates with yours.',
-      },
-      {
-        number: '03',
-        title: 'Move at your own pace',
-        body: 'Talk, explore ideas, and try what feels right.',
-      },
+      { number: '1', title: 'Take your assessment', body: 'A few simple questions.' },
+      { number: '2', title: 'Discover your 4 areas', body: 'What matters most to you.' },
+      { number: '3', title: 'Enjoy your ideas', body: 'Resources and activities near you.' },
     ],
-    duoLine:
-      'Your mentor shares lived experience. Juno helps you stay on track, prepare conversations, and find concrete ideas.',
-    finalHeadline: 'What if we started with you?',
-    previewLabel: 'Conversation with a mentor',
-    previewEyebrow: 'Your mentor',
-    previewCareer: 'Former engineer',
-    previewCallStatus: 'On a call',
-    previewBubble:
-      'Those first months, I had so much time… and I didn’t really know where to start.',
-    previewReply: 'That’s exactly how I feel right now.',
-    previewJunoCue: 'Juno can help you prepare your next conversation.',
-    previewDemoNote: 'Illustration — demo persona.',
+    finalHeadline: 'Shall we start?',
+    previewLabel: 'The four areas of Happy Retraite',
+    previewForYou: 'For you',
+    previewPick: 'Try aqua fitness classes near you',
   },
 
   assessment: {
@@ -78,12 +49,9 @@ export const messages = {
     back: 'Back',
     continue: 'Continue',
     submit: 'See my assessment',
-    generatingTitle: 'Juno is putting your assessment together...',
-    generatingMessages: [
-      'Picking up what matters to you',
-      'Bringing your priorities into focus',
-      'Preparing your first few ideas',
-    ],
+    generatingTitle: 'Putting your assessment together...',
+    preparingSteps: ['Your priorities', 'What you enjoy', 'Resources near you'],
+    locationPlaceholder: 'e.g. Lille or 59000',
     textPlaceholder:
       'A good week. The people around you. What a Tuesday looks like...',
     scaleAria: (point: number) => `${point} out of 5`,
@@ -101,6 +69,14 @@ export const messages = {
     mentorRevealLead:
       'Their paths and experience echo what you shared with us.',
     cta: 'Meet my mentor matches',
+    hubRevealTitle: 'We’ve prepared resources suited to your situation.',
+    hubRevealLead:
+      'Ranked by what matters to you, across the four areas of your retirement.',
+    hubCta: 'Go to my space',
+    readyTitle: 'Your Happy Retraite space is ready.',
+    readyLead: 'We’ve picked resources and ideas suited to your profile.',
+    priorityBadge: 'Priority',
+    highlightedLabel: 'Highlighted',
   },
 
   mentors: {
@@ -109,16 +85,16 @@ export const messages = {
     matchLead:
       'Based on your profile, what you want, and what you’re looking for right now.',
     bestMatch: 'Top match',
-    whyConnect: 'Why Juno thinks you may connect',
+    whyConnect: 'Why you may connect',
     commonGround: 'Things in common',
-    whyPropose: 'Why Juno is suggesting her',
-    whyProposeHim: 'Why Juno is suggesting him',
+    whyPropose: 'Why we’re suggesting her',
+    whyProposeHim: 'Why we’re suggesting him',
     viewProfile: 'View profile',
     choose: (name: string) => `Choose ${name}`,
     yourMentor: 'Your mentor',
     findSomeoneTitle: 'Find someone who could walk alongside you.',
     findSomeoneBody:
-      'From your assessment, Juno can suggest people whose path resonates with yours.',
+      'From your assessment, we can suggest people whose path resonates with yours.',
     seeMatches: 'See my matches',
     writeTo: (name: string) => `Message ${name}`,
     talkTo: (name: string) => `Talk to ${name}`,
@@ -142,6 +118,30 @@ export const messages = {
     greeting: (name: string, hour: number) =>
       `${hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening'}, ${name}`,
     intro: 'Here are your next steps.',
+    hubIntro: 'Here’s what could be useful to you right now.',
+    hubBilanLine: (pillars: string[]) =>
+      pillars.length > 1
+        ? `Based on your assessment, we’ve highlighted ${pillars.join(' and ').toLowerCase()}.`
+        : pillars.length === 1
+          ? `Based on your assessment, we’ve highlighted ${pillars[0]!.toLowerCase()}.`
+          : 'We’ve ranked resources based on your assessment.',
+    pillarsTitle: 'My 4 areas',
+    greetingHub: (name: string, hour: number) =>
+      `${hour >= 18 ? 'Good evening' : 'Hello'} ${name}!`,
+    welcomeBack: 'Good to see you again.',
+    seeAll: 'See all',
+    seeAllIn: (pillar: string) => `See all: ${pillar}`,
+    nearYouOtherCity: (city: string) =>
+      `No activities listed in ${city} yet. Here are a few ideas in Lille.`,
+    forYouNowTitle: 'For you right now',
+    forYouNowLead: 'A few ideas selected from your assessment.',
+    forYouNowLeadNoBilan:
+      'A first selection across the four areas. Your assessment will help refine it.',
+    focusAria: 'Topics highlighted for you',
+    pillarCount: (n: number) => `${n} resource${n > 1 ? 's' : ''}`,
+    nearYouTitle: 'Near you',
+    nearYouLead: 'Places, activities and associations in Lille.',
+    seeAllLocal: 'Explore everything →',
     todosTitle: 'To do',
     todosLead: 'A few next steps — no artificial schedule.',
     todosEmpty: 'No steps yet.',
@@ -154,7 +154,7 @@ export const messages = {
     todosLaterSection: 'Later',
     todoMoreActions: 'More actions',
     todoSourceMentor: (name: string) => `Suggested by ${name}`,
-    todoSourceJuno: 'Suggested by Juno',
+    todoSourceJuno: 'Suggested for you',
     todoSourceUser: 'Added by you',
     todoSourceResource: 'Tied to a resource',
     todoSourceExercise: 'From an exercise',
@@ -179,7 +179,7 @@ export const messages = {
       `${name} suggested looking at an activity. I can help you find something.`,
     junoNoMentor:
       'Once you choose a mentor, I can help you prepare conversations and find ideas nearby.',
-    talkToJuno: 'Talk to Juno',
+    talkToJuno: 'Ask a question',
     thisWeek: 'Your week',
     weekLead: 'Three things. Nothing more.',
     journeyInProgress: 'JOURNEY IN PROGRESS',
@@ -222,12 +222,12 @@ export const messages = {
     ideasTitle: 'A few ideas close to home',
     ideasLead:
       'You’d like to get out and see people, without filling up your calendar. Here are four ideas in Lyon.',
-    coachTitle: 'Talk to Juno',
+    coachTitle: 'Ask a question',
     coachSubtitle: 'Your companion',
     coachPreview: (name: string) =>
       `Hello ${name}. Would you like to move forward on a priority, or explore some new ideas?`,
-    coachPlaceholder: 'Message Juno…',
-    coachOpen: 'Open the conversation with Juno',
+    coachPlaceholder: 'Type your question…',
+    coachOpen: 'Ask a question',
     prototypeWeekSimulator: 'Prototype — simulate the current week',
     weekShort: (n: number) => `W${n}`,
   },
@@ -254,14 +254,14 @@ export const messages = {
     continue: 'Continue',
     start: 'Start',
     review: 'Review',
-    startCta: 'Start with Juno',
+    startCta: 'Get started',
     resumeHint: 'Pick up where you left off.',
   },
 
   guide: {
     progress: (current: number, total: number) => `${current} of ${total}`,
     continue: 'Continue',
-    askJuno: 'Talk it over with Juno',
+    askJuno: 'Ask a question',
     minutes: (n: number) => `About ${n} min`,
     chatGreeting: (pathTitle: string, stepTitle: string) =>
       `You’re exploring “${pathTitle}” — ${stepTitle}. Would you like to talk it through?`,
@@ -276,7 +276,7 @@ export const messages = {
   journeyUi: {
     bravo: 'You’ve completed this step.',
     advancedOn: 'You’ve made progress on:',
-    junoRetains: 'What Juno learned',
+    junoRetains: 'What we took away',
     nextTime: 'Next time',
     nextWeek: 'Next week',
     finishStep: 'Finish',
@@ -306,7 +306,7 @@ export const messages = {
     seeAllResources: 'View all resources →',
     interested: 'I’m interested',
     notForMe: 'Not for me',
-    whyJunoSuggests: 'Why Juno suggests this',
+    whyJunoSuggests: 'Why this could suit you',
     chooseThisOne: 'Choose this one →',
     nextStepConfirm: 'Good. We can make this your next step.',
     pickWhichFirst: 'Which one would you like to start with?',
@@ -326,10 +326,35 @@ export const messages = {
   },
 
   discover: {
-    title: 'Discover',
-    heroTitle: 'People and ideas for your retirement.',
-    subtitle: 'Mentors, activities and resources near you.',
-    tabsAria: 'Discover sections',
+    title: 'Explore',
+    heroTitle: 'Useful resources for your retirement.',
+    subtitle:
+      'Guides, services, activities and places near you, ranked for your profile.',
+    tabsAria: 'Areas',
+    tabAll: 'All',
+    recommendedTitle: 'Recommended for you',
+    recommendedLead: 'A selection across all four areas, based on your assessment.',
+    localTitle: 'Near you',
+    localLead: 'Places, activities and associations in Lille.',
+    guidesTitle: 'Guides & information',
+    guidesLead:
+      'Official and public websites to help you get informed. General information, not personal advice.',
+    catalogueTitle: 'All resources',
+    pillarForYou: 'Top picks for you',
+    pillarStartNow: 'Start now',
+    pillarStartNowLead: 'The steps worth anticipating as retirement approaches.',
+    pillarFurther: 'Going further',
+    topicsAria: 'Topics in this area',
+    topicAll: 'See all',
+    topicForYou: 'For you',
+    localFilter: 'Near you',
+    pillarAllTitle: 'All resources in this area',
+    pillarFinancialNote:
+      'General information and official sources, not personal advice. For any financial decision, speak to a qualified professional.',
+    pillarHealthNote:
+      'Ideas to stay active day to day. For any health question, talk to your doctor.',
+    localBadge: 'Lille',
+    nationalBadge: 'Information',
     tabForYou: 'For you',
     tabMentors: 'Mentors',
     tabActivities: 'Activities & resources',
@@ -416,7 +441,7 @@ export const messages = {
     programYear: 'Current program',
     addToWeek: 'Add to my week',
     askAddToWeek: 'Would you like to make this a next step?',
-    talkToJunoFirst: 'Or talk it over with Juno first',
+    talkToJunoFirst: 'A question before deciding?',
     eligibilityLabel: 'Eligibility',
     costLabel: 'Cost',
     commitmentLabel: 'Commitment',
@@ -428,10 +453,16 @@ export const messages = {
     dismissPrompt: 'What doesn’t quite fit?',
     emptyFilter: 'No resources match this filter right now.',
     emptySearch: 'No results for this search.',
-    backToDiscover: 'Discover',
+    backToDiscover: 'Back',
   },
 
   resources: {
+    kinds: {
+      article: 'Article',
+      guide: 'Guide',
+      tool: 'Online tool',
+      organization: 'Organization',
+    },
     types: {
       place: 'Place',
       program: 'Program',
@@ -453,14 +484,14 @@ export const messages = {
   },
 
   coach: {
-    title: 'Talk to Juno',
+    title: 'Ask a question',
     panelSubtitle: 'Your retirement companion',
     suggestions: 'Suggestions',
-    inputLabel: 'Write to Juno',
-    placeholder: 'Message Juno...',
+    inputLabel: 'Your question',
+    placeholder: 'Type your question...',
     send: 'Send message',
     close: 'Close the conversation',
-    speaker: 'Juno',
+    speaker: 'Happy Retraite',
     addToPlan: 'Add to my journey',
     notNow: 'Not now',
     added:
@@ -472,7 +503,7 @@ export const messages = {
   profile: {
     title: 'My profile',
     subtitle:
-      'The information Juno uses to personalize your journey and its recommendations.',
+      'The information used to personalise your recommendations.',
     situation: 'My situation',
     seeking: 'What I’m looking for',
     interests: 'My interests',
@@ -490,7 +521,7 @@ export const messages = {
     quote: (text: string) => `“${text}”`,
     resetPrototype: 'Reset prototype data',
     resetPrototypeHint:
-      'Clears bilan, mentor, todos and progress — keeps language. Development only.',
+      'Clears your assessment, tasks and progress — keeps language. Development only.',
     mentorsDemoNote:
       'Mentors are demo personas, not real people.',
     yourMentor: 'Your mentor',

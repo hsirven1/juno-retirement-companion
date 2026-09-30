@@ -12,8 +12,14 @@ const variantClasses: Record<Variant, string> = {
   ghost: 'bg-transparent text-ink border border-transparent hover:bg-cream-deep',
 }
 
+const sizeClasses = {
+  md: 'min-h-[44px] px-6 text-[17px] font-medium',
+  lg: 'min-h-14 px-8 text-[17.5px] font-bold',
+}
+
 interface CommonProps {
   variant?: Variant
+  size?: keyof typeof sizeClasses
   className?: string
   children: ReactNode
 }
@@ -25,12 +31,14 @@ type ButtonAsLink = CommonProps & { to: string; type?: never }
 
 export function Button({
   variant = 'primary',
+  size = 'md',
   className,
   children,
   ...props
 }: ButtonAsButton | ButtonAsLink) {
   const classes = cn(
-    'inline-flex items-center justify-center min-h-[44px] px-6 text-[17px] font-medium tracking-[0.01em] rounded-full transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
+    'inline-flex items-center justify-center tracking-[0.01em] rounded-full transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
+    sizeClasses[size],
     variantClasses[variant],
     className,
   )

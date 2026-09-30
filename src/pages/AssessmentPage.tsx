@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { BilanPreparing } from '../components/BilanPreparing'
 import { OnboardingHeader } from '../components/OnboardingHeader'
 import { OptionButton, OptionChip } from '../components/OptionButton'
 import { Button } from '../components/Button'
@@ -26,10 +27,8 @@ export function AssessmentPage() {
   const { answers, setAnswer } = useApp()
   const copy = useCopy()
   const { locale } = useLocale()
-  const generatingMessages = copy.assessment.generatingMessages
   const [index, setIndex] = useState(0)
   const [generating, setGenerating] = useState(false)
-  const [generatingIndex, setGeneratingIndex] = useState(0)
 
   const visible = useMemo(() => getVisibleQuestions(answers), [answers])
   const total = visible.length
@@ -48,22 +47,9 @@ export function AssessmentPage() {
     }
   }, [index, total])
 
-  useEffect(() => {
-    if (!generating) return
-
-    const cycle = window.setInterval(() => {
-      setGeneratingIndex((current) => (current + 1) % generatingMessages.length)
-    }, 850)
-
-    const finish = window.setTimeout(() => {
-      void navigate('/retirement-map')
-    }, 2600)
-
-    return () => {
-      window.clearInterval(cycle)
-      window.clearTimeout(finish)
-    }
-  }, [generating, generatingMessages.length, navigate])
+  const showResult = useCallback(() => {
+    void navigate('/retirement-map')
+  }, [navigate])
 
   function goNext() {
     if (isLast) {
@@ -98,19 +84,7 @@ export function AssessmentPage() {
     return (
       <div className="flex min-h-svh flex-col bg-cream">
         <OnboardingHeader />
-        <div
-          className="flex flex-1 flex-col items-center justify-center px-6 text-center"
-          aria-live="polite"
-          aria-busy="true"
-        >
-          <p className="font-display text-[2rem] text-ink sm:text-[2.35rem]">
-            {copy.assessment.generatingTitle}
-          </p>
-          <p className="generating-copy mt-5 min-h-8 text-[18px] text-ink-muted">
-            {generatingMessages[generatingIndex]}
-          </p>
-          <span className="mt-10 block h-px w-16 bg-clay/70" aria-hidden="true" />
-        </div>
+        <BilanPreparing onDone={showResult} />
       </div>
     )
   }
@@ -130,6 +104,11 @@ export function AssessmentPage() {
       <main className="flex flex-1 flex-col py-12 sm:py-16">
         <Container width="narrow" className="flex flex-1 flex-col">
           <div key={question.id} className="question-enter">
+            {question.section ? (
+              <p className="mb-3 text-[12px] font-extrabold tracking-[0.14em] text-clay-ink uppercase">
+                {localizeText(question.section, locale)}
+              </p>
+            ) : null}
             <h1 className="font-display text-[2rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2.35rem]">
               {prompt}
             </h1>
@@ -207,6 +186,22 @@ export function AssessmentPage() {
                   end={localizeText(question.scaleEnd, locale) ?? ''}
                   value={typeof value === 'number' ? value : null}
                   onSelect={(next) => setAnswer(question.id, next)}
+                />
+              ) : null}
+
+              {question.type === 'text' ? (
+                <input
+                  type="text"
+                  autoFocus
+                  autoComplete="address-level2"
+                  value={typeof value === 'string' ? value : ''}
+                  onChange={(event) => setAnswer(question.id, event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' && canContinue) goNext()
+                  }}
+                  aria-label={prompt}
+                  placeholder={copy.assessment.locationPlaceholder}
+                  className="w-full max-w-md rounded-[14px] border-[1.5px] border-line-strong bg-paper px-5 py-4 text-[19px] font-semibold text-ink placeholder:font-normal placeholder:text-ink-soft focus:border-ink focus:outline-none"
                 />
               ) : null}
 

@@ -2,10 +2,10 @@ import { cn } from '../lib/cn'
 import { MediaBlock } from './MediaBlock'
 import {
   getResourceTheme,
-  mediaHintForResource,
   mediaVariantForResource,
 } from '../lib/resourceTheme'
-import type { ResourceRecommendation } from '../types'
+import { PILLARS } from '../data/pillars'
+import type { PillarId, ResourceRecommendation } from '../types'
 
 export function ResourceCard({
   item,
@@ -13,6 +13,7 @@ export function ResourceCard({
   className,
   showDescription = true,
   borderless = false,
+  pillarId,
 }: {
   item: ResourceRecommendation
   onOpen: (item: ResourceRecommendation) => void
@@ -20,8 +21,12 @@ export function ResourceCard({
   showDescription?: boolean
   /** Editorial treatment: no white card chrome */
   borderless?: boolean
+  /** Colour the card with a pillar accent instead of the resource theme. */
+  pillarId?: PillarId
 }) {
-  const theme = getResourceTheme(item)
+  const theme = pillarId
+    ? { id: pillarId, ...PILLARS[pillarId].theme }
+    : getResourceTheme(item)
 
   return (
     <button
@@ -41,6 +46,7 @@ export function ResourceCard({
         alt=""
         aspect="card"
         variant={mediaVariantForResource(item)}
+        pillarId={pillarId ?? item.primaryPillarId}
       />
 
       <p
@@ -71,9 +77,6 @@ export function ResourceCard({
           {item.homeSnippet}
         </p>
       ) : null}
-
-      {/* Keep hint out of production UI; reserved for future photography pipeline. */}
-      <span className="sr-only">{mediaHintForResource(item)}</span>
     </button>
   )
 }
@@ -106,6 +109,7 @@ export function ResourceCardCompact({
         radius="md"
         className="w-24 shrink-0 sm:w-32"
         variant={mediaVariantForResource(item)}
+        pillarId={item.primaryPillarId}
       />
       <div className="min-w-0 flex-1">
         <p

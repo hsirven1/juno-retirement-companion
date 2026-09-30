@@ -1,341 +1,163 @@
-import { emptySocialPreferences } from './socialLife'
-import { buildMentorMatchingProfile } from '../lib/mentorMatching'
-import { profile } from './profile'
-import type { AssessmentAnswers, MentorMatchingProfile } from '../types'
 import type { Locale } from '../i18n/types'
+import type { PillarId, RetirementPersonalizationProfile } from '../types'
+import type { PillarPriority } from '../lib/pillarRecommendations'
+
+type P = RetirementPersonalizationProfile
 
 function t(fr: string, en: string, locale: Locale): string {
   return locale === 'en' ? en : fr
 }
 
-function matchingFromAnswers(answers: AssessmentAnswers): MentorMatchingProfile {
-  return buildMentorMatchingProfile({
-    answers,
-    profile,
-    socialPreferences: emptySocialPreferences(),
-  })
+const isPre = (p: P) =>
+  p.retirementStage === 'still_working' || p.retirementStage === 'retiring_soon'
+
+const weakNetwork = (p: P) =>
+  p.socialNetworkStrength === 'rare' ||
+  p.socialNetworkStrength === 'few_around' ||
+  p.socialNetworkStrength === 'often_alone'
+
+/** What the person wants in each pillar, as a short verb phrase. */
+function wish(pillar: PillarId, p: P, locale: Locale): string {
+  switch (pillar) {
+    case 'financial':
+      return isPre(p)
+        ? t('y voir clair sur vos démarches et vos revenus', 'get clear on your paperwork and income', locale)
+        : t('mieux maîtriser vos finances', 'feel more in control of your finances', locale)
+    case 'health':
+      return p.activityLevel === 'active'
+        ? t('rester actif·ve', 'stay active', locale)
+        : t('bouger davantage', 'move more', locale)
+    case 'social':
+      return weakNetwork(p) || p.livingSituation === 'alone'
+        ? t('voir du monde plus souvent', 'see people more often', locale)
+        : t('garder une vie sociale régulière', 'keep a regular social life', locale)
+    case 'projects':
+      if (p.travelInterest) {
+        return t('voyager et découvrir de nouvelles choses', 'travel and discover new things', locale)
+      }
+      if (p.learningGoals.length > 0) {
+        return t('apprendre de nouvelles choses', 'learn new things', locale)
+      }
+      return t('faire avancer vos projets', 'move your projects forward', locale)
+  }
 }
 
-/**
- * Compact 2–3 sentence synthesis for the post-Bilan page.
- * Cautious, human wording — not a diagnostic report.
- */
-export function buildBilanSynthesis(
-  answers: AssessmentAnswers,
-  locale: Locale,
-): string {
-  const matching = matchingFromAnswers(answers)
-  const sentences: string[] = []
+const elide = (phrase: string) => (/^[aeiouyhéè]/i.test(phrase) ? `d’${phrase}` : `de ${phrase}`)
 
-  const wantsSocial =
-    matching.wantMoreOf.includes('social_contact') ||
-    matching.ambitions.includes('meet_people') ||
-    matching.helpTopics.includes('social') ||
-    matching.socialNetworkStrength === 'few_around' ||
-    matching.socialNetworkStrength === 'often_alone'
-
-  const wantsTravel =
-    matching.interests.includes('travel') ||
-    matching.wantMoreOf.includes('travel') ||
-    matching.ambitions.includes('travel_more') ||
-    matching.wantMoreOf.includes('new_experiences')
-
-  const wantsUseful =
-    matching.wantMoreOf.includes('usefulness') ||
-    matching.ambitions.includes('volunteer') ||
-    matching.helpTopics.includes('volunteering')
-
-  const wantsProjects =
-    matching.wantMoreOf.includes('personal_projects') ||
-    matching.wantMoreOf.includes('starting_something') ||
-    matching.ambitions.includes('small_business') ||
-    matching.ambitions.includes('creative_project')
-
-  // Sentence 1 — overall direction
-  if (matching.needForStructure === 'high' && wantsSocial && wantsTravel) {
-    sentences.push(
-      t(
-        'Vous cherchez une retraite active et assez structurée, avec davantage de contacts sociaux et de nouvelles choses à découvrir.',
-        'You’re looking for an active, fairly structured retirement, with more social contact and new things to explore.',
-        locale,
-      ),
-    )
-  } else if (matching.needForStructure === 'high' && wantsSocial) {
-    sentences.push(
-      t(
-        'Vous semblez chercher un rythme assez structuré, avec davantage de contacts sociaux dans vos semaines.',
-        'You seem to be looking for a fairly structured rhythm, with more social contact in your weeks.',
-        locale,
-      ),
-    )
-  } else if (matching.needForStructure === 'high') {
-    sentences.push(
-      t(
-        'Vous semblez chercher un nouveau rythme assez structuré, qui donne un cap à vos journées.',
-        'You seem to be looking for a fairly structured new rhythm that gives your days a sense of direction.',
-        locale,
-      ),
-    )
-  } else if (matching.needForStructure === 'low' && wantsTravel) {
-    sentences.push(
-      t(
-        'Vous semblez à l’aise avec des journées plus ouvertes, et attiré·e par les voyages et les découvertes.',
-        'You seem comfortable with more open days, and drawn to travel and discovery.',
-        locale,
-      ),
-    )
-  } else if (wantsSocial) {
-    sentences.push(
-      t(
-        'Retrouver davantage de contacts sociaux semble particulièrement important pour vous dans cette nouvelle étape.',
-        'Rebuilding more social contact seems especially important for you in this next chapter.',
-        locale,
-      ),
-    )
-  } else if (wantsUseful) {
-    sentences.push(
-      t(
-        'Continuer à vous sentir utile et à contribuer semble compter beaucoup pour vous.',
-        'Continuing to feel useful and to contribute seems to matter a lot to you.',
-        locale,
-      ),
-    )
-  } else {
-    sentences.push(
-      t(
-        'Vous cherchez ce qui pourrait donner du sens et du goût à cette nouvelle étape.',
-        'You’re looking for what could give meaning and shape to this next chapter.',
-        locale,
-      ),
-    )
-  }
-
-  // Sentence 2 — how they approach novelty / projects
-  if (matching.adventureLevel === 'moderate' || matching.comfortDoingThingsAlone === 'low') {
-    sentences.push(
-      t(
-        'Vous aimez avoir des projets, mais vous préférez savoir à quoi vous attendre avant de vous lancer.',
-        'You like having projects, but you prefer knowing what to expect before you jump in.',
-        locale,
-      ),
-    )
-  } else if (matching.adventureLevel === 'high' && wantsProjects) {
-    sentences.push(
-      t(
-        'Vous semblez ouvert·e à explorer de nouveaux projets et à essayer des choses sans trop attendre.',
-        'You seem open to exploring new projects and trying things without waiting too long.',
-        locale,
-      ),
-    )
-  } else if (matching.adventureLevel === 'low') {
-    sentences.push(
-      t(
-        'Vous préférez souvent avancer à partir de cadres familiers et rassurants.',
-        'You often prefer to move forward from familiar, reassuring settings.',
-        locale,
-      ),
-    )
-  } else if (wantsProjects || wantsUseful) {
-    sentences.push(
-      t(
-        'Des projets concrets et le sentiment d’avancer à votre rythme semblent bien vous convenir.',
-        'Concrete projects and a sense of progressing at your own pace seem to suit you well.',
-        locale,
-      ),
-    )
-  } else if (wantsTravel || matching.interests.includes('learning')) {
-    sentences.push(
-      t(
-        'Apprendre, découvrir et garder de la curiosité semblent faire partie de ce que vous recherchez.',
-        'Learning, discovering, and staying curious seem part of what you’re looking for.',
-        locale,
-      ),
-    )
-  }
-
-  // Optional third sentence — only if we have a distinct remaining signal
-  if (
-    sentences.length < 3 &&
-    matching.comfortDoingThingsAlone === 'low' &&
-    !sentences.some((s) => /savoir à quoi|knowing what to expect/i.test(s))
-  ) {
-    sentences.push(
-      t(
-        'Rejoindre seul un groupe nouveau peut être un frein — un accompagnement plus doux pourrait aider.',
-        'Joining a new group alone can feel like a barrier — gentler support could help.',
-        locale,
-      ),
-    )
-  }
-
-  return sentences.slice(0, 3).join(' ')
+function joinList(items: string[], locale: Locale): string {
+  if (items.length <= 1) return items[0] ?? ''
+  const and = locale === 'en' ? ' and ' : ' et '
+  return `${items.slice(0, -1).join(', ')}${and}${items[items.length - 1]}`
 }
 
-export type BilanPriority = { id: string; label: string }
+/** One concise sentence summarising the person, from their top pillars. */
+export function buildBilanSummary(p: P, priority: PillarPriority, locale: Locale): string {
+  const wishes = priority.highlighted.slice(0, 3).map((pillar) => wish(pillar, p, locale))
 
-/**
- * 3–4 short priorities for the post-Bilan page (no scores, no diagnosis).
- */
-export function buildBilanPriorities(
-  answers: AssessmentAnswers,
-  locale: Locale,
-): BilanPriority[] {
-  const matching = matchingFromAnswers(answers)
-  const priorities: Array<{ id: string; label: string; weight: number }> = []
-
-  const add = (id: string, fr: string, en: string, weight: number) => {
-    if (priorities.some((p) => p.id === id)) return
-    priorities.push({ id, label: t(fr, en, locale), weight })
+  if (locale === 'en') {
+    const opening =
+      isPre(p)
+        ? 'You’re preparing for retirement, wanting to '
+        : p.retirementStage === 'retired_years'
+          ? 'You’re enjoying your retirement and would like to '
+          : 'You’re starting a new chapter, wanting to '
+    return `${opening}${joinList(wishes, locale)}.`
   }
 
-  if (
-    matching.wantMoreOf.includes('social_contact') ||
-    matching.ambitions.includes('meet_people') ||
-    matching.helpTopics.includes('social') ||
-    matching.socialNetworkStrength === 'few_around' ||
-    matching.socialNetworkStrength === 'often_alone'
-  ) {
-    add(
-      'social',
-      'Retrouver davantage de vie sociale',
-      'Rebuild more social life',
-      10,
-    )
-  }
-
-  if (
-    matching.needForStructure === 'high' ||
-    matching.wantMoreOf.includes('structure') ||
-    matching.helpTopics.includes('structure')
-  ) {
-    add(
-      'structure',
-      'Garder un rythme assez structuré',
-      'Keep a fairly structured rhythm',
-      9,
-    )
-  }
-
-  if (
-    matching.interests.includes('travel') ||
-    matching.wantMoreOf.includes('travel') ||
-    matching.ambitions.includes('travel_more') ||
-    matching.wantMoreOf.includes('new_experiences')
-  ) {
-    add(
-      'travel',
-      'Voyager et découvrir',
-      'Travel and discover',
-      8,
-    )
-  }
-
-  if (
-    matching.wantMoreOf.includes('usefulness') ||
-    matching.ambitions.includes('volunteer') ||
-    matching.helpTopics.includes('volunteering') ||
-    matching.helpTopics.includes('transmitting')
-  ) {
-    add(
-      'useful',
-      'Continuer à vous sentir utile',
-      'Keep feeling useful',
-      7,
-    )
-  }
-
-  if (
-    matching.wantMoreOf.includes('learning') ||
-    matching.interests.includes('learning') ||
-    matching.ambitions.includes('learn_something') ||
-    matching.helpTopics.includes('learning')
-  ) {
-    add('learn', 'Apprendre de nouvelles choses', 'Learn new things', 6)
-  }
-
-  if (
-    matching.wantMoreOf.includes('activity') ||
-    matching.interests.includes('sport') ||
-    matching.ambitions.includes('take_up_sport')
-  ) {
-    add('active', 'Rester actif·ve au quotidien', 'Stay active day to day', 5)
-  }
-
-  if (
-    matching.wantMoreOf.includes('personal_projects') ||
-    matching.wantMoreOf.includes('starting_something') ||
-    matching.ambitions.includes('small_business') ||
-    matching.ambitions.includes('creative_project')
-  ) {
-    add(
-      'projects',
-      'Construire un projet personnel',
-      'Build a personal project',
-      5,
-    )
-  }
-
-  if (matching.comfortDoingThingsAlone === 'low') {
-    add(
-      'alone',
-      'Essayer des activités sans vous sentir seul·e',
-      'Try activities without feeling alone',
-      4,
-    )
-  }
-
-  if (priorities.length === 0) {
-    add(
-      'pace',
-      'Avancer à votre rythme',
-      'Move forward at your own pace',
-      1,
-    )
-    add(
-      'explore',
-      'Découvrir ce qui vous attire vraiment',
-      'Discover what truly draws you in',
-      1,
-    )
-    add(
-      'support',
-      'Être accompagné·e dans cette transition',
-      'Feel supported through this transition',
-      1,
-    )
-  }
-
-  return priorities
-    .sort((a, b) => b.weight - a.weight)
-    .slice(0, 4)
-    .map(({ id, label }) => ({ id, label }))
+  const opening = isPre(p)
+    ? 'Vous préparez votre retraite avec l’envie '
+    : p.retirementStage === 'retired_years'
+      ? 'Vous profitez de votre retraite avec l’envie '
+      : 'Vous entrez dans une nouvelle étape avec l’envie '
+  return `${opening}${joinList(wishes.map(elide), locale)}.`
 }
 
-/** @deprecated Prefer buildBilanSynthesis / buildBilanPriorities for the map page. */
-export function buildBilanSignals(
-  answers: AssessmentAnswers,
-  locale: Locale,
-): string[] {
-  const synthesis = buildBilanSynthesis(answers, locale)
-  return synthesis ? [synthesis] : []
-}
-
-/** Kept for any legacy callers — themes/areas no longer shown on the map page. */
-export function getMapContent(
-  answers: AssessmentAnswers,
-  locale: Locale = 'fr',
-): {
-  summary: string
-  signals: string[]
-  priorities: BilanPriority[]
-  synthesis: string
-} {
-  const synthesis = buildBilanSynthesis(answers, locale)
-  const priorities = buildBilanPriorities(answers, locale)
+/** One short, personal line per pillar for the Bilan result. */
+export function buildPillarInsights(p: P, locale: Locale): Record<PillarId, string> {
   return {
-    summary: synthesis,
-    signals: synthesis ? [synthesis] : [],
-    priorities,
-    synthesis,
+    financial: financialInsight(p, locale),
+    health: healthInsight(p, locale),
+    social: socialInsight(p, locale),
+    projects: projectsInsight(p, locale),
   }
+}
+
+function financialInsight(p: P, locale: Locale): string {
+  if (isPre(p)) {
+    return t('Préparer sereinement vos démarches et vos futurs revenus.', 'Prepare your paperwork and future income calmly.', locale)
+  }
+  if (p.retirementAdminNeeds.length > 0) {
+    return t('Y voir clair sur vos droits et vos démarches.', 'Get clear on your entitlements and paperwork.', locale)
+  }
+  if (p.extraIncomeInterest) {
+    return t('Explorer des pistes de revenus complémentaires.', 'Explore ways to earn some extra income.', locale)
+  }
+  if (p.financialNeeds.includes('budget') || p.financialConfidence === 'low') {
+    return t('Clarifier votre budget et mieux comprendre vos options.', 'Clarify your budget and understand your options.', locale)
+  }
+  if (p.investmentInterest || p.propertyInterest) {
+    return t('Mieux comprendre votre épargne et votre patrimoine.', 'Better understand your savings and assets.', locale)
+  }
+  return t('Garder un œil serein sur vos finances.', 'Keep a calm eye on your finances.', locale)
+}
+
+function healthInsight(p: P, locale: Locale): string {
+  const a = p.preferredPhysicalActivities
+  if (a.includes('swimming') && a.includes('walking')) {
+    return t('Nager, marcher et garder la forme.', 'Swim, walk and stay fit.', locale)
+  }
+  if (a.includes('swimming')) return t('Nager et garder la forme.', 'Swim and stay fit.', locale)
+  if (a.includes('walking') || a.includes('outdoor')) {
+    return t('Marcher et profiter du grand air.', 'Walk and enjoy the outdoors.', locale)
+  }
+  if (p.physicalGoals.includes('move_more') || p.activityLevel === 'low') {
+    return t('Bouger un peu plus, à votre rythme.', 'Move a little more, at your own pace.', locale)
+  }
+  if (p.physicalGoals.includes('try_new_sport')) {
+    return t('Essayer une nouvelle activité.', 'Try a new activity.', locale)
+  }
+  if (p.activityLevel === 'active') {
+    return t('Continuer à bouger régulièrement.', 'Keep moving regularly.', locale)
+  }
+  return t('Prendre soin de votre forme au quotidien.', 'Look after your fitness day to day.', locale)
+}
+
+function socialInsight(p: P, locale: Locale): string {
+  if (weakNetwork(p)) {
+    return t('Créer davantage d’occasions de voir du monde.', 'Create more chances to see people.', locale)
+  }
+  if (p.aloneComfort === 'low') {
+    return t('Trouver des activités faciles à rejoindre.', 'Find activities that are easy to join.', locale)
+  }
+  if (p.socialGoals.includes('new_friends') || p.socialGoals.includes('partner')) {
+    return t('Rencontrer de nouvelles personnes.', 'Meet new people.', locale)
+  }
+  if (p.socialGoals.includes('outing_companions')) {
+    return t('Trouver des compagnons de sortie.', 'Find people to go out with.', locale)
+  }
+  if (p.socialGoals.includes('regular_occasions') || p.socialGoals.includes('group_activities')) {
+    return t('Retrouver des rendez-vous réguliers.', 'Enjoy regular get-togethers.', locale)
+  }
+  if (p.socialGoals.includes('maintain_relationships')) {
+    return t('Entretenir vos liens avec vos proches.', 'Keep in touch with the people you love.', locale)
+  }
+  return t('Partager de bons moments avec d’autres.', 'Share good times with others.', locale)
+}
+
+function projectsInsight(p: P, locale: Locale): string {
+  const has = (x: string) => p.projects.includes(x as P['projects'][number])
+  if (p.travelInterest && p.learningGoals.length > 0) {
+    return t('Voyager et continuer à apprendre.', 'Travel and keep learning.', locale)
+  }
+  if (p.travelInterest) return t('Voyager et découvrir de nouveaux horizons.', 'Travel and discover new horizons.', locale)
+  if (p.learningGoals.length > 0) return t('Apprendre de nouvelles choses.', 'Learn new things.', locale)
+  if (p.volunteeringInterest) {
+    return t('Vous engager pour une cause qui compte.', 'Get involved in a cause that matters.', locale)
+  }
+  if (has('creative') || has('culture')) return t('Créer et vous faire plaisir.', 'Create and enjoy yourself.', locale)
+  if (has('entrepreneurship')) return t('Lancer une petite activité.', 'Start a small activity.', locale)
+  if (has('gardening') || has('home_project')) {
+    return t('Jardiner, bricoler, embellir votre quotidien.', 'Garden, make and brighten your days.', locale)
+  }
+  return t('Découvrir ce qui vous fait envie.', 'Discover what you’d love to do.', locale)
 }

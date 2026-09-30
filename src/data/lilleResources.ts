@@ -108,8 +108,8 @@ export const lilleResources: LilleResource[] = [
       "en": "A municipal network of 10 neighborhood senior spaces offering sports, cultural and creative activities, as well as places to meet others."
     },
     "whyUseful": {
-      "fr": "Bon point de départ quand Juno sait qu’une personne veut plus de rythme, d’activité ou de contact social sans avoir encore choisi une activité précise.",
-      "en": "A strong starting point when Juno knows someone wants more structure, activity or social contact but has not yet chosen a specific activity."
+      "fr": "Un bon point de départ si vous voulez plus de rythme, bouger ou voir du monde, sans avoir encore choisi d’activité précise.",
+      "en": "A good starting point if you want more structure, activity or company but haven’t picked a specific activity yet."
     },
     "tags": ["municipal", "senior", "multi_activity", "social", "regular_activity"],
     "source": {
@@ -155,8 +155,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Offers activities including adapted exercise, Pilates, qi gong, salsa, bachata, yoga, painting, pottery, choir, sewing and more."
     },
     "whyUseful": {
-      "fr": "Très pertinent pour quelqu’un qui veut tester plusieurs activités collectives avant de choisir ce qui lui convient.",
-      "en": "Especially relevant for someone who wants to try several group activities before deciding what suits them."
+      "fr": "Idéal pour essayer plusieurs activités de groupe avant de choisir celle qui vous plaît.",
+      "en": "Ideal for trying several group activities before choosing the one you enjoy."
     },
     "tags": ["senior", "multi_activity", "small_group_possible", "creative", "fitness", "dance"],
     "source": {
@@ -202,8 +202,8 @@ export const lilleResources: LilleResource[] = [
       "en": "An afternoon social space offering sophrology, gentle exercise, tai chi, hiking/orienteering and outdoor activities."
     },
     "whyUseful": {
-      "fr": "Bon match pour une personne qui veut rester active tout en retrouvant régulièrement les mêmes personnes.",
-      "en": "A good match for someone who wants to stay active while seeing familiar people regularly."
+      "fr": "Pour rester actif tout en retrouvant régulièrement les mêmes visages.",
+      "en": "Stay active while seeing familiar faces regularly."
     },
     "tags": ["senior", "outdoor", "gentle_activity", "hiking", "regular"],
     "source": {
@@ -249,8 +249,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Offers gentle exercise, sophrology, eutony, Spanish and mini-conferences in a neighborhood space open during the week."
     },
     "whyUseful": {
-      "fr": "Peut convenir à quelqu’un qui recherche à la fois une activité douce, un rendez-vous régulier et un cadre social.",
-      "en": "Can suit someone looking for gentle activity, a regular appointment and a social setting."
+      "fr": "Une activité douce, un rendez-vous régulier et un cadre convivial, au même endroit.",
+      "en": "Gentle activity, a regular slot and a friendly setting, all in one place."
     },
     "tags": ["senior", "gentle_activity", "language", "learning", "regular"],
     "source": {
@@ -296,8 +296,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Offers gentle exercise, aquabike, adapted physical activity, theatre, sewing, painting, intergenerational activities and digital support."
     },
     "whyUseful": {
-      "fr": "Une ressource polyvalente qui peut répondre à plusieurs priorités sans demander de choisir immédiatement un seul type d’activité.",
-      "en": "A versatile resource that can support several priorities without requiring someone to choose one activity type immediately."
+      "fr": "Un lieu polyvalent : vous pouvez explorer plusieurs envies sans devoir choisir tout de suite.",
+      "en": "A versatile place: explore several interests without having to choose right away."
     },
     "tags": ["senior", "fitness", "creative", "intergenerational", "digital_support"],
     "source": {
@@ -343,8 +343,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Offers gentle exercise, several levels of rock dancing, painting and duplicate Scrabble."
     },
     "whyUseful": {
-      "fr": "Intéressant pour quelqu’un qui veut une activité sociale structurée autour de la danse, du jeu ou de la création.",
-      "en": "Useful for someone who wants structured social activity built around dance, games or creativity."
+      "fr": "De la danse, des jeux ou de la création dans un cadre structuré et chaleureux.",
+      "en": "Dance, games or creative activities in a structured, welcoming setting."
     },
     "tags": ["senior", "dance", "creative", "games", "regular"],
     "source": {
@@ -390,8 +390,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Offers gentle exercise, tai chi, mosaics, a memory workshop, e-sports discovery and free digital support."
     },
     "whyUseful": {
-      "fr": "Combine activité, découverte et soutien numérique dans un lieu de proximité.",
-      "en": "Combines activity, discovery and digital support in a neighborhood setting."
+      "fr": "Activités, découvertes et aide au numérique, près de chez vous.",
+      "en": "Activities, discovery and digital help, close to home."
     },
     "tags": ["senior", "gentle_activity", "creative", "digital_support", "regular"],
     "source": {
@@ -437,8 +437,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Municipal program including aquadouce, sports sessions in senior spaces and links to Lille sports clubs."
     },
     "whyUseful": {
-      "fr": "Permet à Juno d’orienter vers une offre sportive large plutôt que vers une salle de sport générique.",
-      "en": "Lets Juno guide users toward a broad sports offering instead of a generic gym recommendation."
+      "fr": "Un large choix d’activités sportives encadrées, bien plus varié qu’une simple salle de sport.",
+      "en": "A wide choice of supervised sports, far more varied than a regular gym."
     },
     "tags": ["municipal", "fitness", "sport", "group", "multi_activity"],
     "source": {
@@ -484,8 +484,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Help with smartphones, computers, the internet, apps, online purchases and communication tools."
     },
     "whyUseful": {
-      "fr": "Peut devenir une prochaine étape très concrète après un parcours sur l’autonomie numérique ou la communication avec les proches.",
-      "en": "Can become a very concrete next step after a journey about digital autonomy or communicating with family and friends."
+      "fr": "Une aide concrète pour être plus à l’aise avec vos démarches en ligne et garder le lien avec vos proches.",
+      "en": "Practical help to feel more at ease with online paperwork and staying in touch with loved ones."
     },
     "tags": ["senior", "digital", "support", "free", "practical"],
     "source": {
@@ -531,8 +531,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Quarterly program of excursions, guided visits, hikes and celebrations, also presented as a way to meet new people."
     },
     "whyUseful": {
-      "fr": "Excellent choix pour quelqu’un qui veut voir du monde sans s’engager dans une activité hebdomadaire.",
-      "en": "A strong choice for someone who wants more social contact without committing to a weekly activity."
+      "fr": "Pour voir du monde et sortir, sans vous engager chaque semaine.",
+      "en": "Get out and meet people without committing every week."
     },
     "tags": ["senior", "one_off", "outings", "social", "low_commitment"],
     "source": {
@@ -578,8 +578,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Group trips in France lasting a few days to one week, with a trip leader, transport, full board, activities and guided visits."
     },
     "whyUseful": {
-      "fr": "Pertinent pour une personne qui veut voyager en groupe sans organiser elle-même tout le séjour.",
-      "en": "Relevant for someone who wants to travel with a group without organizing every detail themselves."
+      "fr": "Voyager en groupe sans avoir à tout organiser vous-même.",
+      "en": "Travel with a group without organising everything yourself."
     },
     "tags": ["senior", "travel", "group_travel", "multi_day"],
     "source": {
@@ -625,8 +625,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Municipal card providing senior benefits plus access to libraries, Sunday museum entry, the zoo and reduced prices at selected facilities."
     },
     "whyUseful": {
-      "fr": "Juno peut la recommander comme facilitateur avant de proposer certaines activités municipales payantes ou réservées.",
-      "en": "Juno can recommend it as an enabler before suggesting certain paid or restricted municipal activities."
+      "fr": "Des réductions et un accès facilité à de nombreuses activités de la Ville.",
+      "en": "Discounts and easier access to many city activities."
     },
     "tags": ["senior", "benefit", "municipal", "access", "discount"],
     "source": {
@@ -672,8 +672,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Demonstration and advice center focused on home adaptation, assistive solutions and autonomy, with visits and workshops."
     },
     "whyUseful": {
-      "fr": "Ressource très actionnable lorsque Juno détecte une question concrète sur le logement ou l’autonomie, sans donner lui-même de conseil médical.",
-      "en": "A highly actionable resource when Juno identifies a practical home or autonomy question, without providing medical advice itself."
+      "fr": "Des conseils concrets et gratuits pour adapter votre logement et préserver votre autonomie.",
+      "en": "Free, practical advice to adapt your home and stay independent."
     },
     "tags": ["senior", "home", "autonomy", "free", "occupational_therapy"],
     "source": {
@@ -719,8 +719,8 @@ export const lilleResources: LilleResource[] = [
       "en": "2026-27 program of conferences, workshops and cultural outings focused on discovery, knowledge-sharing and interaction."
     },
     "whyUseful": {
-      "fr": "Ressource centrale pour quelqu’un qui veut apprendre, structurer sa semaine et rencontrer des personnes autour d’intérêts communs.",
-      "en": "A core resource for someone who wants to learn, add structure to the week and meet people around shared interests."
+      "fr": "Apprendre, rythmer votre semaine et rencontrer des personnes qui partagent vos centres d’intérêt.",
+      "en": "Learn, add rhythm to your week and meet people who share your interests."
     },
     "tags": ["learning", "social", "workshops", "conferences", "culture"],
     "source": {
@@ -766,8 +766,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Photography workshop scheduled from October 2026 to January 2027 in a small group."
     },
     "whyUseful": {
-      "fr": "Bon exemple d’activité régulière et sociale autour d’un intérêt créatif précis.",
-      "en": "A good example of a regular social activity built around a specific creative interest."
+      "fr": "Un rendez-vous régulier et convivial autour de la photographie.",
+      "en": "A regular, friendly group built around photography."
     },
     "tags": ["photography", "creative", "small_group", "regular"],
     "source": {
@@ -813,8 +813,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Choir session running from October 2026 to January 2027."
     },
     "whyUseful": {
-      "fr": "Intéressant pour une personne qui cherche une activité collective régulière sans nécessité de conversation forcée.",
-      "en": "Relevant for someone seeking regular group activity without requiring forced conversation."
+      "fr": "Chanter en groupe régulièrement, sans pression de faire la conversation.",
+      "en": "Sing with a group regularly, with no pressure to make small talk."
     },
     "tags": ["choir", "music", "group", "regular"],
     "source": {
@@ -860,8 +860,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Beginner Spanish course in a small group, scheduled from October 2026 to January 2027."
     },
     "whyUseful": {
-      "fr": "Combine apprentissage, rendez-vous régulier et interactions en petit groupe.",
-      "en": "Combines learning, a regular appointment and small-group interaction."
+      "fr": "Apprendre l’espagnol en petit groupe, à un rythme régulier.",
+      "en": "Learn Spanish in a small group, at a regular pace."
     },
     "tags": ["language", "spanish", "small_group", "regular"],
     "source": {
@@ -907,8 +907,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Social sciences workshop scheduled from October 2026 to April 2027."
     },
     "whyUseful": {
-      "fr": "Pertinent pour quelqu’un qui souhaite retrouver de la stimulation intellectuelle dans un cadre collectif.",
-      "en": "Relevant for someone who wants intellectual stimulation in a group setting."
+      "fr": "Pour retrouver de la stimulation intellectuelle en groupe.",
+      "en": "For intellectual stimulation in a group setting."
     },
     "tags": ["social_sciences", "learning", "group", "long_term"],
     "source": {
@@ -954,8 +954,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Annual conference program covering history, society, literature and many other topics."
     },
     "whyUseful": {
-      "fr": "Très faible barrière d’entrée pour quelqu’un qui veut sortir, apprendre et tester l’UTL avant de s’engager dans un atelier.",
-      "en": "A very low-barrier way to get out, learn and try the UTL before committing to a workshop."
+      "fr": "Une façon simple de sortir, apprendre et découvrir l’UTL avant de vous inscrire à un atelier.",
+      "en": "An easy way to get out, learn and try the UTL before signing up for a workshop."
     },
     "tags": ["conference", "learning", "one_off", "low_commitment"],
     "source": {
@@ -1001,8 +1001,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Neighborhood hub offering weekly Repair Café, sewing, furniture workshops, English, cycling, Pilates, Zumba, solidarity activities and more."
     },
     "whyUseful": {
-      "fr": "Excellent exemple de ressource non spécifique aux seniors qui peut créer naturellement activité, apprentissage et lien social.",
-      "en": "A strong example of a non-senior-specific resource that can naturally combine activity, learning and social connection."
+      "fr": "Un lieu ouvert à tous les âges pour bouger, apprendre et rencontrer du monde naturellement.",
+      "en": "A place open to all ages to stay active, learn and meet people naturally."
     },
     "tags": ["all_ages", "community", "multi_activity", "low_barrier"],
     "source": {
@@ -1048,8 +1048,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Neighborhood workshops where residents and volunteers repair objects together, learn and socialize."
     },
     "whyUseful": {
-      "fr": "Très bon match pour une personne qui veut rencontrer du monde autour d’une activité concrète, apprendre ou se rendre utile sans gros engagement.",
-      "en": "A strong match for someone who wants to meet people through a practical activity, learn, or be useful without a major commitment."
+      "fr": "Rencontrer du monde autour d’une activité concrète, apprendre ou rendre service, sans gros engagement.",
+      "en": "Meet people through a hands-on activity, learn or help out, with no big commitment."
     },
     "tags": ["repair", "volunteering", "learning", "monthly", "low_commitment"],
     "source": {
@@ -1095,8 +1095,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Repair Café hosted at Tipimi, generally on the last Saturday of the month, with a volunteer team."
     },
     "whyUseful": {
-      "fr": "Faible engagement et interaction naturelle autour d’une tâche concrète, idéal pour tester une activité collective.",
-      "en": "Low commitment and natural interaction around a practical task, making it ideal for trying a group activity."
+      "fr": "Peu d’engagement, des échanges naturels autour d’un objet à réparer : idéal pour une première fois.",
+      "en": "Low commitment and easy conversation around something to fix — ideal for a first try."
     },
     "tags": ["repair", "fives", "monthly", "free", "low_commitment"],
     "source": {
@@ -1142,8 +1142,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Repair workshop at Centre social La Busette, held regularly in the evening."
     },
     "whyUseful": {
-      "fr": "Une façon ponctuelle et concrète de rencontrer des personnes du quartier tout en apprenant.",
-      "en": "A concrete, occasional way to meet people from the neighborhood while learning."
+      "fr": "Une façon ponctuelle et concrète de rencontrer des gens du quartier tout en apprenant.",
+      "en": "An occasional, hands-on way to meet neighbours while learning."
     },
     "tags": ["repair", "centre", "monthly", "free", "registration"],
     "source": {
@@ -1189,8 +1189,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Repair Café at La Fabrique du Sud, generally on the second Thursday of the month."
     },
     "whyUseful": {
-      "fr": "Peut être recommandé comme première expérience associative ou collective à faible engagement.",
-      "en": "Can be recommended as a first low-commitment community or volunteering experience."
+      "fr": "Une première expérience associative, simple et sans engagement.",
+      "en": "A simple, no-commitment first taste of community volunteering."
     },
     "tags": ["repair", "lille_sud", "monthly", "free"],
     "source": {
@@ -1236,8 +1236,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Network of neighborhood community gardens combining gardening, biodiversity, composting, workshops and social activities."
     },
     "whyUseful": {
-      "fr": "Très pertinent pour quelqu’un qui veut être dehors, faire quelque chose de concret et rencontrer des personnes sans cadre trop formel.",
-      "en": "Especially relevant for someone who wants to be outdoors, do something practical and meet people in an informal setting."
+      "fr": "Être dehors, faire quelque chose de concret et rencontrer des gens, sans cadre formel.",
+      "en": "Be outdoors, do something practical and meet people, without formality."
     },
     "tags": ["outdoor", "gardening", "community", "flexible", "social"],
     "source": {
@@ -1283,8 +1283,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Community garden in Fives focused on vegetable gardening, composting and biodiversity."
     },
     "whyUseful": {
-      "fr": "Alternative intéressante aux clubs classiques pour une personne qui préfère rencontrer des gens en faisant quelque chose.",
-      "en": "An interesting alternative to traditional clubs for someone who prefers meeting people while doing something."
+      "fr": "Une alternative aux clubs classiques : on se rencontre en jardinant.",
+      "en": "An alternative to traditional clubs: you meet people while gardening."
     },
     "tags": ["garden", "fives", "outdoor", "community"],
     "source": {
@@ -1330,8 +1330,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Natural community garden in Moulins with composting, workshops and activities."
     },
     "whyUseful": {
-      "fr": "Peut correspondre à une recherche de lien social informel, d’activité extérieure et de participation locale.",
-      "en": "Can suit someone looking for informal social connection, outdoor activity and local participation."
+      "fr": "Du lien informel, du plein air et une vraie participation à la vie du quartier.",
+      "en": "Informal connection, fresh air and real involvement in local life."
     },
     "tags": ["garden", "moulins", "outdoor", "workshops"],
     "source": {
@@ -1377,8 +1377,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Neighborhood garden with vegetable plots, composting, workshops and activities."
     },
     "whyUseful": {
-      "fr": "Une piste concrète pour quelqu’un qui veut être dehors et rencontrer des habitants autour d’une activité partagée.",
-      "en": "A practical option for someone who wants to be outdoors and meet neighbors around a shared activity."
+      "fr": "Jardiner dehors et rencontrer des habitants autour d’un projet partagé.",
+      "en": "Garden outdoors and meet neighbours around a shared project."
     },
     "tags": ["garden", "saint_maurice", "outdoor", "community"],
     "source": {
@@ -1424,8 +1424,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Municipal platform connecting residents and associations for volunteering, skill-sharing, equipment sharing and association discovery."
     },
     "whyUseful": {
-      "fr": "Bonne ressource quand Juno sait qu’une personne veut s’engager mais doit encore préciser le type de mission ou la cause.",
-      "en": "Useful when Juno knows someone wants to contribute but still needs to narrow down the type of mission or cause."
+      "fr": "Utile si vous avez envie de vous engager sans savoir encore pour quelle cause ou quelle mission.",
+      "en": "Useful if you’d like to volunteer but aren’t yet sure which cause or role."
     },
     "tags": ["volunteering", "associations", "marketplace", "skills"],
     "source": {
@@ -1471,8 +1471,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Free event on Sep 26, 2026 bringing together more than 200 associations across sports, culture, solidarity, environment and other areas."
     },
     "whyUseful": {
-      "fr": "Très bon choix pour quelqu’un qui ne sait pas encore ce qu’il veut : on peut explorer beaucoup de possibilités en une seule fois.",
-      "en": "Excellent for someone who is not yet sure what they want, because many options can be explored in one place."
+      "fr": "Idéal si vous ne savez pas encore ce qui vous attire : beaucoup de possibilités à découvrir en une seule journée.",
+      "en": "Ideal if you’re not sure yet what appeals to you: lots of options to discover in a single day."
     },
     "tags": ["event", "associations", "one_off", "exploration", "free"],
     "source": {
@@ -1518,8 +1518,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Local support point for finding volunteering opportunities that match availability, interests and skills."
     },
     "whyUseful": {
-      "fr": "Très pertinent lorsqu’un utilisateur veut se rendre utile mais préfère parler à quelqu’un avant de choisir une association.",
-      "en": "Especially relevant when someone wants to contribute but would rather speak to a person before choosing an organization."
+      "fr": "Pour échanger avec quelqu’un avant de choisir une association où vous rendre utile.",
+      "en": "Talk things through with someone before choosing where to volunteer."
     },
     "tags": ["volunteering", "matching", "human_support", "retirees"],
     "source": {
@@ -1565,8 +1565,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Public platform currently listing hundreds of opportunities around Lille, including mentoring, social connection, leisure, sports and cultural mediation."
     },
     "whyUseful": {
-      "fr": "Source riche à connecter plus tard à Juno pour passer d’un profil d’engagement à des missions très concrètes.",
-      "en": "A rich future source for turning a user's contribution preferences into concrete volunteering opportunities."
+      "fr": "Des missions de bénévolat concrètes près de chez vous, à choisir selon vos envies et votre temps.",
+      "en": "Concrete volunteering missions near you, chosen to fit your interests and time."
     },
     "tags": ["volunteering", "mentoring", "public_platform", "many_opportunities"],
     "source": {
@@ -1612,8 +1612,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Central hub for Lille's association ecosystem, offering information, support, training and orientation."
     },
     "whyUseful": {
-      "fr": "Peut être utilisé par Juno pour quelqu’un qui veut comprendre l’écosystème associatif avant de s’engager ou même lancer un projet.",
-      "en": "Useful for someone who wants to understand the local association ecosystem before volunteering or even starting a project."
+      "fr": "Pour découvrir le tissu associatif local avant de vous engager, ou même lancer votre propre projet.",
+      "en": "Discover local associations before volunteering — or even start your own project."
     },
     "tags": ["associations", "support", "training", "project"],
     "source": {
@@ -1659,8 +1659,8 @@ export const lilleResources: LilleResource[] = [
       "en": "Adult classes and workshops in visual arts, photography, printmaking, drawing, painting, video, screen printing and mixed media."
     },
     "whyUseful": {
-      "fr": "Bonne ressource non spécifique à la retraite pour quelqu’un qui veut apprendre une pratique créative et retrouver un groupe régulier.",
-      "en": "A strong non-retirement-specific resource for someone who wants to learn a creative practice and join a regular group."
+      "fr": "Apprendre une pratique artistique et retrouver un groupe chaque semaine.",
+      "en": "Learn an artistic practice and join a regular weekly group."
     },
     "tags": ["art", "creative", "learning", "regular", "adult"],
     "source": {

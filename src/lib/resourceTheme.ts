@@ -12,6 +12,8 @@ export type ResourceThemeTokens = {
  * so placeholders don’t all resolve to coral.
  */
 export const RESOURCE_THEME_PRIORITY: string[] = [
+  'financial',
+  'health',
   'active',
   'contribute',
   'learn',
@@ -70,6 +72,18 @@ export const RESOURCE_THEMES: ResourceThemeTokens[] = [
     solidVar: '--theme-learn-solid',
     tintVar: '--theme-learn-tint',
     inkVar: '--theme-learn-ink',
+  },
+  {
+    id: 'financial',
+    solidVar: '--pillar-financial-solid',
+    tintVar: '--pillar-financial-tint',
+    inkVar: '--pillar-financial-ink',
+  },
+  {
+    id: 'health',
+    solidVar: '--pillar-health-solid',
+    tintVar: '--pillar-health-tint',
+    inkVar: '--pillar-health-ink',
   },
 ]
 

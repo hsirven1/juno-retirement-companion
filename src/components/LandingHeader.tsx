@@ -14,19 +14,25 @@ export function LandingHeader() {
     <header className="relative z-10">
       <Container
         width="wide"
-        className="flex items-center justify-between gap-6 py-6"
+        className="flex items-center justify-between gap-3 py-6 sm:gap-6"
       >
-        <Logo size="landing" />
+        <span className="sm:hidden">
+          <Logo size="nav" />
+        </span>
+        <span className="hidden sm:block">
+          <Logo size="landing" />
+        </span>
         <nav
-          className="flex items-center gap-6 sm:gap-8"
+          className="flex items-center gap-3 sm:gap-8"
           aria-label={copy.nav.landing}
         >
-          <HashLink href="#how-it-works">{copy.nav.howItWorks}</HashLink>
-          <HashLink href="#about">{copy.nav.about}</HashLink>
+          <span className="hidden sm:inline">
+            <HashLink href="#how-it-works">{copy.nav.howItWorks}</HashLink>
+          </span>
           <LanguageSelector />
           <button
             type="button"
-            className="cursor-pointer text-[16px] text-ink-muted transition-colors hover:text-ink"
+            className="cursor-pointer text-[15px] text-ink-muted sm:text-[16px] transition-colors hover:text-ink"
             onClick={() => {
               enterAsReturningUser()
               void navigate('/home')

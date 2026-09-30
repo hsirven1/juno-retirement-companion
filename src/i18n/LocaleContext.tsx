@@ -38,6 +38,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = LOCALE_BCP47[locale] ?? locale
+    document.title = getMessages(locale).brand.documentTitle
   }, [locale])
 
   const value = useMemo<LocaleContextValue>(

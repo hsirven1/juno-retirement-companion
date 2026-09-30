@@ -72,7 +72,7 @@ const replies: Record<string, CoachReply> = {
   },
   'j’aimerais trouver une association près de chez moi.': {
     content:
-      'D’accord. Autour de Lyon, Juno a déjà repéré des associations liées à vos thèmes — mentorat, activité, rencontres.\n\nJe peux vous emmener dans Découvrir.',
+      'D’accord. Autour de Lille, plusieurs associations correspondent à vos envies — mentorat, activité, rencontres.\n\nVous les trouverez dans Explorer.',
     action: {
       label: 'Ouvrir Découvrir',
       to: '/discover',

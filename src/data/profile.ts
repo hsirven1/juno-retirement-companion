@@ -31,7 +31,37 @@ export const profile: RetirementProfile = {
     'Un ou deux rendez-vous dans la semaine, pas un agenda plein.',
   situation: {
     retiredDate: 'À la retraite depuis juin 2026',
-    location: 'Lyon, France',
+    location: 'Lille, France',
     formerRole: 'Ancien ingénieur',
+  },
+}
+
+/** English display text for the demo profile (French is the source). */
+export const profileEnText: Pick<
+  RetirementProfile,
+  'vision' | 'learnings' | 'interests' | 'seeking' | 'preferences' | 'situation'
+> = {
+  vision:
+    'I’d like enough rhythm for my weeks to feel meaningful, while keeping the freedom to travel and spend more time with my family.',
+  learnings: [
+    'Large organised groups really aren’t for me.',
+    'I enjoy activities where I learn something.',
+    'I want one or two fixed plans a week, not a full calendar.',
+  ],
+  interests: ['Cycling', 'Travel', 'Engineering', 'Cooking', 'History'],
+  seeking: [
+    'More rhythm during the week',
+    'Meeting new people',
+    'Sharing my experience',
+  ],
+  preferences: [
+    'Weekday activities',
+    'Small groups',
+    'No long-term commitment',
+  ],
+  situation: {
+    retiredDate: 'Retired since June 2026',
+    location: 'Lille, France',
+    formerRole: 'Former engineer',
   },
 }

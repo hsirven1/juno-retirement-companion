@@ -61,7 +61,7 @@ const repliesEn: Record<string, CoachReply> = {
   },
   'i’d like to find a group near me.': {
     content:
-      'All right. Around Lyon, Juno has already found groups connected to your areas — mentoring, activities, meeting people.\n\nI can take you to Discover.',
+      'All right. Around Lille, several groups match your interests — mentoring, activities, meeting people.\n\nYou’ll find them in Explore.',
     action: {
       label: 'Open Discover',
       to: '/discover',

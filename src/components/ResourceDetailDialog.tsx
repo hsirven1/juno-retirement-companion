@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { ExternalLink, X } from 'lucide-react'
 import { Button } from './Button'
-import { JunoOrb } from './JunoOrb'
 import { MediaBlock } from './MediaBlock'
+import { PILLARS } from '../data/pillars'
+import { PillarBadge } from './pillars/PillarCard'
 import { useApp } from '../context/useApp'
 import { useCopy, useLocale } from '../i18n'
 import { formatLastChecked } from '../lib/lilleResourceAdapter'
@@ -56,7 +57,9 @@ export function ResourceDetailDialog({
   const later = socialFeedback.laterIds.includes(resource.id)
   const dismissed = socialFeedback.dismissedIds.includes(resource.id)
   const raw = getLilleResourceById(resource.id)
-  const theme = getResourceTheme(resource)
+  const theme = resource.primaryPillarId
+    ? { id: resource.primaryPillarId, ...PILLARS[resource.primaryPillarId].theme }
+    : getResourceTheme(resource)
 
   const lastChecked = resource.sourceLastChecked
     ? formatLastChecked(resource.sourceLastChecked, locale)
@@ -105,7 +108,6 @@ export function ResourceDetailDialog({
 
   function handleSave() {
     markSocialInterest(resource)
-    setShowAddPrompt(true)
   }
 
   function handleAddToWeek() {
@@ -160,21 +162,8 @@ export function ResourceDetailDialog({
                 aspect="hero"
                 radius="lg"
                 variant={mediaVariantForResource(resource)}
+                pillarId={resource.primaryPillarId}
               />
-              <div className="mt-3 hidden grid-cols-2 gap-3 sm:grid">
-                <MediaBlock
-                  theme={theme}
-                  aspect="thumb"
-                  radius="md"
-                  variant={(mediaVariantForResource(resource) + 1) % 4}
-                />
-                <MediaBlock
-                  theme={theme}
-                  aspect="thumb"
-                  radius="md"
-                  variant={(mediaVariantForResource(resource) + 2) % 4}
-                />
-              </div>
             </div>
 
             <div className="min-w-0">
@@ -198,6 +187,11 @@ export function ResourceDetailDialog({
               <p className="mt-4 text-[17px] leading-relaxed text-[#4A433D]">
                 {resource.description}
               </p>
+              {!resource.isLocal && resource.pillarIds?.includes('financial') ? (
+                <p className="mt-3 text-[14px] leading-snug text-ink-soft">
+                  {copy.discover.pillarFinancialNote}
+                </p>
+              ) : null}
 
               <div className="mt-6 grid grid-cols-2 gap-3">
                 {rhythmText ? (
@@ -282,22 +276,22 @@ export function ResourceDetailDialog({
             </div>
 
             <div>
-              <div className="relative overflow-hidden rounded-[20px] bg-[#241C18] p-6 text-[#F2E7DC]">
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -top-16 -right-10 size-48 rounded-full"
-                  style={{
-                    background:
-                      'radial-gradient(circle, rgba(225,80,58,0.4), transparent 68%)',
-                  }}
-                />
-                <div className="relative flex items-center gap-3">
-                  <JunoOrb size={32} glow />
-                  <p className="text-[12px] font-[800] tracking-[0.1em] text-[#E6B9A6] uppercase">
+              <div
+                className="rounded-[20px] p-6"
+                style={{ backgroundColor: `var(${theme.tintVar})` }}
+              >
+                <div className="flex items-center gap-3">
+                  {resource.primaryPillarId ? (
+                    <PillarBadge id={resource.primaryPillarId} size={34} />
+                  ) : null}
+                  <p
+                    className="text-[12px] font-[800] tracking-[0.1em] uppercase"
+                    style={{ color: `var(${theme.inkVar})` }}
+                  >
                     {copy.journeyUi.whyJunoSuggests}
                   </p>
                 </div>
-                <p className="relative mt-3 text-[17px] leading-[1.55]">
+                <p className="mt-3 text-[17px] leading-[1.55] text-ink">
                   {resource.personalizationReason || resource.whyUseful}
                 </p>
               </div>

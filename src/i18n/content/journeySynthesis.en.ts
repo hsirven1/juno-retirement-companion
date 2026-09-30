@@ -282,7 +282,7 @@ export function getJourneySynthesisEn(
     case 'opportunity-summary':
       return {
         paragraphs: [
-          'Thank you for that. Juno will take it into account for the next suggestions.',
+          'Thank you. We’ll take it into account in your next suggestions.',
         ],
         tags: Object.entries(prefs.opportunityTypeFeedback)
           .filter(([, v]) => v === 'yes')

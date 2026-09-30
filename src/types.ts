@@ -335,6 +335,157 @@ export interface ResourceRecommendation {
   address?: string | null
   neighborhood?: string | null
   lilleThemeIds?: string[]
+  /** Life pillars this resource supports (primary architecture). */
+  pillarIds?: PillarId[]
+  primaryPillarId?: PillarId
+  /** Content kind — broader than the Lille `resourceType`. */
+  kind?: ResourceKind
+  /** Local, place-based resource (vs national information / guide). */
+  isLocal?: boolean
+  match?: ResourceMatchMeta
+  /** Topics inside the pillar (see `PILLAR_TOPICS`). */
+  topicIds?: string[]
+}
+
+/** Four life pillars — language-neutral ids. */
+export type PillarId = 'financial' | 'health' | 'social' | 'projects'
+
+/**
+ * Supported resource kinds. Not every kind has content yet; local Lille
+ * records map to activity / organization / service / event / place.
+ */
+export type ResourceKind =
+  | 'article'
+  | 'guide'
+  | 'tool'
+  | 'activity'
+  | 'organization'
+  | 'service'
+  | 'course'
+  | 'event'
+  | 'professional'
+  | 'place'
+  | 'program'
+  | 'benefit'
+
+export type FinancialConfidence = 'low' | 'medium' | 'high'
+
+export type FinancialNeed =
+  | 'retirement_application'
+  | 'entitlements'
+  | 'pension_income'
+  | 'budget'
+  | 'savings'
+  | 'investing'
+  | 'property'
+  | 'inheritance'
+  | 'extra_income'
+
+export type ActivityLevel = 'low' | 'moderate' | 'active'
+
+export type PhysicalGoal =
+  | 'move_more'
+  | 'stay_active'
+  | 'strength'
+  | 'flexibility'
+  | 'try_new_sport'
+
+export type PhysicalActivity =
+  | 'walking'
+  | 'swimming'
+  | 'group_exercise'
+  | 'gym'
+  | 'outdoor'
+  | 'cycling'
+  | 'dance'
+
+export type SocialGoal =
+  | 'maintain_relationships'
+  | 'new_friends'
+  | 'group_activities'
+  | 'outing_companions'
+  | 'partner'
+  | 'regular_occasions'
+
+export type ProjectType =
+  | 'travel'
+  | 'volunteering'
+  | 'language'
+  | 'courses'
+  | 'gardening'
+  | 'home_project'
+  | 'creative'
+  | 'culture'
+  | 'entrepreneurship'
+  | 'personal_project'
+  | 'lifelong_dream'
+
+type Level3 = 'low' | 'moderate' | 'high'
+
+/**
+ * Language-neutral personalisation profile, derived from Bilan answers on
+ * demand (never persisted separately). Null / empty means "not answered".
+ */
+export interface RetirementPersonalizationProfile {
+  retirementStage: RetirementStageTag | null
+  location: 'lille' | null
+  careerFamily: MentorCareerFamily | null
+
+  financialConfidence: FinancialConfidence | null
+  /** All financial topics the person wants clarity on. */
+  financialNeeds: FinancialNeed[]
+  /** Subset: applications, entitlements, pension income. */
+  retirementAdminNeeds: FinancialNeed[]
+  /** Subset: budget, savings, investing, property, inheritance, extra income. */
+  financialGoals: FinancialNeed[]
+  investmentInterest: boolean
+  propertyInterest: boolean
+  extraIncomeInterest: boolean
+  /** Explicitly said "nothing in particular" for finances. */
+  financialNothing: boolean
+
+  activityLevel: ActivityLevel | null
+  physicalGoals: PhysicalGoal[]
+  preferredPhysicalActivities: PhysicalActivity[]
+  physicalNothing: boolean
+
+  livingSituation: MentorLivingSituation | null
+  socialNetworkStrength: SocialNetworkStrength | null
+  aloneComfort: Level3 | null
+  socialGoals: SocialGoal[]
+  socialNothing: boolean
+  joiningReassuranceNeeds: JoiningReassuranceNeed[]
+
+  /** Raw interest option ids from the Bilan. */
+  interests: string[]
+  projects: ProjectType[]
+  learningGoals: ProjectType[]
+  travelInterest: boolean
+  volunteeringInterest: boolean
+
+  needForStructure: Level3 | null
+  adventureLevel: MentorAdventureLevel | null
+
+  /** Raw help-topic and challenge ids (explicit priorities). */
+  helpTopics: string[]
+  challenges: string[]
+}
+
+/** Optional matching metadata attached to a resource. */
+export interface ResourceMatchMeta {
+  retirementStages?: RetirementStageTag[]
+  financialNeeds?: FinancialNeed[]
+  activityLevels?: ActivityLevel[]
+  physicalGoals?: PhysicalGoal[]
+  physicalActivities?: PhysicalActivity[]
+  socialGoals?: SocialGoal[]
+  projectTypes?: ProjectType[]
+  /** Recurring rendez-vous (weekly course, regular group). */
+  recurring?: boolean
+  /** Easy to join alone, drop-in or small group. */
+  lowBarrier?: boolean
+  /** One-off or exploratory — suits curious profiles. */
+  exploratory?: boolean
 }
 
 export interface ResourceIdea {
@@ -392,6 +543,8 @@ export interface AssessmentQuestion {
     pre: LocalizedText
     retired: LocalizedText
   }
+  /** Short section label shown above the prompt (e.g. "Finances"). */
+  section?: LocalizedText
   /** Lightweight branching — omit question when false. */
   showIf?: (answers: AssessmentAnswers) => boolean
 }
@@ -600,6 +753,9 @@ export type AmbitionTag =
   | 'creative_project'
   | 'family_time'
   | 'meet_people'
+  | 'learn_language'
+  | 'home_project'
+  | 'lifelong_dream'
   | 'not_sure'
 
 /**

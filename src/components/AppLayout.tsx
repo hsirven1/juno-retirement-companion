@@ -1,16 +1,15 @@
 import { NavLink, Outlet, Link } from 'react-router-dom'
-import { Compass, House, Search } from 'lucide-react'
+import { Compass, House, UserRound } from 'lucide-react'
 import { Logo } from './Logo'
 import { JunoChatOverlay } from './JunoChatOverlay'
 import { GuidedThemeOverlay } from './GuidedThemeOverlay'
 import { useApp } from '../context/useApp'
 import { cn } from '../lib/cn'
 import { useCopy, LanguageSelector } from '../i18n'
-import { JunoOrb } from './JunoOrb'
 import type { ReactNode } from 'react'
 
 export function AppLayout({ children }: { children?: ReactNode }) {
-  const { openChat, chatOpen, guidedThemeOpen, profile } = useApp()
+  const { profile } = useApp()
   const copy = useCopy()
 
   const links = [
@@ -24,17 +23,17 @@ export function AppLayout({ children }: { children?: ReactNode }) {
       to: '/discover',
       label: copy.nav.discover,
       shortLabel: copy.nav.discoverShort,
-      icon: Search,
+      icon: Compass,
     },
     {
       to: '/profile',
       label: copy.nav.profile,
       shortLabel: copy.nav.profileShort,
-      icon: Compass,
+      icon: UserRound,
     },
   ]
 
-  const initials = (profile.firstName || 'J')
+  const initials = (profile.firstName || 'HR')
     .slice(0, 2)
     .toUpperCase()
 
@@ -68,14 +67,6 @@ export function AppLayout({ children }: { children?: ReactNode }) {
 
           <div className="ml-auto flex items-center gap-2 sm:gap-3">
             <LanguageSelector />
-            <button
-              type="button"
-              onClick={() => openChat()}
-              className="hidden cursor-pointer items-center gap-2.5 rounded-full bg-clay py-2 pr-[17px] pl-[11px] text-[15px] font-bold text-on-coral transition-colors hover:bg-clay-deep md:inline-flex"
-            >
-              <JunoOrb size={21} />
-              {copy.nav.talkToJuno}
-            </button>
             <Link
               to="/profile"
               className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[#E3D6C6] bg-[#EFE4D6] text-[14px] font-[800] text-[#6B5F54] transition-colors hover:bg-cream-deep"
@@ -90,17 +81,6 @@ export function AppLayout({ children }: { children?: ReactNode }) {
       <main className="flex-1 pb-28 md:pb-20">
         {children ?? <Outlet />}
       </main>
-
-      {!chatOpen && !guidedThemeOpen ? (
-        <button
-          type="button"
-          onClick={() => openChat()}
-          className="fixed right-4 bottom-[5.5rem] z-30 inline-flex cursor-pointer rounded-full md:hidden"
-          aria-label={copy.nav.talkToJuno}
-        >
-          <JunoOrb size={60} glow />
-        </button>
-      ) : null}
 
       <nav
         className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-paper/94 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:hidden"

@@ -10,7 +10,7 @@ const NEXT_STEP_TEASERS_EN: Record<string, string> = {
     'We’ll explore what kind of get-togethers suit you best.',
   'social-step-4': 'We’ll picture a good week together, simply.',
   'social-step-5':
-    'Juno will suggest a few concrete ideas that could suit you.',
+    'Here are a few concrete ideas that could suit you.',
   'social-step-6': 'We’ll explore what exists around you, close to home.',
   'social-step-7':
     'You’ll be able to choose a first thing to try, without committing to anything more.',
@@ -259,7 +259,7 @@ function getCompletionSynthesisEn(
     case 'opportunity-summary':
       return {
         paragraphs: [
-          'Thank you for telling us. Juno will take it into account in what it suggests next.',
+          'Thank you for telling us. We’ll take it into account in what we suggest next.',
         ],
         tags: Object.entries(prefs.opportunityTypeFeedback)
           .filter(([, value]) => value === 'yes')

@@ -10,7 +10,7 @@ const sizes = {
   /** Public landing — more prominent lockup */
   landing: {
     icon: 40,
-    wordmark: 34,
+    wordmark: 30,
     gap: 12,
     /** Optical nudge: cheek mass sits low-right, so lift icon slightly */
     iconOffsetY: -1,
@@ -18,7 +18,7 @@ const sizes = {
   /** In-app / onboarding nav — compact */
   nav: {
     icon: 28,
-    wordmark: 24,
+    wordmark: 22,
     gap: 10,
     iconOffsetY: 0,
   },
@@ -71,7 +71,7 @@ export function Logo({ to = '/', className, size = 'nav' }: LogoProps) {
         )}
       </span>
       <span
-        className="font-display font-medium leading-none tracking-[-0.02em] lowercase"
+        className="font-display font-medium whitespace-nowrap leading-none tracking-[-0.02em]"
         style={{
           fontSize: tokens.wordmark,
           /* Optical baseline with Newsreader lowercase — slight lift vs box center */

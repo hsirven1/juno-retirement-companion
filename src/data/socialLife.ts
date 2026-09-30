@@ -362,7 +362,7 @@ export const lilleSocialResources: LilleSocialResource[] = [
       'Si vous souhaitez surtout voir davantage les personnes que vous connaissez déjà.',
     location: 'Lille',
     metadata: 'Personnel · Proches',
-    sourceName: 'Juno',
+    sourceName: 'Happy Retraite',
     externalUrl: '#',
     saved: false,
     addedToPlan: false,

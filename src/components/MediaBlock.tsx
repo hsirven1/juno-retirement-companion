@@ -1,5 +1,7 @@
 import { cn } from '../lib/cn'
 import type { ResourceThemeTokens } from '../lib/resourceTheme'
+import type { PillarId } from '../types'
+import { PillarGlyph } from './pillars/PillarGlyph'
 
 type Aspect = 'card' | 'hero' | 'thumb' | 'square' | 'compact'
 
@@ -24,6 +26,7 @@ export function MediaBlock({
   className,
   radius = 'lg',
   variant = 0,
+  pillarId,
 }: {
   theme: ResourceThemeTokens
   imageUrl?: string | null
@@ -32,6 +35,8 @@ export function MediaBlock({
   className?: string
   radius?: 'sm' | 'md' | 'lg'
   variant?: number
+  /** Draw the pillar pictogram instead of abstract shapes. */
+  pillarId?: PillarId
 }) {
   const radiusClass =
     radius === 'sm'
@@ -62,9 +67,44 @@ export function MediaBlock({
           decoding="async"
           className="absolute inset-0 size-full object-cover object-center"
         />
+      ) : pillarId ? (
+        <GlyphPlaceholder theme={theme} variant={v} pillarId={pillarId} />
       ) : (
         <PlaceholderShapes theme={theme} variant={v} />
       )}
+    </div>
+  )
+}
+
+const GLYPH_LAYOUTS = [
+  { glyph: 'right-[-6%] bottom-[-28%] h-[115%]', disc: 'right-[2%] bottom-[-30%] h-[100%]' },
+  { glyph: 'left-[6%] top-[-18%] h-[105%]', disc: 'left-[-6%] top-[-30%] h-[95%]' },
+  { glyph: 'right-[10%] top-[12%] h-[76%]', disc: 'right-[4%] top-[4%] h-[92%]' },
+  { glyph: 'left-[-4%] bottom-[-22%] h-[100%]', disc: 'left-[10%] bottom-[-40%] h-[110%]' },
+]
+
+function GlyphPlaceholder({
+  theme,
+  variant,
+  pillarId,
+}: {
+  theme: ResourceThemeTokens
+  variant: number
+  pillarId: PillarId
+}) {
+  const layout = GLYPH_LAYOUTS[variant]!
+  return (
+    <div aria-hidden="true" className="absolute inset-0">
+      <span
+        className={cn('absolute aspect-square rounded-full bg-paper/45', layout.disc)}
+      />
+      <PillarGlyph
+        id={pillarId}
+        size="100%"
+        strokeWidth={1.8}
+        className={cn('absolute aspect-square w-auto', layout.glyph)}
+        style={{ color: `var(${theme.solidVar})` }}
+      />
     </div>
   )
 }

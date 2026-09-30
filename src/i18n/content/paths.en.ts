@@ -183,7 +183,7 @@ export const stepCopyEn: Record<string, StepCopy> = {
   'path-actif-4': {
     title: 'Discover an activity near you',
     content:
-      'Juno picked a few ideas around Lyon that match what you enjoy.',
+      'A few ideas around Lille that match what you enjoy.',
     ctaLabel: 'See the ideas',
   },
   'path-actif-5': {
@@ -296,7 +296,7 @@ export const stepCopyEn: Record<string, StepCopy> = {
   'finances-2': {
     title: 'The topics worth revisiting',
     content:
-      'Everyday budget, plans (travel, helping family), and things to watch out for. Juno can help you organize your questions — not replace a professional.',
+      'Everyday budget, plans (travel, helping family), and things to watch out for. A way to organise your questions — not a replacement for a professional.',
     ctaLabel: 'Continue',
   },
   'finances-3': {
@@ -313,7 +313,7 @@ export const stepCopyEn: Record<string, StepCopy> = {
   'finances-4': {
     title: 'Identify a first useful action',
     content:
-      'For example: list your questions, gather a few documents, or note what you would like to clarify with an advisor. Juno does not provide personalized financial advice.',
+      'For example: list your questions, gather a few documents, or note what you would like to clarify with an advisor. No personalised financial advice is provided here.',
     ctaLabel: 'Finish this step',
   },
 }

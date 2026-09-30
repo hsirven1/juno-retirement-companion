@@ -8,6 +8,12 @@ import type {
 } from '../types'
 import type { JourneyRole, LilleResource, ThemeId } from '../data/lilleResources'
 import { lilleResources } from '../data/lilleResources'
+import { LILLE_MATCH } from '../data/lilleResourceMatching'
+import {
+  pillarsForLilleResource,
+  primaryPillarForLilleResource,
+  topicIdsFor,
+} from '../data/pillars'
 
 /** Map Juno active theme IDs → Lille dataset theme IDs */
 export const JUNO_TO_LILLE_THEMES: Record<string, ThemeId[]> = {
@@ -59,9 +65,19 @@ export function formatLastChecked(isoDate: string, locale: Locale): string {
   }).format(date)
 }
 
-export function buildLocationLine(resource: LilleResource): string {
+const MULTIPLE_NEIGHBORHOODS: Record<Locale, string> = {
+  fr: 'Plusieurs quartiers',
+  en: 'Several neighbourhoods',
+}
+
+function neighborhoodLabel(resource: LilleResource, locale: Locale): string | null {
+  const value = resource.location.neighborhood
+  return value === 'Multiple neighborhoods' ? MULTIPLE_NEIGHBORHOODS[locale] : value
+}
+
+export function buildLocationLine(resource: LilleResource, locale: Locale): string {
   const parts = [
-    resource.location.neighborhood,
+    neighborhoodLabel(resource, locale),
     resource.location.city,
   ].filter(Boolean)
   return parts.join(' · ')
@@ -73,7 +89,7 @@ export function buildMetaLine(
   commitmentLabel: string,
 ): string {
   const parts = [
-    resource.location.neighborhood,
+    neighborhoodLabel(resource, locale),
     resource.cost.label[locale],
     commitmentLabel,
   ].filter(Boolean)
@@ -150,7 +166,7 @@ export function toResourceRecommendation(
     description,
     homeSnippet: description,
     personalizationReason: why,
-    location: buildLocationLine(resource),
+    location: buildLocationLine(resource, locale),
     metadata: buildMetaLine(resource, locale, options.commitmentLabel),
     sourceName: resource.source.name,
     externalUrl: resource.source.url,
@@ -171,8 +187,14 @@ export function toResourceRecommendation(
     sourceLastChecked: resource.source.lastChecked,
     timeSensitive: resource.timeSensitive,
     address: resource.location.address,
-    neighborhood: resource.location.neighborhood,
+    neighborhood: neighborhoodLabel(resource, locale),
     lilleThemeIds: resource.themeIds,
+    pillarIds: pillarsForLilleResource(resource),
+    primaryPillarId: primaryPillarForLilleResource(resource),
+    kind: resource.resourceType,
+    isLocal: true,
+    match: LILLE_MATCH[resource.id],
+    topicIds: topicIdsFor(LILLE_MATCH[resource.id]),
   }
 }
 

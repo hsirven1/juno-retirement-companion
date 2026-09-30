@@ -642,10 +642,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [startPath],
   )
 
-  const profile = useMemo(
-    () => mergeProfile(persisted.profileOverrides),
-    [persisted.profileOverrides],
-  )
+  const bilanLocation = persisted.assessmentAnswers.location
+  const profile = useMemo(() => {
+    const base = mergeProfile(persisted.profileOverrides)
+    if (typeof bilanLocation !== 'string' || !bilanLocation.trim()) return base
+    return {
+      ...base,
+      situation: { ...base.situation, location: bilanLocation.trim() },
+    }
+  }, [persisted.profileOverrides, bilanLocation])
 
   const setMatchedMentorId = useCallback(
     (mentorId: string | null) => {

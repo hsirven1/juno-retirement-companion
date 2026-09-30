@@ -13,7 +13,7 @@ export const NEXT_STEP_TEASERS_EN: Record<string, string> = {
     'We’ll explore what kind of get-togethers feel most like you.',
   'social-step-4': 'Together, we’ll picture a good week, simply.',
   'social-step-5':
-    'Juno will suggest a few practical ideas that could suit you.',
+    'Here are a few practical ideas that could suit you.',
   'social-step-6': 'We’ll look at what exists around you, close to home.',
   'social-step-7':
     'You’ll be able to choose a first thing to try, without committing further.',

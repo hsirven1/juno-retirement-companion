@@ -83,6 +83,7 @@ const INTEREST_MAP: Record<string, MentorInterestTag[]> = {
   diy: ['craft'],
   technology: ['learning'],
   languages: ['learning'],
+  courses: ['learning'],
   history: ['culture', 'learning'],
   volunteering: ['volunteering', 'community'],
   entrepreneurship: ['business'],
@@ -181,13 +182,17 @@ function inferInterests(
     if (id === 'volunteer') tags.add('volunteering')
     if (id === 'small_business') tags.add('business')
     if (id === 'travel_more') tags.add('travel')
-    if (id === 'learn_something') tags.add('learning')
+    if (id === 'learn_something' || id === 'learn_language') tags.add('learning')
     if (id === 'take_up_sport') tags.add('sport')
-    if (id === 'creative_project') tags.add('craft')
+    if (id === 'creative_project' || id === 'home_project') tags.add('craft')
     if (id === 'meet_people' || id === 'join_group') tags.add('community')
   }
 
-  const blob = [...profile.interests, ...profile.seeking].join(' ').toLowerCase()
+  // Demo profile text only fills gaps when no Bilan interests were given.
+  const hasBilanInterests = asStringArray(answers.interests).length > 0
+  const blob = hasBilanInterests
+    ? ''
+    : [...profile.interests, ...profile.seeking].join(' ').toLowerCase()
   if (/vélo|sport|bouger|marche|cycl/.test(blob)) tags.add('sport')
   if (/voyage|travel/.test(blob)) tags.add('travel')
   if (/histoire|culture|musée|photo|musique/.test(blob)) tags.add('culture')
@@ -290,7 +295,10 @@ function inferHelpTopics(
     }
   }
 
-  const seeking = profile.seeking.join(' ').toLowerCase()
+  const seeking =
+    asStringArray(answers.helpTopics).length > 0
+      ? ''
+      : profile.seeking.join(' ').toLowerCase()
   if (/rythme|structure/.test(seeking)) tags.add('structure')
   if (/rencontre|monde|social/.test(seeking)) tags.add('social')
   if (prefs.socialFormInterests.includes('engager')) tags.add('volunteering')
@@ -343,6 +351,52 @@ function inferAloneComfort(
   return 'moderate'
 }
 
+/**
+ * "Want more of" is no longer asked directly; it is derived from the newer
+ * pillar questions (explicit legacy answers are kept when present).
+ */
+function deriveWantMoreOf(answers: AssessmentAnswers): string[] {
+  const out = new Set(asStringArray(answers.wantMoreOf))
+  const socialGoals = asStringArray(answers.socialGoals)
+  if (
+    socialGoals.some((id) =>
+      ['new_friends', 'group_activities', 'outing_companions', 'regular_occasions', 'partner'].includes(id),
+    )
+  ) {
+    out.add('social_contact')
+  }
+  if (socialGoals.includes('maintain_relationships')) out.add('family_time')
+  const empty = asString(answers.emptyDays)
+  if (empty === 'prefer_planned' || empty === 'uneasy_empty' || empty === 'bored_quickly') {
+    out.add('structure')
+  }
+  if (empty === 'relaxing') out.add('quieter_life')
+  const physical = asStringArray(answers.physicalPreferences)
+  if (physical.some((id) => id !== 'nothing_particular')) out.add('activity')
+  const ambitions = asStringArray(answers.ambitions)
+  if (ambitions.includes('learn_something') || ambitions.includes('learn_language')) {
+    out.add('learning')
+  }
+  if (ambitions.includes('travel_more')) out.add('travel')
+  if (ambitions.includes('volunteer')) out.add('usefulness')
+  if (ambitions.includes('creative_project')) out.add('creativity')
+  if (ambitions.includes('small_business')) out.add('starting_something')
+  if (ambitions.includes('family_time')) out.add('family_time')
+  if (ambitions.includes('home_project') || ambitions.includes('lifelong_dream')) {
+    out.add('personal_projects')
+  }
+  const finance = asStringArray(answers.financialTopics)
+  if (finance.some((id) => ['savings', 'investing', 'property', 'extra_income'].includes(id))) {
+    out.add('financial_projects')
+  }
+  if (asString(answers.novelty) === 'try_freely') out.add('new_experiences')
+  const help = asStringArray(answers.helpTopics)
+  if (help.includes('personal_project')) out.add('personal_projects')
+  if (help.includes('structure')) out.add('structure')
+  if (help.includes('social')) out.add('social_contact')
+  return [...out]
+}
+
 /** Build matching inputs from bilan + prefs + profile. */
 export function buildMentorMatchingProfile(args: {
   answers: AssessmentAnswers
@@ -376,7 +430,7 @@ export function buildMentorMatchingProfile(args: {
         'know_what_to_expect',
       ].includes(id),
   )
-  const wantMoreOf = asStringArray(answers.wantMoreOf).filter((id): id is WantMoreOfTag =>
+  const wantMoreOf = deriveWantMoreOf(answers).filter((id): id is WantMoreOfTag =>
     [
       'social_contact',
       'structure',
@@ -405,6 +459,9 @@ export function buildMentorMatchingProfile(args: {
       'creative_project',
       'family_time',
       'meet_people',
+      'learn_language',
+      'home_project',
+      'lifelong_dream',
       'not_sure',
     ].includes(id),
   )

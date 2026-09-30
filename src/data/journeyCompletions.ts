@@ -19,7 +19,7 @@ const NEXT_STEP_TEASERS: Record<string, string> = {
   'social-step-4':
     'Nous imaginerons ensemble une bonne semaine, simplement.',
   'social-step-5':
-    'Juno vous proposera quelques pistes concrètes qui pourraient vous correspondre.',
+    'Voici quelques pistes concrètes qui pourraient vous correspondre.',
   'social-step-6':
     'Nous explorerons ce qui existe autour de vous, près de chez vous.',
   'social-step-7':

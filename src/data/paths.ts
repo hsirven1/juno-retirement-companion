@@ -235,7 +235,7 @@ export const guidedPaths: GuidedPath[] = [
           ? {
               ...step,
               content:
-                'Juno a sélectionné quelques idées autour de Lyon, adaptées à vos goûts.',
+                'Quelques idées autour de Lille, adaptées à vos goûts.',
               resourceIds: ['lyon-cycling', 'lyon-walking'],
               discoverFilter: 'move' as const,
               ctaLabel: 'Voir les idées',
@@ -452,7 +452,7 @@ export const guidedPaths: GuidedPath[] = [
         type: 'content',
         title: 'Les sujets utiles à revoir',
         content:
-          'Budget de vie, projets (voyage, aide familiale), et points de vigilance. Juno peut vous aider à structurer vos questions — pas à remplacer un professionnel.',
+          'Budget de vie, projets (voyage, aide familiale), et points de vigilance. De quoi structurer vos questions — sans remplacer un professionnel.',
         estimatedMinutes: 3,
         ctaLabel: 'Continuer',
       },
@@ -479,7 +479,7 @@ export const guidedPaths: GuidedPath[] = [
         type: 'action',
         title: 'Identifier une première action utile',
         content:
-          'Par exemple : lister vos questions, rassembler quelques documents, ou noter ce que vous souhaitez clarifier avec un conseiller. Juno ne fournit pas de conseil financier personnalisé.',
+          'Par exemple : lister vos questions, rassembler quelques documents, ou noter ce que vous souhaitez clarifier avec un conseiller. Aucun conseil financier personnalisé n’est fourni ici.',
         estimatedMinutes: 3,
         ctaLabel: 'Terminer cette étape',
       },

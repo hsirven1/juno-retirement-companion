@@ -4,6 +4,7 @@ import { Container } from '../components/Container'
 import { Button } from '../components/Button'
 import { MentorAvatar } from '../components/mentor/MentorAvatar'
 import { getMentorById } from '../data/mentors'
+import { profile as demoProfile, profileEnText } from '../data/profile'
 import { useApp } from '../context/useApp'
 import { buildSocialProfileSummary, useCopy, useLocale } from '../i18n'
 
@@ -29,10 +30,40 @@ export function ProfilePage() {
   const [draft, setDraft] = useState('')
 
   // Keep editable fields in sync when path answers update the profile
-  const liveSeeking = editing === 'seeking' ? seeking : profile.seeking
-  const liveInterests = editing === 'interests' ? interests : profile.interests
-  const livePreferences =
-    editing === 'preferences' ? preferences : profile.preferences
+  // Demo profile text is authored in French; show English copy until edited.
+  function localized<T>(value: T, source: T, english: T): T {
+    return locale === 'en' && value === source ? english : value
+  }
+  const liveSeeking = localized(
+    editing === 'seeking' ? seeking : profile.seeking,
+    demoProfile.seeking,
+    profileEnText.seeking,
+  )
+  const liveInterests = localized(
+    editing === 'interests' ? interests : profile.interests,
+    demoProfile.interests,
+    profileEnText.interests,
+  )
+  const livePreferences = localized(
+    editing === 'preferences' ? preferences : profile.preferences,
+    demoProfile.preferences,
+    profileEnText.preferences,
+  )
+  const liveSituation = localized(
+    situation,
+    demoProfile.situation,
+    profileEnText.situation,
+  )
+  const liveLearnings = localized(
+    profile.learnings,
+    demoProfile.learnings,
+    profileEnText.learnings,
+  )
+  const liveVision = localized(
+    profile.vision,
+    demoProfile.vision,
+    profileEnText.vision,
+  )
 
   const socialSummary = buildSocialProfileSummary(socialPreferences, locale)
   const socialStarted =
@@ -68,6 +99,7 @@ export function ProfilePage() {
         {copy.profile.subtitle}
       </p>
 
+      {matchedMentor ? (
       <section className="mt-12 rounded-[20px] border border-line bg-paper p-5 sm:p-6">
         <h2 className="text-[13px] font-medium tracking-[0.16em] text-ink-soft uppercase">
           {copy.profile.yourMentor}
@@ -119,15 +151,16 @@ export function ProfilePage() {
           </div>
         )}
       </section>
+      ) : null}
 
       <section className="mt-12">
         <SectionHeader
           title={copy.profile.situation}
-          onEdit={() => startEdit('role', situation.formerRole)}
+          onEdit={() => startEdit('role', liveSituation.formerRole)}
         />
         <dl className="mt-5 space-y-2 text-[18px] text-ink">
-          <dd>{situation.retiredDate}</dd>
-          <dd>{situation.location}</dd>
+          <dd>{liveSituation.retiredDate}</dd>
+          <dd>{liveSituation.location}</dd>
           {editing === 'role' ? (
             <EditableField
               value={draft}
@@ -136,7 +169,7 @@ export function ProfilePage() {
               onCancel={() => setEditing(null)}
             />
           ) : (
-            <dd>{situation.formerRole}</dd>
+            <dd>{liveSituation.formerRole}</dd>
           )}
         </dl>
       </section>
@@ -193,7 +226,7 @@ export function ProfilePage() {
           {copy.profile.learnings}
         </h2>
         <ul className="mt-6 space-y-4">
-          {profile.learnings.map((learning) => (
+          {liveLearnings.map((learning) => (
             <li key={learning} className="max-w-[36rem] text-[18px] text-ink-muted">
               {learning}
             </li>
@@ -206,7 +239,7 @@ export function ProfilePage() {
           {copy.profile.vision}
         </h2>
         <blockquote className="mt-5 font-display text-[1.55rem] leading-snug text-ink">
-          {copy.profile.quote(profile.vision)}
+          {copy.profile.quote(liveVision)}
         </blockquote>
       </section>
 

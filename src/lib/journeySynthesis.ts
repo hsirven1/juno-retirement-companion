@@ -439,7 +439,7 @@ export function getJourneySynthesis(
     case 'opportunity-summary':
       return {
         paragraphs: [
-          'Merci pour ces retours. Juno en tiendra compte pour les prochaines suggestions.',
+          'Merci pour ces retours. Nous en tiendrons compte pour les prochaines suggestions.',
         ],
         tags: Object.entries(prefs.opportunityTypeFeedback)
           .filter(([, v]) => v === 'yes')
@@ -544,5 +544,5 @@ export function buildSocialProfileSummary(
 
   return lines.length > 0
     ? lines
-    : ['Juno apprend encore ce qui vous conviendrait le mieux.']
+    : ['Nous apprenons encore ce qui vous conviendrait le mieux.']
 }
